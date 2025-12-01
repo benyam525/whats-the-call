@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "What's the Call? | NBA Referee Training",
-  description: 'Test your NBA rules knowledge with daily scenarios from the official Case Book',
+  title: 'RuleVision | See the Call Before It Happens',
+  description: 'Trusted by the fastest-growing community of dedicated officials',
 }
 
 export default function RootLayout({

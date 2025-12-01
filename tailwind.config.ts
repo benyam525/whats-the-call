@@ -9,9 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'nba-blue': '#1d428a',
-        'nba-red': '#c8102e',
-        'whistle-gold': '#fdb927',
+        'brand-black': '#1A1A1A',
+        'brand-gray': '#6B7280',
+        'brand-border': '#E5E7EB',
+        'brand-card': '#F9FAFB',
+      },
+      fontFamily: {
+        'sans': ['Inter', 'system-ui', 'sans-serif'],
+      },
+      letterSpacing: {
+        'tighter': '-0.02em',
       },
     },
   },
