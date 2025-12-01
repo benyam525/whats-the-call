@@ -38,15 +38,14 @@ export default function LeaderboardPage() {
       {/* Navigation */}
       <nav className="border-b border-brand-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/">
             <Image
-              src="/rulevisionlogo_new.png"
+              src="/RuleVisionv2.png"
               alt="RuleVision"
-              width={32}
-              height={32}
-              className="h-8 w-auto"
+              width={150}
+              height={40}
+              className="h-10 w-auto"
             />
-            <span className="text-brand-black font-semibold text-lg tracking-tight">RuleVision</span>
           </Link>
           <div className="flex items-center gap-8">
             <Link href="/about" className="text-brand-gray hover:text-brand-black transition-colors">

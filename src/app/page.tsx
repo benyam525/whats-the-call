@@ -44,16 +44,15 @@ export default function HomePage() {
       {/* Navigation */}
       <nav className="border-b border-brand-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link href="/">
             <Image
-              src="/rulevisionlogo_new.png"
+              src="/RuleVisionv2.png"
               alt="RuleVision"
-              width={32}
-              height={32}
-              className="h-8 w-auto"
+              width={150}
+              height={40}
+              className="h-10 w-auto"
             />
-            <span className="text-brand-black font-semibold text-lg tracking-tight">RuleVision</span>
-          </div>
+          </Link>
           <div className="flex items-center gap-8">
             <Link href="/about" className="text-brand-gray hover:text-brand-black transition-colors">
               About
@@ -67,18 +66,15 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="max-w-4xl mx-auto px-6 py-24 text-center">
-        <div className="mb-6 flex justify-center">
+        <div className="mb-8 flex justify-center">
           <Image
-            src="/rulevisionlogo_new.png"
+            src="/RuleVisionv2.png"
             alt="RuleVision"
-            width={120}
+            width={400}
             height={120}
-            className="h-24 w-auto"
+            className="h-auto w-full max-w-md"
           />
         </div>
-        <h1 className="text-5xl font-bold text-brand-black tracking-tighter mb-4">
-          RuleVision
-        </h1>
         <p className="text-2xl text-brand-black mb-3 font-medium">
           See the Call Before It Happens.
         </p>
