@@ -10,8 +10,8 @@ interface StreakBadgeProps {
 export function StreakBadge({ streak, loading }: StreakBadgeProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg px-4 py-2 shadow-sm animate-pulse">
-        <div className="h-5 w-24 bg-gray-200 rounded"></div>
+      <div className="bg-rv-slate/50 rounded-lg px-4 py-2 border border-white/5 animate-pulse">
+        <div className="h-5 w-24 bg-rv-steel rounded"></div>
       </div>
     );
   }
@@ -23,37 +23,37 @@ export function StreakBadge({ streak, loading }: StreakBadgeProps) {
     : 0;
 
   return (
-    <div className="bg-white rounded-lg px-4 py-3 shadow-sm border border-gray-100">
+    <div className="bg-rv-slate/50 rounded-lg px-4 py-3 border border-white/5">
       <div className="flex items-center gap-4">
         {/* Streak */}
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">
+        <div className={`flex items-center gap-2 ${streak.currentStreak > 0 ? 'streak-active' : ''}`}>
+          <span className="text-xl">
             {streak.currentStreak > 0 ? '🔥' : '📊'}
           </span>
           <div>
-            <div className="text-sm text-gray-500">Streak</div>
-            <div className="font-bold text-nba-blue">
+            <div className="text-xs text-rv-silver/50 uppercase tracking-wider">Streak</div>
+            <div className="font-bold text-rv-gold">
               {streak.currentStreak} {streak.currentStreak === 1 ? 'day' : 'days'}
             </div>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="h-10 w-px bg-gray-200"></div>
+        <div className="h-8 w-px bg-white/10"></div>
 
         {/* Accuracy */}
         <div>
-          <div className="text-sm text-gray-500">Accuracy</div>
-          <div className="font-bold text-nba-blue">{accuracy}%</div>
+          <div className="text-xs text-rv-silver/50 uppercase tracking-wider">Accuracy</div>
+          <div className="font-bold text-rv-accent-bright">{accuracy}%</div>
         </div>
 
         {/* Best Streak */}
         {streak.longestStreak > streak.currentStreak && (
           <>
-            <div className="h-10 w-px bg-gray-200"></div>
+            <div className="h-8 w-px bg-white/10"></div>
             <div>
-              <div className="text-sm text-gray-500">Best</div>
-              <div className="font-bold text-whistle-gold">{streak.longestStreak} days</div>
+              <div className="text-xs text-rv-silver/50 uppercase tracking-wider">Best</div>
+              <div className="font-bold text-rv-warning">{streak.longestStreak} days</div>
             </div>
           </>
         )}
@@ -61,8 +61,8 @@ export function StreakBadge({ streak, loading }: StreakBadgeProps) {
 
       {/* Motivational message */}
       {streak.currentStreak >= 3 && (
-        <div className="mt-2 text-sm text-green-600 font-medium">
-          🎯 {getStreakMessage(streak.currentStreak)}
+        <div className="mt-2 text-sm text-rv-success font-medium">
+          {getStreakMessage(streak.currentStreak)}
         </div>
       )}
     </div>

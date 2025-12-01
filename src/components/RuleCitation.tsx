@@ -3,17 +3,17 @@
 interface RuleCitationProps {
   ruling: string;
   ruleReference?: string;
-  ruleLink?: string;
+  casebookReference?: string;
 }
 
-export function RuleCitation({ ruling, ruleReference, ruleLink }: RuleCitationProps) {
+export function RuleCitation({ ruling, ruleReference, casebookReference }: RuleCitationProps) {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
+    <div className="bg-rv-navy/50 rounded-lg overflow-hidden border border-white/5 mt-4">
       {/* Header */}
-      <div className="bg-gradient-to-r from-nba-blue to-blue-700 px-4 py-2">
-        <h3 className="font-bold text-white flex items-center gap-2">
+      <div className="bg-rv-accent/10 border-b border-rv-accent/20 px-4 py-2">
+        <h3 className="font-bold text-rv-accent-bright flex items-center gap-2 text-sm">
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -31,43 +31,26 @@ export function RuleCitation({ ruling, ruleReference, ruleLink }: RuleCitationPr
 
       {/* Ruling text */}
       <div className="p-4">
-        <p className="text-gray-800 leading-relaxed">{ruling}</p>
+        <p className="text-rv-silver leading-relaxed text-sm">{ruling}</p>
       </div>
 
-      {/* Rule reference - The "aha" moment */}
+      {/* Rule reference */}
       {ruleReference && (
-        <div className="bg-amber-50 border-t border-amber-100 px-4 py-3">
+        <div className="bg-rv-gold/10 border-t border-rv-gold/20 px-4 py-3">
           <div className="flex items-start gap-3">
-            <span className="text-2xl">📖</span>
+            <span className="text-xl">📖</span>
             <div className="flex-1">
-              <div className="text-sm text-amber-800 font-medium mb-1">
+              <div className="text-xs text-rv-gold/80 font-medium uppercase tracking-wider mb-0.5">
                 Rule Reference
               </div>
-              <div className="font-bold text-amber-900 text-lg">
+              <div className="font-bold text-rv-gold">
                 {ruleReference}
               </div>
-              {ruleLink && (
-                <a
-                  href={ruleLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-amber-700 hover:text-amber-900 mt-2 underline underline-offset-2"
-                >
-                  Read the full rule
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
+              {casebookReference && (
+                <div className="text-sm text-rv-silver/60 mt-1.5 flex items-center gap-1.5">
+                  <span>📋</span>
+                  {casebookReference}
+                </div>
               )}
             </div>
           </div>

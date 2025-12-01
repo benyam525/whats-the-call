@@ -7,7 +7,17 @@
       "Bash(export PATH=\"/usr/local/bin:/opt/homebrew/bin:$HOME/.nvm/versions/node/*/bin:$PATH\")",
       "Bash(npm install)",
       "Bash(git init)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npm run build:*)",
+      "Bash(/usr/local/bin/npm install)",
+      "Bash(PATH=\"/usr/local/bin:$PATH\" /usr/local/bin/node:*)",
+      "Bash(PATH=\"/usr/local/bin:$PATH\" /usr/local/bin/npm install:*)",
+      "Bash(PATH=\"/usr/local/bin:$PATH\" /usr/local/bin/npm run build:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []

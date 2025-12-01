@@ -1,17 +1,19 @@
 export type Category =
-  | '24-Second Clock'
-  | 'Backcourt Violation'
-  | 'Ball in Play'
-  | 'Basket Interference / Goaltending'
-  | 'Blood Protocol'
-  | 'Boundary Lines'
-  | 'Charging / Blocking';
+  | 'Away-from-the-Play Fouls'
+  | 'Backboard'
+  | 'Backcourt'
+  | 'Batted Ball'
+  | 'Blocking Fouls'
+  | 'Captains'
+  | 'Choice of Baskets'
+  | 'Clear-Path-to-the-Basket'
+  | "Coach's Challenge";
 
 export type Difficulty = 'rookie' | 'veteran' | 'expert';
 
 export type AnswerKey = 'a' | 'b' | 'c' | 'd';
 
-export interface CaseQuestion {
+export interface CasebookQuestion {
   id: string;
   category: Category;
   difficulty: Difficulty;
@@ -25,9 +27,12 @@ export interface CaseQuestion {
   };
   correctAnswer: AnswerKey;
   ruling: string;
-  ruleReference?: string;
-  ruleLink?: string;
+  ruleReference: string;
+  casebookReference: string;
 }
+
+// Alias for backward compatibility
+export type CaseQuestion = CasebookQuestion;
 
 export interface VoteStats {
   questionId: string;
@@ -58,6 +63,6 @@ export interface LeaderboardEntry {
 }
 
 export interface DailyEmail {
-  case: CaseQuestion;
+  case: CasebookQuestion;
   sentAt: Date;
 }

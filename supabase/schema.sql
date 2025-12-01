@@ -158,3 +158,218 @@ GRANT SELECT, INSERT ON votes TO authenticated;
 GRANT SELECT, INSERT, UPDATE ON user_streaks TO authenticated;
 GRANT SELECT ON vote_stats TO authenticated;
 GRANT EXECUTE ON FUNCTION update_user_streak TO authenticated;
+
+-- ============================================
+-- SUDDEN DEATH SCORES
+-- Tracks high scores for Sudden Death mode
+-- ============================================
+CREATE TABLE IF NOT EXISTS sudden_death_scores (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  visitor_id TEXT NOT NULL,
+  score INT NOT NULL DEFAULT 0,
+  difficulty_reached TEXT DEFAULT 'rookie' CHECK (difficulty_reached IN ('rookie', 'veteran', 'expert')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_sudden_death_visitor ON sudden_death_scores(visitor_id);
+CREATE INDEX IF NOT EXISTS idx_sudden_death_leaderboard ON sudden_death_scores(score DESC);
+
+-- ============================================
+-- DAILY 5 COMPLETIONS
+-- Tracks daily quiz completions
+-- ============================================
+CREATE TABLE IF NOT EXISTS daily_5_completions (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  visitor_id TEXT NOT NULL,
+  completion_date DATE NOT NULL,
+  score INT NOT NULL CHECK (score >= 0 AND score <= 5),
+  answers JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(visitor_id, completion_date)
+);
+
+CREATE INDEX IF NOT EXISTS idx_daily_5_visitor ON daily_5_completions(visitor_id);
+CREATE INDEX IF NOT EXISTS idx_daily_5_date ON daily_5_completions(completion_date);
+
+-- ============================================
+-- DAILY 5 STREAKS
+-- Tracks consecutive days of Daily 5 completion
+-- ============================================
+CREATE TABLE IF NOT EXISTS daily_5_streaks (
+  visitor_id TEXT PRIMARY KEY,
+  display_name TEXT,
+  current_streak INT DEFAULT 0,
+  longest_streak INT DEFAULT 0,
+  last_completion_date DATE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_daily_5_streaks_leaderboard
+ON daily_5_streaks(longest_streak DESC, current_streak DESC);
+
+-- ============================================
+-- CATEGORY MASTERY
+-- Tracks per-category progress
+-- ============================================
+CREATE TABLE IF NOT EXISTS category_mastery (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  visitor_id TEXT NOT NULL,
+  category TEXT NOT NULL,
+  correct INT DEFAULT 0,
+  total INT DEFAULT 0,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(visitor_id, category)
+);
+
+CREATE INDEX IF NOT EXISTS idx_category_mastery_visitor ON category_mastery(visitor_id);
+
+-- ============================================
+-- FUNCTION: Update Daily 5 Streak
+-- Called when a user completes Daily 5
+-- ============================================
+CREATE OR REPLACE FUNCTION update_daily_5_streak(
+  p_visitor_id TEXT,
+  p_score INT,
+  p_answers JSONB,
+  p_display_name TEXT DEFAULT NULL
+)
+RETURNS daily_5_streaks
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_today DATE := CURRENT_DATE;
+  v_yesterday DATE := CURRENT_DATE - INTERVAL '1 day';
+  v_result daily_5_streaks;
+  v_already_completed BOOLEAN;
+BEGIN
+  -- Check if already completed today
+  SELECT EXISTS(
+    SELECT 1 FROM daily_5_completions
+    WHERE visitor_id = p_visitor_id AND completion_date = v_today
+  ) INTO v_already_completed;
+
+  IF v_already_completed THEN
+    -- Return existing streak without changes
+    SELECT * INTO v_result FROM daily_5_streaks WHERE visitor_id = p_visitor_id;
+    RETURN v_result;
+  END IF;
+
+  -- Record the completion
+  INSERT INTO daily_5_completions (visitor_id, completion_date, score, answers)
+  VALUES (p_visitor_id, v_today, p_score, p_answers);
+
+  -- Update streak
+  INSERT INTO daily_5_streaks (visitor_id, display_name, current_streak, longest_streak, last_completion_date)
+  VALUES (
+    p_visitor_id,
+    COALESCE(p_display_name, 'Ref ' || LEFT(p_visitor_id, 6)),
+    1,
+    1,
+    v_today
+  )
+  ON CONFLICT (visitor_id) DO UPDATE SET
+    display_name = COALESCE(NULLIF(p_display_name, ''), daily_5_streaks.display_name),
+    current_streak = CASE
+      WHEN daily_5_streaks.last_completion_date = v_yesterday THEN daily_5_streaks.current_streak + 1
+      ELSE 1
+    END,
+    longest_streak = GREATEST(
+      daily_5_streaks.longest_streak,
+      CASE
+        WHEN daily_5_streaks.last_completion_date = v_yesterday THEN daily_5_streaks.current_streak + 1
+        ELSE 1
+      END
+    ),
+    last_completion_date = v_today,
+    updated_at = NOW()
+  RETURNING * INTO v_result;
+
+  RETURN v_result;
+END;
+$$;
+
+-- ============================================
+-- FUNCTION: Update Category Mastery
+-- Called when a user answers in Category Drill
+-- ============================================
+CREATE OR REPLACE FUNCTION update_category_mastery(
+  p_visitor_id TEXT,
+  p_category TEXT,
+  p_is_correct BOOLEAN
+)
+RETURNS category_mastery
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_result category_mastery;
+BEGIN
+  INSERT INTO category_mastery (visitor_id, category, correct, total)
+  VALUES (
+    p_visitor_id,
+    p_category,
+    CASE WHEN p_is_correct THEN 1 ELSE 0 END,
+    1
+  )
+  ON CONFLICT (visitor_id, category) DO UPDATE SET
+    correct = category_mastery.correct + CASE WHEN p_is_correct THEN 1 ELSE 0 END,
+    total = category_mastery.total + 1,
+    updated_at = NOW()
+  RETURNING * INTO v_result;
+
+  RETURN v_result;
+END;
+$$;
+
+-- ============================================
+-- RLS for new tables
+-- ============================================
+ALTER TABLE sudden_death_scores ENABLE ROW LEVEL SECURITY;
+ALTER TABLE daily_5_completions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE daily_5_streaks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE category_mastery ENABLE ROW LEVEL SECURITY;
+
+-- Sudden Death policies
+CREATE POLICY "Allow anonymous sudden_death reads" ON sudden_death_scores
+  FOR SELECT USING (true);
+CREATE POLICY "Allow anonymous sudden_death inserts" ON sudden_death_scores
+  FOR INSERT WITH CHECK (true);
+
+-- Daily 5 completions policies
+CREATE POLICY "Allow anonymous daily_5_completions reads" ON daily_5_completions
+  FOR SELECT USING (true);
+CREATE POLICY "Allow anonymous daily_5_completions inserts" ON daily_5_completions
+  FOR INSERT WITH CHECK (true);
+
+-- Daily 5 streaks policies
+CREATE POLICY "Allow anonymous daily_5_streaks reads" ON daily_5_streaks
+  FOR SELECT USING (true);
+CREATE POLICY "Allow anonymous daily_5_streaks inserts" ON daily_5_streaks
+  FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow anonymous daily_5_streaks updates" ON daily_5_streaks
+  FOR UPDATE USING (true);
+
+-- Category mastery policies
+CREATE POLICY "Allow anonymous category_mastery reads" ON category_mastery
+  FOR SELECT USING (true);
+CREATE POLICY "Allow anonymous category_mastery inserts" ON category_mastery
+  FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow anonymous category_mastery updates" ON category_mastery
+  FOR UPDATE USING (true);
+
+-- ============================================
+-- GRANTS for new tables
+-- ============================================
+GRANT SELECT, INSERT ON sudden_death_scores TO anon;
+GRANT SELECT, INSERT ON daily_5_completions TO anon;
+GRANT SELECT, INSERT, UPDATE ON daily_5_streaks TO anon;
+GRANT SELECT, INSERT, UPDATE ON category_mastery TO anon;
+GRANT EXECUTE ON FUNCTION update_daily_5_streak TO anon;
+GRANT EXECUTE ON FUNCTION update_category_mastery TO anon;
+
+GRANT SELECT, INSERT ON sudden_death_scores TO authenticated;
+GRANT SELECT, INSERT ON daily_5_completions TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON daily_5_streaks TO authenticated;
+GRANT SELECT, INSERT, UPDATE ON category_mastery TO authenticated;
+GRANT EXECUTE ON FUNCTION update_daily_5_streak TO authenticated;
+GRANT EXECUTE ON FUNCTION update_category_mastery TO authenticated;
