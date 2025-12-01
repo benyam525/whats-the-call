@@ -1,9 +1,44 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+// Hardcoded salary ranges per level
+const SALARY_RANGES = {
+  'youth-rec': { min: 25, max: 50, label: 'Youth/Rec League' },
+  'high-school': { min: 50, max: 150, label: 'High School' },
+  'aau-travel': { min: 75, max: 200, label: 'AAU/Travel' },
+  'juco': { min: 100, max: 250, label: 'Junior College' },
+  'd2-d3': { min: 150, max: 400, label: 'D2/D3 College' },
+  'd1': { min: 300, max: 800, label: 'D1 College' },
+  'g-league': { min: 600, max: 1500, label: 'G-League' },
+  'nba': { min: 3000, max: 10000, label: 'NBA' },
+};
+
 export default function MarketingPage() {
+  const [currentLevel, setCurrentLevel] = useState('high-school');
+  const [targetLevel, setTargetLevel] = useState('d1');
+  const [gamesPerSeason, setGamesPerSeason] = useState(30);
+  const [yearsReffing, setYearsReffing] = useState(10);
+
+  const calculateEarnings = () => {
+    const current = SALARY_RANGES[currentLevel as keyof typeof SALARY_RANGES];
+    const target = SALARY_RANGES[targetLevel as keyof typeof SALARY_RANGES];
+
+    // Annual range at target level
+    const annualMin = target.min * gamesPerSeason;
+    const annualMax = target.max * gamesPerSeason;
+
+    // Lifetime range (assuming progression to target level)
+    const lifetimeMin = annualMin * yearsReffing;
+    const lifetimeMax = annualMax * yearsReffing;
+
+    return { annualMin, annualMax, lifetimeMin, lifetimeMax };
+  };
+
+  const earnings = calculateEarnings();
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -401,6 +436,109 @@ export default function MarketingPage() {
               >
                 Take the Exam
               </Link>
+            </div>
+          </div>
+
+          {/* Ref Path Earnings Explorer */}
+          <div className="max-w-4xl mx-auto mt-16">
+            <h3 className="text-3xl font-bold text-center mb-3 text-brand-black tracking-tighter">
+              Ref Path Earnings Explorer
+            </h3>
+            <p className="text-center text-brand-gray mb-8 max-w-2xl mx-auto">
+              Map your officiating journey and explore potential earning ranges at each level. Used by current NBA refs to understand the financial landscape of officiating.
+            </p>
+
+            <div className="bg-white border border-brand-border rounded-2xl p-8">
+              {/* Input Controls */}
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div>
+                  <label className="block text-sm font-semibold text-brand-black mb-2">
+                    Current Level
+                  </label>
+                  <select
+                    value={currentLevel}
+                    onChange={(e) => setCurrentLevel(e.target.value)}
+                    className="w-full px-4 py-3 border border-brand-border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black text-brand-black"
+                  >
+                    {Object.entries(SALARY_RANGES).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-brand-black mb-2">
+                    Target Level
+                  </label>
+                  <select
+                    value={targetLevel}
+                    onChange={(e) => setTargetLevel(e.target.value)}
+                    className="w-full px-4 py-3 border border-brand-border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black text-brand-black"
+                  >
+                    {Object.entries(SALARY_RANGES).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-brand-black mb-2">
+                    Games Per Season
+                  </label>
+                  <input
+                    type="number"
+                    value={gamesPerSeason}
+                    onChange={(e) => setGamesPerSeason(Number(e.target.value))}
+                    min="1"
+                    max="200"
+                    className="w-full px-4 py-3 border border-brand-border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black text-brand-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-brand-black mb-2">
+                    Years Officiating
+                  </label>
+                  <input
+                    type="number"
+                    value={yearsReffing}
+                    onChange={(e) => setYearsReffing(Number(e.target.value))}
+                    min="1"
+                    max="40"
+                    className="w-full px-4 py-3 border border-brand-border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black text-brand-black"
+                  />
+                </div>
+              </div>
+
+              {/* Results */}
+              <div className="grid md:grid-cols-2 gap-6 pt-6 border-t border-brand-border">
+                <div className="bg-brand-card rounded-xl p-6">
+                  <h4 className="text-sm font-semibold text-brand-gray mb-2">Annual Earning Range</h4>
+                  <p className="text-3xl font-bold text-brand-black">
+                    ${earnings.annualMin.toLocaleString()} - ${earnings.annualMax.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-brand-gray mt-1">at target level</p>
+                </div>
+
+                <div className="bg-brand-card rounded-xl p-6">
+                  <h4 className="text-sm font-semibold text-brand-gray mb-2">Lifetime Earning Range</h4>
+                  <p className="text-3xl font-bold text-brand-black">
+                    ${earnings.lifetimeMin.toLocaleString()} - ${earnings.lifetimeMax.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-brand-gray mt-1">over {yearsReffing} years</p>
+                </div>
+              </div>
+
+              {/* Disclaimer */}
+              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-xs text-brand-black leading-relaxed">
+                  <strong>Important:</strong> These are estimated ranges based on typical per-game fees at each level. Actual earnings vary by region, league, experience, and availability. NBA positions are extremely competitive and rare. This tool is for inspiration and planning—not a guarantee of income. Many current NBA officials use similar frameworks to understand the financial progression of officiating careers.
+                </p>
+              </div>
             </div>
           </div>
         </div>
