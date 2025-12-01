@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { ModeCard, modeConfig } from '@/components/ModeCard';
 import { Leaderboard } from '@/components/Leaderboard';
 import { useVisitorId } from '@/hooks/useVisitorId';
@@ -113,15 +112,13 @@ export default function Home() {
       <header className="header-gradient py-6 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/rulevision.png"
-                alt="RuleVision"
-                width={180}
-                height={40}
-                className="h-10 w-auto"
-                priority
-              />
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-white">
+                RuleVision
+              </h1>
+              <p className="text-rv-silver/70 text-sm mt-1">
+                NBA Officials Training System
+              </p>
             </div>
             <Leaderboard currentVisitorId={visitorId} />
           </div>
