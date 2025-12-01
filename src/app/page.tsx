@@ -8,32 +8,28 @@ const gameModes = [
     id: 'film-room',
     icon: '🎬',
     name: 'Film Room',
-    description: 'Practice mode with explanations',
-    stat: 'No pressure',
+    description: 'Slow it down. Study the tape. Become undeniable.',
     href: '/play/film-room'
   },
   {
     id: 'daily-5',
     icon: '📅',
     name: 'Daily 5',
-    description: '5 questions per day',
-    stat: '0 day streak',
+    description: 'Five plays. One habit. Built daily.',
     href: '/play/daily-5'
   },
   {
     id: 'sudden-death',
     icon: '⚡',
     name: 'Sudden Death',
-    description: 'Answer until you miss',
-    stat: 'Best: 0',
+    description: '10 seconds. Where instincts win and hesitation ends your run.',
     href: '/play/sudden-death'
   },
   {
     id: 'category-drill',
     icon: '🎯',
     name: 'Category Drill',
-    description: 'Master specific topics',
-    stat: '0% mastery',
+    description: 'Reps on reps. Precision on demand.',
     href: '/play/category-drill'
   }
 ];
@@ -99,15 +95,12 @@ export default function HomePage() {
               className="group bg-white border border-brand-border rounded-xl p-8 hover:border-brand-black transition-all"
             >
               <div className="text-4xl mb-4">{mode.icon}</div>
-              <h3 className="text-xl font-semibold text-brand-black mb-2 tracking-tight">
+              <h3 className="text-xl font-semibold text-brand-black mb-3 tracking-tight">
                 {mode.name}
               </h3>
-              <p className="text-brand-gray mb-4">
+              <p className="text-brand-gray leading-relaxed">
                 {mode.description}
               </p>
-              <div className="text-sm text-brand-gray font-medium">
-                {mode.stat}
-              </div>
             </Link>
           ))}
         </div>
