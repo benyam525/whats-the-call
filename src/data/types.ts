@@ -28,6 +28,7 @@ export interface CasebookQuestion {
   correctAnswer: AnswerKey;
   ruling: string;
   ruleReference: string;
+  ruleLink?: string;
   casebookReference: string;
 }
 
