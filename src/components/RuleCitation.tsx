@@ -3,10 +3,10 @@
 interface RuleCitationProps {
   ruling: string;
   ruleReference?: string;
-  ruleLink?: string;
+  casebookReference?: string;
 }
 
-export function RuleCitation({ ruling, ruleReference, ruleLink }: RuleCitationProps) {
+export function RuleCitation({ ruling, ruleReference, casebookReference }: RuleCitationProps) {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100">
       {/* Header */}
@@ -46,28 +46,10 @@ export function RuleCitation({ ruling, ruleReference, ruleLink }: RuleCitationPr
               <div className="font-bold text-amber-900 text-lg">
                 {ruleReference}
               </div>
-              {ruleLink && (
-                <a
-                  href={ruleLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-amber-700 hover:text-amber-900 mt-2 underline underline-offset-2"
-                >
-                  Read the full rule
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
+              {casebookReference && (
+                <div className="text-sm text-amber-700 mt-2">
+                  📋 {casebookReference}
+                </div>
               )}
             </div>
           </div>

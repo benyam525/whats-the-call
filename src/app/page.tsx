@@ -296,7 +296,7 @@ function CallSimulatorContent() {
               <RuleCitation
                 ruling={currentQuestion.ruling}
                 ruleReference={currentQuestion.ruleReference}
-                ruleLink={currentQuestion.ruleLink}
+                casebookReference={currentQuestion.casebookReference}
               />
             </div>
           )}

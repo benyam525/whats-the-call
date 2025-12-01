@@ -1,625 +1,490 @@
-import { CaseQuestion, Difficulty } from './types';
+// NBA Casebook Questions - Sample Set
+// Source: Official 2023-24 NBA Casebook
+// Each question includes page number and question number for reference
 
-/**
- * NBA Case Book Questions
- * Source: Official NBA Case Book
- * MVP Scope: Up to "Coach's Challenge" section (page 13)
- *
- * Difficulty Levels:
- * - rookie: Common situations, fundamental rules
- * - veteran: Less common scenarios, requires deeper knowledge
- * - expert: Edge cases, rare situations, nuanced interpretations
- */
+import { CasebookQuestion, Category, Difficulty } from './types';
 
-export const casebookQuestions: CaseQuestion[] = [
+export const casebookQuestions: CasebookQuestion[] = [
   // ============================================
-  // 24-SECOND CLOCK
+  // AWAY-FROM-THE-PLAY FOULS (Page 4-5, Q1-7)
   // ============================================
   {
-    id: '24sec-001',
-    category: '24-Second Clock',
-    difficulty: 'rookie',
-    scenario: 'Team A has possession with 8 seconds remaining on the shot clock. A1 attempts a field goal that hits the rim and rebounds to A2.',
-    question: 'What happens to the shot clock?',
+    id: 'aftp-001',
+    category: 'Away-from-the-Play Fouls',
+    difficulty: 'veteran',
+    scenario: 'During the last two minutes of the fourth period, Player A1 is attempting a throw-in from out-of-bounds to Player A2. As the ball is in the air and Player A2 awaits the pass, he is fouled by Player B1.',
+    question: 'How is this administered?',
     options: {
-      a: 'Reset to 24 seconds',
-      b: 'Reset to 14 seconds',
-      c: 'Continue from where it stopped',
-      d: 'Turn off until Team A gains clear possession',
+      a: 'Away-from-the-play foul - one free throw plus possession',
+      b: 'Common foul - Player A2 was involved in the play',
+      c: 'Technical foul on Player B1',
+      d: 'Flagrant foul - automatic ejection'
     },
-    correctAnswer: 'a',
-    ruling: 'When the ball hits the rim on a field goal attempt and the offensive team regains possession, the shot clock resets to 24 seconds.',
-    ruleReference: 'Rule 7, Section II',
-    ruleLink: 'https://official.nba.com/rule-no-7-shot-clock/',
+    correctAnswer: 'b',
+    ruling: 'This is a common foul, as Player A2 was involved in the play. This is not considered an away-from-the-play foul.',
+    ruleReference: 'Rule 4, Section IV (h); Rule 12B, Section X (a)',
+    casebookReference: 'Page 4, Question 1'
   },
   {
-    id: '24sec-002',
-    category: '24-Second Clock',
-    difficulty: 'veteran',
-    scenario: 'Team A has 5 seconds on the shot clock. A1 drives and is fouled by B1 in the act of shooting. The shot misses.',
-    question: 'If Team A is in the bonus, what is the shot clock situation after the free throws?',
+    id: 'aftp-002',
+    category: 'Away-from-the-Play Fouls',
+    difficulty: 'expert',
+    scenario: 'During the last two minutes of the fourth period, Player A1 is out-of-bounds attempting to inbound the ball. Player B1 reaches across the boundary line and fouls Player A1.',
+    question: 'How is this administered?',
     options: {
-      a: 'Reset to 24 seconds',
-      b: 'Reset to 14 seconds',
-      c: 'Continue from 5 seconds',
-      d: 'Reset to 14 seconds only if less than 14 remained',
-    },
-    correctAnswer: 'a',
-    ruling: 'After free throws following a personal foul, the shot clock is reset to 24 seconds for the team that will have possession.',
-    ruleReference: 'Rule 7, Section III',
-    ruleLink: 'https://official.nba.com/rule-no-7-shot-clock/',
-  },
-  {
-    id: '24sec-003',
-    category: '24-Second Clock',
-    difficulty: 'veteran',
-    scenario: 'Team A is inbounding the ball with 18 seconds on the shot clock. B1 deflects the inbound pass out of bounds.',
-    question: 'What is the shot clock situation?',
-    options: {
-      a: 'Reset to 24 seconds',
-      b: 'Reset to 14 seconds',
-      c: 'Continue from 18 seconds',
-      d: 'Reset based on backcourt/frontcourt location',
+      a: 'Common foul on Player B1',
+      b: 'Away-from-the-play foul',
+      c: 'Delay-of-game technical foul on Player B1',
+      d: 'Double foul situation'
     },
     correctAnswer: 'c',
-    ruling: 'The shot clock continues from where it stopped. There is no reset for a deflection out of bounds by the defense.',
-    ruleReference: 'Rule 7, Section II',
-    ruleLink: 'https://official.nba.com/rule-no-7-shot-clock/',
+    ruling: 'Player B1 is assessed a Delay-of-Game technical foul since the game is in the last two minutes of the fourth period and he broke the plane of the boundary line first.',
+    ruleReference: 'Rule 12A, Section II (a)(5) and (Exception 5)',
+    casebookReference: 'Page 4, Question 2'
   },
   {
-    id: '24sec-004',
-    category: '24-Second Clock',
-    difficulty: 'expert',
-    scenario: 'Team A has 4 seconds on the shot clock. A1\'s shot attempt is blocked by B1 and the ball goes out of bounds off B1.',
-    question: 'What is the shot clock for Team A on the throw-in?',
+    id: 'aftp-003',
+    category: 'Away-from-the-Play Fouls',
+    difficulty: 'veteran',
+    scenario: 'During the last two minutes of any period, Player A1 is dribbling the ball in the frontcourt and Player B2 deliberately fouls Player A2 who is not in the play.',
+    question: 'What is the ruling?',
     options: {
-      a: 'Reset to 24 seconds',
-      b: 'Reset to 14 seconds',
-      c: 'Continue from 4 seconds',
-      d: 'No shot clock (dead ball)',
+      a: 'Common foul - two free throws',
+      b: 'Away-from-the-play foul - one free throw plus possession',
+      c: 'Technical foul on Player B2',
+      d: 'No call - play on'
     },
     correctAnswer: 'b',
-    ruling: 'When the offense retains possession after the ball goes out of bounds off the defense without hitting the rim, the shot clock resets to 14 seconds (or continues if more than 14 seconds remain).',
-    ruleReference: 'Rule 7, Section II(e)',
-    ruleLink: 'https://official.nba.com/rule-no-7-shot-clock/',
-  },
-  {
-    id: '24sec-005',
-    category: '24-Second Clock',
-    difficulty: 'rookie',
-    scenario: 'With 3 seconds on the shot clock, A1 attempts a 3-point shot. The ball is in flight when the shot clock buzzer sounds, then the ball hits the rim and goes in.',
-    question: 'Does the basket count?',
-    options: {
-      a: 'No, shot clock violation',
-      b: 'Yes, counts as 3 points',
-      c: 'Yes, but only 2 points',
-      d: 'Depends on whether it touched the backboard first',
-    },
-    correctAnswer: 'b',
-    ruling: 'If the ball is released before the shot clock expires and subsequently hits the rim, there is no violation. The basket counts.',
-    ruleReference: 'Rule 7, Section IV',
-    ruleLink: 'https://official.nba.com/rule-no-7-shot-clock/',
-  },
-  {
-    id: '24sec-006',
-    category: '24-Second Clock',
-    difficulty: 'rookie',
-    scenario: 'Team A commits a shot clock violation. The ball is awarded to Team B.',
-    question: 'Where does Team B inbound the ball?',
-    options: {
-      a: 'At the nearest spot out of bounds',
-      b: 'At the sideline nearest the violation',
-      c: 'At the baseline',
-      d: 'At mid-court',
-    },
-    correctAnswer: 'b',
-    ruling: 'After a shot clock violation, the ball is awarded to the opposing team at the sideline nearest to where the violation occurred.',
-    ruleReference: 'Rule 7, Section IV',
-    ruleLink: 'https://official.nba.com/rule-no-7-shot-clock/',
+    ruling: 'Player B2 is assessed an away-from-the-play foul. Any player on Team A shall attempt one free throw. The ball is awarded to Team A on the sideline where play was interrupted.',
+    ruleReference: 'Rule 4, Section IV (h); Rule 12B, Section X (a)(1) and (2)',
+    casebookReference: 'Page 4, Question 3'
   },
 
   // ============================================
-  // BACKCOURT VIOLATION
+  // BACKBOARD (Page 5, Q8-11)
   // ============================================
   {
-    id: 'back-001',
-    category: 'Backcourt Violation',
-    difficulty: 'expert',
-    scenario: 'A1 is standing in the frontcourt and catches a pass while airborne. A1 lands with one foot in the backcourt and one foot in the frontcourt.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Legal play, ball is in frontcourt',
-      b: 'Backcourt violation on A1',
-      c: 'Jump ball situation',
-      d: 'Ball is in backcourt, no violation',
-    },
-    correctAnswer: 'b',
-    ruling: 'A player who catches the ball in the air with frontcourt status cannot land with any part of their body in the backcourt. This is a backcourt violation.',
-    ruleReference: 'Rule 4, Section VI',
-    ruleLink: 'https://official.nba.com/rule-no-4-definitions/',
-  },
-  {
-    id: 'back-002',
-    category: 'Backcourt Violation',
-    difficulty: 'veteran',
-    scenario: 'A1 has the ball in the frontcourt near the division line. A1 passes to A2 who is standing with one foot on each side of the division line.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Legal play - A2 is in frontcourt',
-      b: 'Backcourt violation',
-      c: 'Legal play - A2 is in backcourt',
-      d: 'Technical foul',
-    },
-    correctAnswer: 'b',
-    ruling: 'A player with one foot in each court is considered to be in the backcourt. A pass from the frontcourt to such a player is a backcourt violation.',
-    ruleReference: 'Rule 4, Section VI',
-    ruleLink: 'https://official.nba.com/rule-no-4-definitions/',
-  },
-  {
-    id: 'back-003',
-    category: 'Backcourt Violation',
-    difficulty: 'veteran',
-    scenario: 'Team A is awarded the ball for a throw-in in their frontcourt with 6 seconds on the shot clock. A1 passes to A2 who is in the backcourt.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Backcourt violation',
-      b: 'Legal play - shot clock resets to 14',
-      c: 'Legal play - shot clock stays at 6',
-      d: 'Shot clock violation',
-    },
-    correctAnswer: 'a',
-    ruling: 'Once a team has established frontcourt status (including on a frontcourt throw-in), they cannot pass or dribble into the backcourt.',
-    ruleReference: 'Rule 4, Section VI',
-    ruleLink: 'https://official.nba.com/rule-no-4-definitions/',
-  },
-  {
-    id: 'back-004',
-    category: 'Backcourt Violation',
-    difficulty: 'expert',
-    scenario: 'A1 dribbles in the backcourt. B1 tips the ball which hits A1\'s leg and bounces into the frontcourt. A1 then recovers the ball in the frontcourt.',
-    question: 'Has Team A established frontcourt status?',
-    options: {
-      a: 'Yes, Team A has frontcourt status',
-      b: 'No, still in backcourt',
-      c: 'Jump ball situation',
-      d: 'Backcourt violation on A1',
-    },
-    correctAnswer: 'a',
-    ruling: 'When the ball is deflected by a defender into the frontcourt and the offense recovers it there, the offense has established frontcourt status.',
-    ruleReference: 'Rule 4, Section VI',
-    ruleLink: 'https://official.nba.com/rule-no-4-definitions/',
-  },
-  {
-    id: 'back-005',
-    category: 'Backcourt Violation',
+    id: 'backboard-001',
+    category: 'Backboard',
     difficulty: 'rookie',
-    scenario: 'A1 is dribbling in the frontcourt. B1 deflects the ball and it rolls into the backcourt. A1 recovers the ball in the backcourt.',
-    question: 'What is the ruling?',
+    scenario: 'On an unsuccessful field goal attempt, the ball hits the basket ring and rebounds over and behind the face of the backboard. The ball returns to the floor and touches inbounds without touching any backboard supports.',
+    question: 'Is the ball to remain in play?',
     options: {
-      a: 'Backcourt violation on A1',
-      b: 'Legal play - A1 can continue from backcourt',
-      c: 'Shot clock resets to 14 seconds',
-      d: 'Jump ball situation',
+      a: 'Yes - ball is live and play continues',
+      b: 'No - violation on the shooting team',
+      c: 'Jump ball at center court',
+      d: 'Shooting foul on the defense'
     },
     correctAnswer: 'b',
-    ruling: 'When a defender causes the ball to go into the backcourt, the offense may recover the ball in the backcourt without violation. This is not a backcourt violation.',
-    ruleReference: 'Rule 4, Section VI(d)',
-    ruleLink: 'https://official.nba.com/rule-no-4-definitions/',
+    ruling: 'No. A violation shall be called on the last team to touch the ball before it went directly behind the backboard. The ball is awarded to the opposing team at the free throw line extended.',
+    ruleReference: 'Rule 8, Section II (b)',
+    casebookReference: 'Page 5, Question 8'
   },
-
-  // ============================================
-  // BALL IN PLAY
-  // ============================================
   {
-    id: 'ball-001',
-    category: 'Ball in Play',
+    id: 'backboard-002',
+    category: 'Backboard',
     difficulty: 'rookie',
-    scenario: 'On a throw-in, A1 hands the ball through the plane of the boundary line to A2, who grabs it.',
-    question: 'Is this a legal play?',
+    scenario: 'On an unsuccessful field goal attempt, the ball rebounds off the basket ring and rolls along the top edge of the backboard.',
+    question: 'Is the ball still in play?',
     options: {
-      a: 'Yes, the ball is in play',
-      b: 'No, violation on A1',
-      c: 'No, violation on A2',
-      d: 'Technical foul on A1',
-    },
-    correctAnswer: 'b',
-    ruling: 'The thrower-in may not hand the ball to a player on the court. The ball must be passed or bounced to a teammate. This is a violation.',
-    ruleReference: 'Rule 8, Section III',
-    ruleLink: 'https://official.nba.com/rule-no-8-out-of-bounds-and-throw-in/',
-  },
-  {
-    id: 'ball-002',
-    category: 'Ball in Play',
-    difficulty: 'rookie',
-    scenario: 'A1 is making a throw-in. Before releasing the ball, A1 steps over the boundary line with one foot while holding the ball.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Legal, as long as A1 releases the ball within 5 seconds',
-      b: 'Violation - turnover to Team B',
-      c: 'Technical foul on A1',
-      d: 'Let play continue if no defender was affected',
-    },
-    correctAnswer: 'b',
-    ruling: 'The thrower-in may not step onto the playing court before releasing the ball. This is a violation.',
-    ruleReference: 'Rule 8, Section III',
-    ruleLink: 'https://official.nba.com/rule-no-8-out-of-bounds-and-throw-in/',
-  },
-  {
-    id: 'ball-003',
-    category: 'Ball in Play',
-    difficulty: 'veteran',
-    scenario: 'During a throw-in, A1 releases the ball and it bounces once on the court. Before anyone touches it, A1 steps inbounds and catches the ball.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Legal play - ball was in play',
-      b: 'Violation on A1',
-      c: 'Jump ball situation',
-      d: 'Shot clock reset',
-    },
-    correctAnswer: 'b',
-    ruling: 'The thrower-in may not be the first player to touch the ball after releasing it for the throw-in, unless it first touches another player. This is a violation.',
-    ruleReference: 'Rule 8, Section III(c)',
-    ruleLink: 'https://official.nba.com/rule-no-8-out-of-bounds-and-throw-in/',
-  },
-  {
-    id: 'ball-004',
-    category: 'Ball in Play',
-    difficulty: 'expert',
-    scenario: 'Following a made basket, A1 catches the ball as it comes through the net and immediately throws it to a referee who then hands it to B1 for the throw-in.',
-    question: 'What happens to the game clock during this sequence?',
-    options: {
-      a: 'Clock starts when referee hands ball to B1',
-      b: 'Clock starts when B1 releases the throw-in',
-      c: 'Clock starts when the ball touches a player on court',
-      d: 'Clock does not stop after made basket',
+      a: 'No - dead ball, jump ball situation',
+      b: 'No - violation, ball went out of bounds',
+      c: 'Yes - all four sides of the backboard are inbounds',
+      d: 'Only if it falls back onto the court within 3 seconds'
     },
     correctAnswer: 'c',
-    ruling: 'After a successful field goal, the game clock starts when the ball is legally touched by a player on the court.',
-    ruleReference: 'Rule 5, Section IX',
-    ruleLink: 'https://official.nba.com/rule-no-5-scoring-and-timing/',
-  },
-
-  // ============================================
-  // BASKET INTERFERENCE / GOALTENDING
-  // ============================================
-  {
-    id: 'goal-001',
-    category: 'Basket Interference / Goaltending',
-    difficulty: 'rookie',
-    scenario: 'A1 shoots and the ball is on its downward flight above the basket. B1 jumps and touches the ball while it is entirely above the rim level.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Legal block - good defense',
-      b: 'Goaltending - 2 or 3 points for Team A',
-      c: 'Basket interference - 2 or 3 points for Team A',
-      d: 'Jump ball situation',
-    },
-    correctAnswer: 'b',
-    ruling: 'Touching the ball during a field goal attempt while it is on its downward flight, entirely above the rim level, and has a chance to enter the basket is goaltending. Points are awarded.',
-    ruleReference: 'Rule 11, Section I',
-    ruleLink: 'https://official.nba.com/rule-no-11-basket-interference-goaltending/',
+    ruling: 'Yes. All four sides of the backboard are considered inbounds.',
+    ruleReference: 'Rule 4, Section I (c)',
+    casebookReference: 'Page 5, Question 10'
   },
   {
-    id: 'goal-002',
-    category: 'Basket Interference / Goaltending',
+    id: 'backboard-003',
+    category: 'Backboard',
     difficulty: 'veteran',
-    scenario: 'A1 shoots and the ball bounces off the rim. While the ball is rolling on the rim with a chance to go in, A2 touches the ball trying to tip it in.',
+    scenario: 'Player A1 passes the ball and it hits his own backboard. May Player A1 be the first to touch the ball?',
     question: 'What is the ruling?',
     options: {
-      a: 'If ball goes in, basket counts',
-      b: 'Basket interference by A2 - no basket',
-      c: 'Goaltending by A2 - basket counts',
-      d: 'Legal play - continuation',
-    },
-    correctAnswer: 'b',
-    ruling: 'An offensive player may not touch the ball while it is on or within the rim or has a chance to enter the basket. This is offensive basket interference.',
-    ruleReference: 'Rule 11, Section II',
-    ruleLink: 'https://official.nba.com/rule-no-11-basket-interference-goaltending/',
-  },
-  {
-    id: 'goal-003',
-    category: 'Basket Interference / Goaltending',
-    difficulty: 'expert',
-    scenario: 'B1 is hanging on the rim as A1\'s shot attempt hits the backboard and bounces toward the basket. The ball hits B1\'s arm while B1 is still on the rim.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Legal - incidental contact',
-      b: 'Technical foul on B1',
-      c: 'Basket interference - basket counts',
-      d: 'Goaltending - basket counts',
+      a: 'No - this is a traveling violation',
+      b: 'No - this is a double dribble violation',
+      c: 'Yes - a player may touch his own pass if it hits the backboard',
+      d: 'Only if another player touched it first'
     },
     correctAnswer: 'c',
-    ruling: 'A player may not touch the rim or net while the ball is on or within the basket, or touch the ball while it is in the cylinder above the rim. Basket interference by the defense awards the basket.',
-    ruleReference: 'Rule 11, Section II',
-    ruleLink: 'https://official.nba.com/rule-no-11-basket-interference-goaltending/',
-  },
-  {
-    id: 'goal-004',
-    category: 'Basket Interference / Goaltending',
-    difficulty: 'rookie',
-    scenario: 'A1 dunks the ball. After the ball clears the net, A1 continues to hang on the rim for a moment before dropping down.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Technical foul on A1',
-      b: 'Legal - basket counts, no foul',
-      c: 'Basket interference - no basket',
-      d: 'Flagrant foul',
-    },
-    correctAnswer: 'b',
-    ruling: 'A player may hang on the rim after a dunk to prevent injury to themselves or another player. Brief hanging after the ball clears is permitted.',
-    ruleReference: 'Rule 11, Section II(e)',
-    ruleLink: 'https://official.nba.com/rule-no-11-basket-interference-goaltending/',
-  },
-  {
-    id: 'goal-005',
-    category: 'Basket Interference / Goaltending',
-    difficulty: 'veteran',
-    scenario: 'A1\'s shot hits the backboard and is on its way down toward the basket. B1 jumps and blocks the ball off the backboard before it reaches the rim.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Legal block',
-      b: 'Goaltending - basket counts',
-      c: 'Basket interference - basket counts',
-      d: 'Depends on the distance from the basket',
-    },
-    correctAnswer: 'b',
-    ruling: 'Once the ball has touched the backboard during a field goal attempt, touching it while it is on its downward flight is goaltending.',
-    ruleReference: 'Rule 11, Section I(a)',
-    ruleLink: 'https://official.nba.com/rule-no-11-basket-interference-goaltending/',
-  },
-  {
-    id: 'goal-006',
-    category: 'Basket Interference / Goaltending',
-    difficulty: 'expert',
-    scenario: 'A1 attempts a layup. The ball rolls around the rim and is about to exit without going through. B1 touches the ball as it is leaving the rim.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Goaltending - basket counts',
-      b: 'Legal play - good defense',
-      c: 'Basket interference - basket counts',
-      d: 'Jump ball situation',
-    },
-    correctAnswer: 'b',
-    ruling: 'If the ball clearly has no chance to go through the basket, touching it is legal. Once the ball is clearly exiting the cylinder, it may be touched.',
-    ruleReference: 'Rule 11, Section I',
-    ruleLink: 'https://official.nba.com/rule-no-11-basket-interference-goaltending/',
+    ruling: 'Yes. A player may be the first to touch his own pass, or shot, if the ball touches his basket ring, backboard or another player.',
+    ruleReference: 'Rule 10, Section XIII (g)',
+    casebookReference: 'Page 5, Question 11'
   },
 
   // ============================================
-  // BLOOD PROTOCOL
+  // BACKCOURT (Page 6-7, Q12-24)
   // ============================================
   {
-    id: 'blood-001',
-    category: 'Blood Protocol',
+    id: 'backcourt-001',
+    category: 'Backcourt',
     difficulty: 'rookie',
-    scenario: 'A1 is bleeding from a cut on their arm. The referee notices this during a dead ball.',
-    question: 'What must happen?',
+    scenario: 'Player A1 taps the ball into his backcourt while rebounding. Player A2 retrieves the ball in the backcourt and continues to advance toward the frontcourt.',
+    question: 'Is this legal?',
     options: {
-      a: 'A1 may continue until the next timeout',
-      b: 'A1 must be substituted immediately',
-      c: 'A1 must leave and may return when bleeding stops and wound is covered',
-      d: 'Game is delayed up to 5 minutes for treatment',
+      a: 'No - backcourt violation',
+      b: 'Yes - any player may recover a ball tapped into backcourt during rebounding',
+      c: 'Only if it was an offensive rebound',
+      d: 'Only if the shot clock has not reset'
+    },
+    correctAnswer: 'b',
+    ruling: 'Yes. Any player may recover a ball which is tapped into the backcourt during rebounding or when the ball is loose. The shot clock will also be reset to 14.',
+    ruleReference: 'Rule 10, Section IX (b)',
+    casebookReference: 'Page 6, Question 12'
+  },
+  {
+    id: 'backcourt-002',
+    category: 'Backcourt',
+    difficulty: 'expert',
+    scenario: 'A player in control of the ball has stopped his dribble in the frontcourt very close to the midcourt line. While being played extremely close by an opponent, he steps into the backcourt.',
+    question: 'What must the official judge?',
+    options: {
+      a: 'Always a backcourt violation',
+      b: 'Always a traveling violation',
+      c: 'Could be a personal foul, traveling violation, or backcourt violation depending on circumstances',
+      d: 'No violation - player was forced back'
     },
     correctAnswer: 'c',
-    ruling: 'A player who is bleeding or has blood on their uniform must be directed to leave the game. They may return when the bleeding has stopped and the wound is properly covered.',
-    ruleReference: 'Rule 3, Section VI',
-    ruleLink: 'https://official.nba.com/rule-no-3-players-substitutes-and-coaches/',
+    ruling: 'The official must judge this as: (1) a personal foul if illegal contact caused him to step back, (2) a traveling violation if the step was illegal, or (3) a backcourt violation.',
+    ruleReference: 'Rule 4, Section VI (a); Rule 10, Section IX (a); Rule 12B, Section I (a)',
+    casebookReference: 'Page 6, Question 13'
   },
   {
-    id: 'blood-002',
-    category: 'Blood Protocol',
+    id: 'backcourt-003',
+    category: 'Backcourt',
     difficulty: 'veteran',
-    scenario: 'A1 has blood on their jersey. The team has no replacement jersey available.',
-    question: 'What happens?',
+    scenario: 'Player A1 has possession in the frontcourt. He passes to Player A2 who is still in the air after leaping from his backcourt.',
+    question: 'Is this legal?',
     options: {
-      a: 'A1 is disqualified from the game',
-      b: 'Team A forfeits the game',
-      c: 'A1 may wear the jersey inside-out if blood is covered',
-      d: 'A1 must play without a jersey',
+      a: 'Yes - air space has no frontcourt/backcourt status',
+      b: 'No - backcourt violation; A2 must establish position in frontcourt first',
+      c: 'Legal only if A2 catches and shoots before landing',
+      d: 'Legal only in the last two minutes of a period'
+    },
+    correctAnswer: 'b',
+    ruling: 'No. A backcourt violation has occurred. Player A2 must establish a position on the floor in the frontcourt prior to touching the pass.',
+    ruleReference: 'Rule 8, Section I; Rule 10, Section IX (a)',
+    casebookReference: 'Page 6, Question 16'
+  },
+  {
+    id: 'backcourt-004',
+    category: 'Backcourt',
+    difficulty: 'veteran',
+    scenario: 'Player A1 straddles the midcourt line and, without moving forward, dribbles the ball in the frontcourt while in this position.',
+    question: 'Is this a violation?',
+    options: {
+      a: 'Yes - the ball is in the frontcourt',
+      b: 'Yes - player cannot straddle the line while dribbling',
+      c: 'No - player is considered backcourt if either foot or ball is in backcourt',
+      d: 'No - but only for 3 seconds'
     },
     correctAnswer: 'c',
-    ruling: 'If no replacement jersey is available, the player may wear the bloody jersey inside-out, provided the blood is not visible and the number is still identifiable or announced.',
-    ruleReference: 'Rule 3, Section VI',
-    ruleLink: 'https://official.nba.com/rule-no-3-players-substitutes-and-coaches/',
+    ruling: 'No. A player dribbling the ball is considered in the backcourt if either foot or the ball is in the backcourt.',
+    ruleReference: 'Rule 4, Section VI (d)',
+    casebookReference: 'Page 6, Question 17'
+  },
+  {
+    id: 'backcourt-005',
+    category: 'Backcourt',
+    difficulty: 'veteran',
+    scenario: 'Team A is granted a timeout with the ball in the frontcourt and :21.5 remaining in the fourth period. On the throw-in, the ball is thrown into the backcourt where it is caught by Player A2.',
+    question: 'Is this a violation?',
+    options: {
+      a: 'Yes - backcourt violation',
+      b: 'Yes - 8-second violation starts immediately',
+      c: 'No - during last two minutes of 4th period, ball may be inbounded anywhere',
+      d: 'No - timeout resets frontcourt/backcourt status'
+    },
+    correctAnswer: 'c',
+    ruling: 'No. During the last two minutes of the fourth period and last two minutes of overtime, the ball may be inbounded anywhere on the court.',
+    ruleReference: 'Rule 8, Section III (e) (Exception)',
+    casebookReference: 'Page 7, Question 23'
   },
 
   // ============================================
-  // BOUNDARY LINES
+  // BATTED BALL (Page 8, Q25-26)
   // ============================================
   {
-    id: 'bound-001',
-    category: 'Boundary Lines',
+    id: 'batted-001',
+    category: 'Batted Ball',
     difficulty: 'rookie',
-    scenario: 'A1 is dribbling near the sideline. A1\'s foot touches the boundary line while the ball is in their hand.',
-    question: 'What is the ruling?',
+    scenario: 'Player A1 saves a loose ball from going out-of-bounds by batting the ball back onto the playing court.',
+    question: 'May Player A1 be the first to touch the ball when he returns onto the court?',
     options: {
-      a: 'Legal - ball must touch out of bounds',
-      b: 'A1 is out of bounds - turnover',
-      c: 'A1 is out of bounds only if they step completely over',
-      d: 'Play continues if A1 returns inbounds',
+      a: 'No - out of bounds violation',
+      b: 'No - double dribble violation',
+      c: 'Yes - batting does not constitute player control',
+      d: 'Only if another player touches it first'
     },
-    correctAnswer: 'b',
-    ruling: 'A player is out of bounds when they touch the floor or any object on or outside the boundary line. The ball is out of bounds if the player is out of bounds while touching it.',
-    ruleReference: 'Rule 8, Section I',
-    ruleLink: 'https://official.nba.com/rule-no-8-out-of-bounds-and-throw-in/',
-  },
-  {
-    id: 'bound-002',
-    category: 'Boundary Lines',
-    difficulty: 'veteran',
-    scenario: 'A loose ball is rolling toward the sideline. A1 dives and saves the ball while airborne, throwing it to A2 before landing out of bounds.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Ball is out of bounds - Team B ball',
-      b: 'Legal save - Team A ball',
-      c: 'A1 must land inbounds for it to be legal',
-      d: 'Jump ball situation',
-    },
-    correctAnswer: 'b',
-    ruling: 'A player may save a ball while airborne by passing it before landing out of bounds. The player\'s out of bounds status is determined when they touch out of bounds, and the save is legal if the ball was released before that.',
-    ruleReference: 'Rule 8, Section II',
-    ruleLink: 'https://official.nba.com/rule-no-8-out-of-bounds-and-throw-in/',
-  },
-  {
-    id: 'bound-003',
-    category: 'Boundary Lines',
-    difficulty: 'veteran',
-    scenario: 'A1 has both feet inbounds and reaches out to save a ball that is over the out of bounds area but hasn\'t touched anything out of bounds.',
-    question: 'If A1 catches the ball, what is the ruling?',
-    options: {
-      a: 'Ball is out of bounds - A1 cannot touch it',
-      b: 'Legal save - ball is in play',
-      c: 'Jump ball situation',
-      d: 'Technical foul on A1',
-    },
-    correctAnswer: 'b',
-    ruling: 'The ball is not out of bounds until it touches a player who is out of bounds, or any object out of bounds. A player who is inbounds may save a ball that is above but not touching out of bounds.',
-    ruleReference: 'Rule 8, Section I',
-    ruleLink: 'https://official.nba.com/rule-no-8-out-of-bounds-and-throw-in/',
-  },
-  {
-    id: 'bound-004',
-    category: 'Boundary Lines',
-    difficulty: 'expert',
-    scenario: 'A1 is standing out of bounds and B1 passes the ball directly to A1.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Jump ball situation',
-      b: 'Ball is out of bounds - Team A ball',
-      c: 'Technical foul on B1',
-      d: 'Play continues if A1 steps inbounds',
-    },
-    correctAnswer: 'b',
-    ruling: 'The ball is caused to go out of bounds by the last player to touch it. If the ball touches a player who is standing out of bounds, that player caused it to go out of bounds. Since A1 is on Team A, Team A gets the ball.',
-    ruleReference: 'Rule 8, Section II',
-    ruleLink: 'https://official.nba.com/rule-no-8-out-of-bounds-and-throw-in/',
+    correctAnswer: 'c',
+    ruling: 'Yes. The batting of the ball does not constitute player control, therefore Player A1 may be the first to touch the ball.',
+    ruleReference: 'Rule 10, Section II (b)',
+    casebookReference: 'Page 8, Question 26'
   },
 
   // ============================================
-  // CHARGING / BLOCKING
+  // BLOCKING FOULS (Page 8-9, Q27-32)
   // ============================================
   {
-    id: 'charge-001',
-    category: 'Charging / Blocking',
-    difficulty: 'rookie',
-    scenario: 'B1 has established legal guarding position outside the restricted area. A1 drives and lowers their shoulder, making contact with B1\'s torso. B1 falls backward.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Blocking foul on B1',
-      b: 'Offensive foul (charge) on A1',
-      c: 'No call - incidental contact',
-      d: 'Double foul',
-    },
-    correctAnswer: 'b',
-    ruling: 'When a defender has established legal guarding position and the offensive player lowers their shoulder or uses their forearm to create separation or dislodge the defender, it is an offensive foul (charge).',
-    ruleReference: 'Rule 12B, Section I',
-    ruleLink: 'https://official.nba.com/rule-no-12-fouls-and-penalties/',
-  },
-  {
-    id: 'charge-002',
-    category: 'Charging / Blocking',
-    difficulty: 'rookie',
-    scenario: 'B1 is sliding into position as A1 drives. At the moment of contact, B1\'s feet are still moving.',
-    question: 'What is the ruling?',
-    options: {
-      a: 'Blocking foul on B1',
-      b: 'Offensive foul on A1',
-      c: 'No call - play on',
-      d: 'Depends on who initiated contact',
-    },
-    correctAnswer: 'a',
-    ruling: 'A defender must have established legal guarding position before contact. If the defender\'s feet are still moving when contact occurs, it is typically a blocking foul.',
-    ruleReference: 'Rule 12B, Section I(a)',
-    ruleLink: 'https://official.nba.com/rule-no-12-fouls-and-penalties/',
-  },
-  {
-    id: 'charge-003',
-    category: 'Charging / Blocking',
+    id: 'blocking-001',
+    category: 'Blocking Fouls',
     difficulty: 'veteran',
-    scenario: 'B1 is in the restricted area with legal guarding position established. A1 drives to the basket and collides with B1.',
-    question: 'What is the ruling?',
+    scenario: 'Player A1 catches an outlet pass near midcourt and immediately crashes into defender B1 who is standing in a stationary position.',
+    question: 'Is this a legal defensive position to draw an offensive foul?',
     options: {
-      a: 'Offensive foul on A1',
-      b: 'Blocking foul on B1',
-      c: 'No call - incidental contact',
-      d: 'Flagrant foul on A1',
+      a: 'Yes - defender was stationary',
+      b: 'No - defender must allow receiver room to avoid contact outside Lower Defensive Box',
+      c: 'Yes - offensive player has responsibility to avoid contact',
+      d: 'Depends on whether defender had both feet set'
     },
     correctAnswer: 'b',
-    ruling: 'A secondary defender (one who did not initially guard the ball handler) may not take a charge inside the restricted area. A blocking foul is called.',
-    ruleReference: 'Rule 12B, Section I(b)',
-    ruleLink: 'https://official.nba.com/rule-no-12-fouls-and-penalties/',
+    ruling: 'No. A defender must allow any offensive player who receives a pass outside the Lower Defensive Box enough room to avoid contact.',
+    ruleReference: 'Comments on the Rules, Section II (C)',
+    casebookReference: 'Page 8, Question 27'
   },
   {
-    id: 'charge-004',
-    category: 'Charging / Blocking',
+    id: 'blocking-002',
+    category: 'Blocking Fouls',
     difficulty: 'expert',
-    scenario: 'A1 is driving. B1 is a secondary defender who jumps from inside the restricted area but contact occurs when B1 is outside the restricted area (having jumped forward).',
-    question: 'Does the restricted area apply?',
+    scenario: 'Player A1 drives past his primary defender and crashes into secondary defender B5 who is stationary and trying to draw an offensive foul. Player B5\'s heel is in the Restricted Area.',
+    question: 'Should a defensive foul be called?',
     options: {
-      a: 'Yes - B1 jumped from inside the area',
-      b: 'No - contact occurred outside the area',
-      c: 'No call - play on',
-      d: 'Double foul',
+      a: 'No - defender was stationary with legal position',
+      b: 'Yes - secondary defenders must be completely clear of restricted area',
+      c: 'No - only the toe matters, not the heel',
+      d: 'Jump ball situation'
     },
-    correctAnswer: 'a',
-    ruling: 'The restricted area rule applies based on where the defender\'s feet were when contact began or when they left the floor, not where contact occurs.',
-    ruleReference: 'Rule 12B, Section I(b)',
-    ruleLink: 'https://official.nba.com/rule-no-12-fouls-and-penalties/',
+    correctAnswer: 'b',
+    ruling: 'Yes. In order for an offensive foul to be called, secondary defenders must be completely clear of the restricted area. Lifting one\'s foot or heel off the floor above the RA does not remove them from the RA.',
+    ruleReference: 'Comments on the Rules, Section II (C)',
+    casebookReference: 'Page 8, Question 28'
   },
   {
-    id: 'charge-005',
-    category: 'Charging / Blocking',
+    id: 'blocking-003',
+    category: 'Blocking Fouls',
+    difficulty: 'expert',
+    scenario: 'Defensive Player B5 gets to a legal position and jumps vertically on Player A3\'s drive to the basket. As Player A3 attempts to shoot, B5 lowers his arm and contacts A3 on the elbow.',
+    question: 'Is this a foul?',
+    options: {
+      a: 'No - defender established legal vertical position',
+      b: 'No - incidental contact during shot attempt',
+      c: 'Yes - B5 did not maintain verticality when he lowered his arm',
+      d: 'Offensive foul on A3 for initiating contact'
+    },
+    correctAnswer: 'c',
+    ruling: 'Yes, B5 did not maintain his verticality when he lowered his arm and since he made contact with A3\'s elbow, a shooting foul should be assessed.',
+    ruleReference: 'Comments on the Rules, Section II (C)',
+    casebookReference: 'Page 9, Question 32'
+  },
+  {
+    id: 'blocking-004',
+    category: 'Blocking Fouls',
     difficulty: 'veteran',
-    scenario: 'A1 catches the ball in the post. B1 is guarding A1 and has been in legal guarding position. A1 backs B1 down and creates contact, moving B1 backward.',
+    scenario: 'Player A1 is driving to the basket for a lay-up. Defender B1 is attempting to draw a charge.',
+    question: 'What is the deciding point between block or charge?',
+    options: {
+      a: 'Whether the defender\'s feet were set',
+      b: 'Whether the defender was in the restricted area',
+      c: 'Defender must be in position before offensive player\'s shoulder starts upward motion',
+      d: 'Whether contact was made above or below the waist'
+    },
+    correctAnswer: 'c',
+    ruling: 'The defender must get his body directly into the offensive player\'s path and be at the spot prior to the upward motion, defined as shoulder starting upward.',
+    ruleReference: 'Comments on the Rules, Section II (C)',
+    casebookReference: 'Page 9, Question 30'
+  },
+
+  // ============================================
+  // CAPTAINS (Page 9, Q33-34)
+  // ============================================
+  {
+    id: 'captains-001',
+    category: 'Captains',
+    difficulty: 'rookie',
+    scenario: 'Team A calls a timeout. The captain of Team B wishes to discuss a rule interpretation with the officials.',
+    question: 'Is this allowed?',
+    options: {
+      a: 'Yes - any captain may address officials during timeouts',
+      b: 'No - only the captain of the team charged the timeout may question officials',
+      c: 'Yes - but only if both captains agree',
+      d: 'Only during official timeouts'
+    },
+    correctAnswer: 'b',
+    ruling: 'No. Only the captain of the team charged the timeout may question the officials. At this time he may only ask about a specific rule interpretation, but not about a judgment call.',
+    ruleReference: 'Rule 3, Section III (b)',
+    casebookReference: 'Page 9, Question 33'
+  },
+
+  // ============================================
+  // CLEAR-PATH-TO-THE-BASKET (Page 10-12, Q36-46)
+  // ============================================
+  {
+    id: 'clearpath-001',
+    category: 'Clear-Path-to-the-Basket',
+    difficulty: 'veteran',
+    scenario: 'Player A1 is dribbling in the frontcourt toward the basket during a transition scoring opportunity. Player B1 fouls him from the rear and no other defender is ahead of Player A1 at the time of the foul.',
     question: 'What is the ruling?',
     options: {
-      a: 'No call - normal post play',
-      b: 'Offensive foul on A1',
-      c: 'Blocking foul on B1',
-      d: 'Held ball',
+      a: 'Common foul - two free throws',
+      b: 'Clear path foul - two free throws plus possession',
+      c: 'Flagrant foul - automatic',
+      d: 'Transition take foul'
     },
     correctAnswer: 'b',
-    ruling: 'An offensive player may not dislodge or displace a defender who has established and maintains legal guarding position. Using excessive force to back down a defender is an offensive foul.',
-    ruleReference: 'Rule 12B, Section V',
-    ruleLink: 'https://official.nba.com/rule-no-12-fouls-and-penalties/',
+    ruling: 'This is a clear path foul. Player A1 is awarded two free throws and Team A retains possession on the sideline nearest to where play was interrupted.',
+    ruleReference: 'Rule 12B, Section I (Penalty 6)',
+    casebookReference: 'Page 10, Question 37'
   },
   {
-    id: 'charge-006',
-    category: 'Charging / Blocking',
-    difficulty: 'veteran',
-    scenario: 'A1 is driving. B1 has legal guarding position. A1 goes into their shooting motion as contact occurs with B1. The ball goes in.',
-    question: 'If the official rules this a charge, does the basket count?',
+    id: 'clearpath-002',
+    category: 'Clear-Path-to-the-Basket',
+    difficulty: 'expert',
+    scenario: 'Player A1 has a clear-path-to-the-basket and is grabbed from behind on a two-point field goal attempt. The shot is unsuccessful.',
+    question: 'What is the procedure?',
     options: {
-      a: 'Yes - basket counts, offensive foul',
-      b: 'No - offensive fouls cancel the basket',
-      c: 'Only if A1 was fouled before the charge',
-      d: 'Referee discretion',
+      a: 'Clear path foul - two free throws plus possession',
+      b: 'Common foul - two free throws only',
+      c: 'Flagrant foul assessment required',
+      d: 'And-one opportunity'
     },
     correctAnswer: 'b',
-    ruling: 'When an offensive foul is committed, any field goal made on that play is disallowed. The basket does not count.',
-    ruleReference: 'Rule 5, Section I(b)',
-    ruleLink: 'https://official.nba.com/rule-no-5-scoring-and-timing/',
+    ruling: 'A common foul should be called. A clear path foul cannot occur if the offensive player is fouled in the act of shooting. Player A1 receives two free throw attempts.',
+    ruleReference: 'Rule 12B, Section I (Penalty 3, 4, and 6)',
+    casebookReference: 'Page 11, Question 39'
   },
+  {
+    id: 'clearpath-003',
+    category: 'Clear-Path-to-the-Basket',
+    difficulty: 'expert',
+    scenario: 'Player A1 throws a pass from his backcourt to Player A2 who receives it under the backboard near the baseline. Simultaneous with receiving the pass, Player A2 is fouled by Player B2.',
+    question: 'What is the ruling?',
+    options: {
+      a: 'Clear path foul - ball was advancing to basket',
+      b: 'Common foul - A2 is past the basket, ball not advancing toward it',
+      c: 'Away-from-the-play foul',
+      d: 'Transition take foul'
+    },
+    correctAnswer: 'b',
+    ruling: 'This is a common foul. Player A2 is not deprived of a transition scoring opportunity because the ball is not continuously advancing to the basket; A2 already acquired a position past the basket.',
+    ruleReference: 'Rule 12B, Section I (Penalty 6)',
+    casebookReference: 'Page 11, Question 40'
+  },
+  {
+    id: 'clearpath-004',
+    category: 'Clear-Path-to-the-Basket',
+    difficulty: 'expert',
+    scenario: 'During a transition scoring opportunity, Player B2 sprints toward a pass, jumps with arms toward the ball, and nearly deflects it. In trying to deflect the pass, B2 collides with Player A4 and a foul is called. No defender is ahead of A4.',
+    question: 'Is this a clear path foul?',
+    options: {
+      a: 'Yes - no defender ahead and transition opportunity denied',
+      b: 'No - common foul because defender made legitimate play on ball',
+      c: 'Yes - any foul during transition with no defender ahead is clear path',
+      d: 'Transition take foul'
+    },
+    correctAnswer: 'b',
+    ruling: 'No, this is a common foul. Although no defender was ahead of A4, B2 committed a foul while attempting to make a legitimate play on ball. A clear path foul cannot occur if the foul is caused by attempting to intercept or deflect a pass.',
+    ruleReference: 'Rule 12B, Section I (Penalty 6)',
+    casebookReference: 'Page 12, Question 45'
+  },
+
+  // ============================================
+  // CHOICE OF BASKETS (Page 9, Q35)
+  // ============================================
+  {
+    id: 'choice-001',
+    category: 'Choice of Baskets',
+    difficulty: 'rookie',
+    scenario: 'Prior to the start of the game, a decision must be made about which team gets which basket.',
+    question: 'Which team has the choice of baskets?',
+    options: {
+      a: 'The home team',
+      b: 'The visiting team',
+      c: 'Determined by coin flip',
+      d: 'The team that won the previous matchup'
+    },
+    correctAnswer: 'b',
+    ruling: 'The visiting team has its choice of baskets. Its decision must be made immediately upon taking the court.',
+    ruleReference: 'Rule 4, Section I (a)',
+    casebookReference: 'Page 9, Question 35'
+  },
+
+  // ============================================
+  // COACH'S CHALLENGE (Page 13-18, Q47-52)
+  // ============================================
+  {
+    id: 'challenge-001',
+    category: "Coach's Challenge",
+    difficulty: 'veteran',
+    scenario: 'With 9:58 remaining in the fourth period, Player B1 is called for a defensive foul. Team A\'s head coach immediately calls a timeout (triggering the first mandatory timeout of the period). Team B wants to challenge.',
+    question: 'What is required of Team B to challenge the foul?',
+    options: {
+      a: 'Simply call timeout within 30 seconds',
+      b: 'Signal for Challenge within 30 seconds and notify official of specific event being challenged',
+      c: 'Wait until the next dead ball',
+      d: 'Only the fouled player can request a challenge'
+    },
+    correctAnswer: 'b',
+    ruling: 'Team B\'s head coach must signal for a Challenge no later than 30 seconds from the start of the timeout and notify the game official of the specific event being challenged.',
+    ruleReference: 'Rule 14, Section II (b); Rule 14, Section V (b and d)',
+    casebookReference: 'Page 13, Question 47'
+  },
+  {
+    id: 'challenge-002',
+    category: "Coach's Challenge",
+    difficulty: 'expert',
+    scenario: 'Team B\'s head coach calls timeout and walks back to his bench to consult with assistant coaches. After 25 seconds, he then signals for a Challenge.',
+    question: 'Is this a legal Challenge?',
+    options: {
+      a: 'Yes - it was within 30 seconds',
+      b: 'No - must signal during same interaction as calling timeout',
+      c: 'Yes - any time during timeout is acceptable',
+      d: 'Only if it\'s the team\'s first challenge'
+    },
+    correctAnswer: 'b',
+    ruling: 'This is not a legal Challenge. Although the coach called timeout in a timely manner, he did not signal for the Challenge during the same interaction with the game official in which the timeout was called.',
+    ruleReference: 'Rule 14, Section II (a)',
+    casebookReference: 'Page 17, Question 52(1)'
+  },
+  {
+    id: 'challenge-003',
+    category: "Coach's Challenge",
+    difficulty: 'expert',
+    scenario: 'A foul is called and the stoppage triggers the mandatory timeout. Team B\'s coach argues with officials, then at 28 seconds into the timeout, signals for a Challenge after watching the replay on the jumbotron.',
+    question: 'Is this a legal Challenge?',
+    options: {
+      a: 'No - coach was arguing, not challenging',
+      b: 'No - cannot use arena replay to decide',
+      c: 'Yes - Challenge was signaled within 30 seconds of mandatory timeout',
+      d: 'No - must signal immediately, not after consulting'
+    },
+    correctAnswer: 'c',
+    ruling: 'This is a legal Challenge. For events immediately preceding a mandatory timeout, the coach must signal within 30 seconds from the start of the timeout.',
+    ruleReference: 'Rule 14, Section II (b); Rule 14, Section V (a and b)',
+    casebookReference: 'Page 17-18, Question 52(2)'
+  }
 ];
 
 // Helper function to get a random question
-export function getRandomQuestion(): CaseQuestion {
+export function getRandomQuestion(): CasebookQuestion {
   const index = Math.floor(Math.random() * casebookQuestions.length);
   return casebookQuestions[index];
 }
 
 // Helper function to get questions by category
-export function getQuestionsByCategory(category: string): CaseQuestion[] {
+export function getQuestionsByCategory(category: string): CasebookQuestion[] {
   return casebookQuestions.filter(q => q.category === category);
 }
 
 // Helper function to get questions by difficulty
-export function getQuestionsByDifficulty(difficulty: Difficulty): CaseQuestion[] {
+export function getQuestionsByDifficulty(difficulty: Difficulty): CasebookQuestion[] {
   return casebookQuestions.filter(q => q.difficulty === difficulty);
 }
 
 // Helper function to get today's question (based on date)
-export function getDailyQuestion(): CaseQuestion {
+export function getDailyQuestion(): CasebookQuestion {
   const today = new Date();
   const dayOfYear = Math.floor(
     (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)
@@ -634,6 +499,6 @@ export function getCategories(): string[] {
 }
 
 // Get question by ID
-export function getQuestionById(id: string): CaseQuestion | undefined {
+export function getQuestionById(id: string): CasebookQuestion | undefined {
   return casebookQuestions.find(q => q.id === id);
 }
