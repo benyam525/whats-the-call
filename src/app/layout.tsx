@@ -7,6 +7,10 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'RuleVision | See the Call Before It Happens',
   description: 'Trusted by the fastest-growing community of dedicated officials',
+  icons: {
+    icon: '/RuleVisionv2.png',
+    apple: '/RuleVisionv2.png',
+  },
 }
 
 export default function RootLayout({
