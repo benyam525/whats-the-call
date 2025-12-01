@@ -38,50 +38,50 @@ export function Timer({ seconds, onTimeUp, isRunning, onTick }: TimerProps) {
 
   // Color based on time remaining
   const getColor = () => {
-    if (timeLeft <= 3) return 'text-red-600 bg-red-100';
-    if (timeLeft <= 5) return 'text-yellow-600 bg-yellow-100';
-    return 'text-nba-blue bg-blue-100';
+    if (timeLeft <= 3) return 'text-rv-danger';
+    if (timeLeft <= 5) return 'text-rv-warning';
+    return 'text-rv-accent-bright';
   };
 
-  // Size of progress circle
-  const progress = (timeLeft / seconds) * 100;
-  const circumference = 2 * Math.PI * 45; // radius = 45
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  const getStrokeColor = () => {
+    if (timeLeft <= 3) return 'stroke-rv-danger';
+    if (timeLeft <= 5) return 'stroke-rv-warning';
+    return 'stroke-rv-accent-bright';
+  };
 
   return (
     <div className="relative inline-flex items-center justify-center">
       {/* Background circle */}
-      <svg className="w-20 h-20 transform -rotate-90">
+      <svg className="w-16 h-16 transform -rotate-90">
         <circle
-          cx="40"
-          cy="40"
-          r="35"
+          cx="32"
+          cy="32"
+          r="28"
           stroke="currentColor"
-          strokeWidth="6"
+          strokeWidth="4"
           fill="none"
-          className="text-gray-200"
+          className="text-rv-steel"
         />
         <circle
-          cx="40"
-          cy="40"
-          r="35"
-          stroke="currentColor"
-          strokeWidth="6"
+          cx="32"
+          cy="32"
+          r="28"
+          strokeWidth="4"
           fill="none"
-          strokeDasharray={2 * Math.PI * 35}
-          strokeDashoffset={(2 * Math.PI * 35) - ((timeLeft / seconds) * 2 * Math.PI * 35)}
-          className={`transition-all duration-1000 ${
-            timeLeft <= 3 ? 'text-red-500' : timeLeft <= 5 ? 'text-yellow-500' : 'text-nba-blue'
-          }`}
+          strokeDasharray={2 * Math.PI * 28}
+          strokeDashoffset={(2 * Math.PI * 28) - ((timeLeft / seconds) * 2 * Math.PI * 28)}
+          className={`transition-all duration-1000 ${getStrokeColor()}`}
           strokeLinecap="round"
         />
       </svg>
       {/* Time display */}
-      <div className={`absolute text-2xl font-bold ${
-        timeLeft <= 3 ? 'text-red-600' : timeLeft <= 5 ? 'text-yellow-600' : 'text-nba-blue'
-      }`}>
+      <div className={`absolute text-xl font-bold ${getColor()}`}>
         {timeLeft}
       </div>
+      {/* Danger pulse */}
+      {timeLeft <= 3 && isRunning && (
+        <div className="absolute inset-0 rounded-full animate-ping bg-rv-danger/20" />
+      )}
     </div>
   );
 }

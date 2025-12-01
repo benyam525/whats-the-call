@@ -45,7 +45,7 @@ export function ResultFeedback({ isCorrect, streak = 0, show, onAnimationComplet
       <div
         className={`fixed inset-0 pointer-events-none z-50 transition-opacity duration-200 ${
           visible ? 'opacity-100' : 'opacity-0'
-        } ${isCorrect ? 'bg-green-500/20' : 'bg-red-500/20'}`}
+        } ${isCorrect ? 'bg-rv-success/10' : 'bg-rv-danger/10'}`}
       />
 
       {/* Shake effect via CSS class */}
@@ -69,8 +69,10 @@ export function ResultFeedback({ isCorrect, streak = 0, show, onAnimationComplet
         }`}
       >
         <div
-          className={`px-8 py-4 rounded-2xl shadow-2xl text-2xl font-bold ${
-            isCorrect ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+          className={`px-8 py-4 rounded-xl shadow-2xl text-xl font-bold border backdrop-blur-sm ${
+            isCorrect
+              ? 'bg-rv-success/90 text-white border-rv-success'
+              : 'bg-rv-danger/90 text-white border-rv-danger'
           }`}
         >
           {isCorrect ? '✓' : '✗'} {message}
@@ -80,7 +82,7 @@ export function ResultFeedback({ isCorrect, streak = 0, show, onAnimationComplet
         {milestone && (
           <div className="mt-4 text-center animate-bounce">
             <span className="text-4xl">{milestone.emoji}</span>
-            <div className="text-xl font-bold text-gray-800 mt-2">{milestone.message}</div>
+            <div className="text-xl font-bold text-white mt-2">{milestone.message}</div>
           </div>
         )}
       </div>
@@ -102,22 +104,22 @@ export function ResultHeader({ isCorrect, message, streakCount }: ResultHeaderPr
     <div className="flex items-center gap-2 mb-4">
       {isCorrect ? (
         <>
-          <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-6 h-6 text-rv-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
-          <span className="text-green-800 font-bold text-xl">{displayMessage}</span>
+          <span className="text-rv-success font-bold text-lg">{displayMessage}</span>
           {streakCount && streakCount > 1 && (
-            <span className="ml-2 text-green-600 text-sm">
+            <span className="ml-2 text-rv-gold text-sm">
               🔥 {streakCount} streak!
             </span>
           )}
         </>
       ) : (
         <>
-          <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-6 h-6 text-rv-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <span className="text-red-800 font-bold text-xl">{displayMessage}</span>
+          <span className="text-rv-danger font-bold text-lg">{displayMessage}</span>
         </>
       )}
     </div>

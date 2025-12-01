@@ -15,8 +15,8 @@ import { ResultFeedback, ResultHeader } from '@/components/ResultFeedback';
 
 function LoadingSpinner() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nba-blue"></div>
+    <div className="min-h-screen flex items-center justify-center bg-rv-navy">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rv-accent"></div>
     </div>
   );
 }
@@ -141,21 +141,21 @@ function FilmRoomContent() {
   };
 
   const getButtonClass = (option: AnswerKey) => {
-    const base = 'w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ';
+    const base = 'w-full text-left p-4 rounded-lg border transition-all duration-200 ';
 
     if (!showResult) {
-      return base + 'border-gray-200 hover:border-nba-blue hover:bg-blue-50 cursor-pointer';
+      return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-accent/50 hover:bg-rv-steel cursor-pointer text-white';
     }
 
     if (option === currentQuestion?.correctAnswer) {
-      return base + 'border-green-500 bg-green-50 text-green-800';
+      return base + 'border-rv-success bg-rv-success/20 text-rv-success';
     }
 
     if (option === selectedAnswer && option !== currentQuestion?.correctAnswer) {
-      return base + 'border-red-500 bg-red-50 text-red-800';
+      return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
     }
 
-    return base + 'border-gray-200 opacity-50';
+    return base + 'bg-rv-steel/30 border-white/5 opacity-50 text-rv-silver/60';
   };
 
   if (!currentQuestion) {
@@ -165,7 +165,7 @@ function FilmRoomContent() {
   const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-rv-navy">
       {/* Feedback overlay */}
       <ResultFeedback
         isCorrect={lastAnswerCorrect}
@@ -175,34 +175,34 @@ function FilmRoomContent() {
       />
 
       {/* Header */}
-      <header className="bg-nba-blue text-white py-6 px-4 shadow-lg">
+      <header className="header-gradient py-5 px-4">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <span className="text-2xl">🎬</span>
-                <h1 className="text-3xl font-bold tracking-tight">Film Room</h1>
+                <span className="text-xl">🎬</span>
+                <h1 className="text-2xl font-bold tracking-tight text-white">Film Room</h1>
               </div>
-              <p className="text-blue-200">Practice at your own pace</p>
+              <p className="text-rv-silver/60 text-sm">Practice at your own pace</p>
             </div>
-            <HomeButton className="text-white hover:text-blue-200" />
+            <HomeButton />
           </div>
         </div>
       </header>
 
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-6">
         {/* Streak Badge */}
-        <div className="mb-6">
+        <div className="mb-5">
           <StreakBadge streak={streak} loading={streakLoading} />
         </div>
 
         {/* Score & Filters */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <div className="bg-white rounded-lg px-4 py-2 shadow-sm">
-            <span className="text-gray-600">Session: </span>
-            <span className="font-bold text-nba-blue">{score.correct}/{score.total}</span>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+          <div className="bg-rv-slate/50 rounded-lg px-4 py-2 border border-white/5">
+            <span className="text-rv-silver/60 text-sm">Session: </span>
+            <span className="font-bold text-white">{score.correct}/{score.total}</span>
             {score.total > 0 && (
-              <span className="text-gray-500 ml-2">({percentage}%)</span>
+              <span className="text-rv-silver/40 ml-2 text-sm">({percentage}%)</span>
             )}
           </div>
 
@@ -210,7 +210,7 @@ function FilmRoomContent() {
             <select
               value={selectedDifficulty}
               onChange={(e) => setSelectedDifficulty(e.target.value as Difficulty | 'all')}
-              className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-nba-blue text-sm"
+              className="bg-rv-slate border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rv-accent/50 focus:border-rv-accent/50"
             >
               <option value="all">All Levels</option>
               <option value="rookie">🌱 Rookie</option>
@@ -221,7 +221,7 @@ function FilmRoomContent() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-nba-blue text-sm"
+              className="bg-rv-slate border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rv-accent/50 focus:border-rv-accent/50"
             >
               <option value="all">All Categories</option>
               {categories.map(cat => (
@@ -232,27 +232,27 @@ function FilmRoomContent() {
         </div>
 
         {/* Question Card */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-rv-slate rounded-xl border border-white/5 overflow-hidden">
           {/* Category & Difficulty Badge */}
-          <div className="bg-nba-red px-6 py-2 flex items-center justify-between">
-            <span className="text-white text-sm font-medium">{currentQuestion.category}</span>
+          <div className="bg-rv-navy/50 px-5 py-3 flex items-center justify-between border-b border-white/5">
+            <span className="text-rv-silver text-sm font-medium">{currentQuestion.category}</span>
             <DifficultyBadge difficulty={currentQuestion.difficulty} />
           </div>
 
           {/* Scenario */}
-          <div className="p-6 border-b border-gray-100">
-            <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-2">Scenario</h2>
-            <p className="text-lg text-gray-800 leading-relaxed">{currentQuestion.scenario}</p>
+          <div className="p-5 border-b border-white/5">
+            <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Scenario</h2>
+            <p className="text-white leading-relaxed">{currentQuestion.scenario}</p>
           </div>
 
           {/* Question */}
-          <div className="p-6 bg-gray-50">
-            <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-2">Question</h2>
-            <p className="text-xl font-semibold text-gray-900">{currentQuestion.question}</p>
+          <div className="p-5 bg-rv-navy/30">
+            <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Question</h2>
+            <p className="text-lg font-semibold text-white">{currentQuestion.question}</p>
           </div>
 
           {/* Answer Options */}
-          <div className="p-6 space-y-3">
+          <div className="p-5 space-y-3">
             {(Object.entries(currentQuestion.options) as [AnswerKey, string][])
               .filter(([, value]) => value)
               .map(([key, value]) => (
@@ -262,7 +262,7 @@ function FilmRoomContent() {
                   disabled={showResult}
                   className={getButtonClass(key)}
                 >
-                  <span className="font-bold text-nba-blue mr-3 uppercase">{key}.</span>
+                  <span className="font-bold text-rv-accent mr-3 uppercase">{key}.</span>
                   <span>{value}</span>
                 </button>
               ))}
@@ -270,10 +270,10 @@ function FilmRoomContent() {
 
           {/* Result Section */}
           {showResult && selectedAnswer && (
-            <div className={`p-6 border-t-4 ${
+            <div className={`p-5 border-t ${
               selectedAnswer === currentQuestion.correctAnswer
-                ? 'border-green-500 bg-green-50'
-                : 'border-red-500 bg-red-50'
+                ? 'border-rv-success/30 bg-rv-success/10'
+                : 'border-rv-danger/30 bg-rv-danger/10'
             }`}>
               {/* Result Header */}
               <ResultHeader
@@ -306,7 +306,7 @@ function FilmRoomContent() {
           <div className="mt-6 text-center">
             <button
               onClick={loadNewQuestion}
-              className="bg-nba-blue text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow-lg hover:shadow-xl"
+              className="btn-primary"
             >
               Next Scenario
             </button>
@@ -314,7 +314,7 @@ function FilmRoomContent() {
         )}
 
         {/* Footer */}
-        <footer className="mt-12 text-center text-gray-500 text-sm">
+        <footer className="mt-10 text-center text-rv-silver/40 text-xs">
           <p>Questions sourced from the NBA Official Case Book</p>
           <p className="mt-1">
             {casebookQuestions.length} scenarios available

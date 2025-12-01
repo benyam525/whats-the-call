@@ -138,53 +138,52 @@ export default function CategoryDrill() {
   };
 
   const getMasteryColor = (percentage: number): string => {
-    if (percentage >= 90) return 'text-green-600 bg-green-100';
-    if (percentage >= 70) return 'text-yellow-600 bg-yellow-100';
-    if (percentage > 0) return 'text-orange-600 bg-orange-100';
-    return 'text-gray-400 bg-gray-100';
+    if (percentage >= 90) return 'text-rv-success bg-rv-success/10 border-rv-success/20';
+    if (percentage >= 70) return 'text-rv-warning bg-rv-warning/10 border-rv-warning/20';
+    if (percentage > 0) return 'text-rv-accent-bright bg-rv-accent/10 border-rv-accent/20';
+    return 'text-rv-silver/40 bg-rv-steel/50 border-white/5';
   };
 
   const getButtonClass = (option: AnswerKey) => {
-    const base = 'w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ';
+    const base = 'w-full text-left p-4 rounded-lg border transition-all duration-200 ';
 
     if (!showResult) {
-      return base + 'border-gray-200 hover:border-nba-blue hover:bg-blue-50 cursor-pointer';
+      return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-success/50 hover:bg-rv-steel cursor-pointer text-white';
     }
 
     if (option === currentQuestion?.correctAnswer) {
-      return base + 'border-green-500 bg-green-50 text-green-800';
+      return base + 'border-rv-success bg-rv-success/20 text-rv-success';
     }
 
     if (option === selectedAnswer && option !== currentQuestion?.correctAnswer) {
-      return base + 'border-red-500 bg-red-50 text-red-800';
+      return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
     }
 
-    return base + 'border-gray-200 opacity-50';
+    return base + 'bg-rv-steel/30 border-white/5 opacity-50 text-rv-silver/60';
   };
 
   // Category selection state
   if (gameState === 'select-category') {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <header className="bg-nba-blue text-white py-6 px-4 shadow-lg">
+      <main className="min-h-screen bg-rv-navy">
+        <header className="header-gradient py-5 px-4">
           <div className="max-w-3xl mx-auto">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-1">
-                  <span className="text-2xl">📚</span>
-                  <h1 className="text-3xl font-bold tracking-tight">Category Drill</h1>
+                  <span className="text-xl">📚</span>
+                  <h1 className="text-2xl font-bold tracking-tight text-white">Category Drill</h1>
                 </div>
-                <p className="text-blue-200">Master each rule category</p>
+                <p className="text-rv-silver/60 text-sm">Master each rule category</p>
               </div>
-              <HomeButton className="text-white hover:text-blue-200" />
+              <HomeButton />
             </div>
           </div>
         </header>
 
-        <div className="max-w-3xl mx-auto px-4 py-8">
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Select a Category</h2>
-            <p className="text-gray-600">Answer all questions to reach 100% mastery</p>
+        <div className="max-w-3xl mx-auto px-4 py-6">
+          <div className="mb-5">
+            <p className="text-rv-silver/60 text-sm">Select a category to practice</p>
           </div>
 
           <div className="space-y-3">
@@ -197,12 +196,12 @@ export default function CategoryDrill() {
                 <button
                   key={category}
                   onClick={() => startCategory(category)}
-                  className="w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-left hover:shadow-md hover:border-nba-blue transition-all"
+                  className="w-full bg-rv-slate rounded-xl border border-white/5 p-4 text-left hover:border-rv-success/30 transition-all group"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-gray-800">{category}</h3>
-                      <p className="text-sm text-gray-500">
+                      <h3 className="font-semibold text-white group-hover:text-rv-success transition-colors">{category}</h3>
+                      <p className="text-sm text-rv-silver/60">
                         {questionCount} questions
                         {stats && stats.total > 0 && (
                           <span className="ml-2">• {stats.correct}/{stats.total} correct</span>
@@ -211,21 +210,21 @@ export default function CategoryDrill() {
                     </div>
                     <div className="flex items-center gap-3">
                       {mastery > 0 && (
-                        <span className={`px-3 py-1 rounded-full text-sm font-bold ${getMasteryColor(mastery)}`}>
+                        <span className={`px-3 py-1 rounded-full text-sm font-bold border ${getMasteryColor(mastery)}`}>
                           {mastery}%
                         </span>
                       )}
-                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-5 h-5 text-rv-silver/40 group-hover:text-rv-success transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
                   </div>
 
                   {/* Progress bar */}
-                  <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="mt-3 h-1.5 bg-rv-navy/50 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all ${
-                        mastery >= 90 ? 'bg-green-500' : mastery >= 70 ? 'bg-yellow-500' : 'bg-nba-blue'
+                        mastery >= 90 ? 'bg-rv-success' : mastery >= 70 ? 'bg-rv-warning' : 'bg-rv-accent'
                       }`}
                       style={{ width: `${mastery}%` }}
                     />
@@ -244,33 +243,33 @@ export default function CategoryDrill() {
     const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
 
     return (
-      <main className="min-h-screen bg-gray-50">
-        <header className="bg-nba-blue text-white py-6 px-4 shadow-lg">
+      <main className="min-h-screen bg-rv-navy">
+        <header className="header-gradient py-5 px-4">
           <div className="max-w-3xl mx-auto">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-1">
-                  <span className="text-2xl">📚</span>
-                  <h1 className="text-3xl font-bold tracking-tight">Drill Complete!</h1>
+                  <span className="text-xl">📚</span>
+                  <h1 className="text-2xl font-bold tracking-tight text-white">Drill Complete!</h1>
                 </div>
-                <p className="text-blue-200">{selectedCategory}</p>
+                <p className="text-rv-silver/60 text-sm">{selectedCategory}</p>
               </div>
-              <HomeButton className="text-white hover:text-blue-200" />
+              <HomeButton />
             </div>
           </div>
         </header>
 
         <div className="max-w-3xl mx-auto px-4 py-8">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+          <div className="bg-rv-slate rounded-xl border border-white/5 p-8 text-center">
             <div className="text-6xl mb-4">
               {percentage === 100 ? '🏆' : percentage >= 80 ? '🎉' : percentage >= 60 ? '👏' : '📚'}
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            <h2 className="text-3xl font-bold text-white mb-2">
               {score.correct}/{score.total}
             </h2>
-            <p className="text-xl text-gray-600 mb-4">{percentage}% Accuracy</p>
+            <p className="text-xl text-rv-silver/60 mb-4">{percentage}% Accuracy</p>
 
-            <p className="text-gray-600 mb-6">
+            <p className="text-rv-silver/60 mb-6">
               {percentage === 100
                 ? 'Perfect! You\'ve mastered this category!'
                 : percentage >= 80
@@ -283,13 +282,13 @@ export default function CategoryDrill() {
             <div className="flex gap-4 justify-center">
               <button
                 onClick={() => startCategory(selectedCategory!)}
-                className="bg-nba-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors"
+                className="btn-primary"
               >
                 Try Again
               </button>
               <button
                 onClick={() => setGameState('select-category')}
-                className="border-2 border-gray-200 text-gray-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                className="btn-secondary"
               >
                 Other Categories
               </button>
@@ -302,7 +301,7 @@ export default function CategoryDrill() {
 
   // Playing state
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-rv-navy">
       <ResultFeedback
         isCorrect={lastAnswerCorrect}
         streak={score.correct}
@@ -310,28 +309,28 @@ export default function CategoryDrill() {
         onAnimationComplete={() => setShowFeedback(false)}
       />
 
-      <header className="bg-nba-blue text-white py-6 px-4 shadow-lg">
+      <header className="header-gradient py-5 px-4">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <span className="text-2xl">📚</span>
-                <h1 className="text-2xl font-bold tracking-tight">{selectedCategory}</h1>
+                <span className="text-xl">📚</span>
+                <h1 className="text-xl font-bold tracking-tight text-white">{selectedCategory}</h1>
               </div>
-              <p className="text-blue-200">
+              <p className="text-rv-silver/60 text-sm">
                 Question {currentIndex + 1} of {categoryQuestions.length}
               </p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold">{score.correct}/{score.total}</div>
-              <div className="text-xs text-blue-200">Score</div>
+              <div className="text-2xl font-bold text-white">{score.correct}/{score.total}</div>
+              <div className="text-xs text-rv-silver/60">Score</div>
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="mt-4 h-2 bg-blue-800 rounded-full overflow-hidden">
+          <div className="mt-4 h-1.5 bg-rv-steel rounded-full overflow-hidden">
             <div
-              className="h-full bg-white transition-all duration-300"
+              className="h-full bg-rv-success transition-all duration-300"
               style={{ width: `${((currentIndex + (showResult ? 1 : 0)) / categoryQuestions.length) * 100}%` }}
             />
           </div>
@@ -340,23 +339,23 @@ export default function CategoryDrill() {
 
       <div className="max-w-3xl mx-auto px-4 py-6">
         {currentQuestion && (
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="bg-nba-red px-6 py-2 flex items-center justify-between">
-              <span className="text-white text-sm font-medium">{currentQuestion.category}</span>
+          <div className="bg-rv-slate rounded-xl border border-white/5 overflow-hidden">
+            <div className="bg-rv-navy/50 px-5 py-3 flex items-center justify-between border-b border-white/5">
+              <span className="text-rv-silver text-sm font-medium">{currentQuestion.category}</span>
               <DifficultyBadge difficulty={currentQuestion.difficulty} />
             </div>
 
-            <div className="p-6 border-b border-gray-100">
-              <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-2">Scenario</h2>
-              <p className="text-lg text-gray-800 leading-relaxed">{currentQuestion.scenario}</p>
+            <div className="p-5 border-b border-white/5">
+              <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Scenario</h2>
+              <p className="text-white leading-relaxed">{currentQuestion.scenario}</p>
             </div>
 
-            <div className="p-6 bg-gray-50">
-              <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-2">Question</h2>
-              <p className="text-xl font-semibold text-gray-900">{currentQuestion.question}</p>
+            <div className="p-5 bg-rv-navy/30">
+              <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Question</h2>
+              <p className="text-lg font-semibold text-white">{currentQuestion.question}</p>
             </div>
 
-            <div className="p-6 space-y-3">
+            <div className="p-5 space-y-3">
               {(Object.entries(currentQuestion.options) as [AnswerKey, string][])
                 .filter(([, value]) => value)
                 .map(([key, value]) => (
@@ -366,7 +365,7 @@ export default function CategoryDrill() {
                     disabled={showResult}
                     className={getButtonClass(key)}
                   >
-                    <span className="font-bold text-nba-blue mr-3 uppercase">{key}.</span>
+                    <span className="font-bold text-rv-success mr-3 uppercase">{key}.</span>
                     <span>{value}</span>
                   </button>
                 ))}
@@ -374,10 +373,10 @@ export default function CategoryDrill() {
 
             {showResult && selectedAnswer && (
               <div
-                className={`p-6 border-t-4 ${
+                className={`p-5 border-t ${
                   selectedAnswer === currentQuestion.correctAnswer
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-red-500 bg-red-50'
+                    ? 'border-rv-success/30 bg-rv-success/10'
+                    : 'border-rv-danger/30 bg-rv-danger/10'
                 }`}
               >
                 <ResultHeader
@@ -399,7 +398,7 @@ export default function CategoryDrill() {
           <div className="mt-6 text-center">
             <button
               onClick={handleNext}
-              className="bg-nba-blue text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow-lg hover:shadow-xl"
+              className="btn-primary"
             >
               {currentIndex < categoryQuestions.length - 1 ? 'Next Question' : 'See Results'}
             </button>

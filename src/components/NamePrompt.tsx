@@ -29,15 +29,15 @@ export function NamePrompt({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-scale-in">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-rv-slate rounded-xl border border-white/10 shadow-2xl max-w-md w-full overflow-hidden animate-scale-in">
         {/* Header */}
-        <div className="bg-gradient-to-r from-nba-blue to-blue-700 px-6 py-4">
+        <div className="bg-rv-navy px-6 py-4 border-b border-white/5">
           <div className="flex items-center gap-3">
             <span className="text-3xl">🏆</span>
             <div>
               <h2 className="text-xl font-bold text-white">{title}</h2>
-              <p className="text-blue-200 text-sm">{subtitle}</p>
+              <p className="text-rv-silver/60 text-sm">{subtitle}</p>
             </div>
           </div>
         </div>
@@ -51,21 +51,21 @@ export function NamePrompt({
             placeholder="Your name"
             maxLength={20}
             autoFocus
-            className="w-full px-4 py-3 text-lg border-2 border-gray-200 rounded-lg focus:border-nba-blue focus:outline-none transition-colors"
+            className="w-full px-4 py-3 text-lg bg-rv-navy border border-white/10 rounded-lg text-white placeholder-rv-silver/40 focus:border-rv-accent/50 focus:outline-none focus:ring-2 focus:ring-rv-accent/20 transition-all"
           />
 
           <div className="mt-6 flex gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+              className="btn-secondary flex-1"
             >
               Skip
             </button>
             <button
               type="submit"
               disabled={!name.trim()}
-              className="flex-1 px-4 py-3 bg-nba-blue text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Save Name
             </button>
@@ -77,7 +77,7 @@ export function NamePrompt({
         @keyframes scale-in {
           from {
             opacity: 0;
-            transform: scale(0.9);
+            transform: scale(0.95);
           }
           to {
             opacity: 1;

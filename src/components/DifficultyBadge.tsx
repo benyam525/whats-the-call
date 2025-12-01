@@ -9,17 +9,17 @@ interface DifficultyBadgeProps {
 const difficultyConfig: Record<Difficulty, { label: string; color: string; icon: string }> = {
   rookie: {
     label: 'Rookie',
-    color: 'bg-green-100 text-green-800 border-green-200',
+    color: 'bg-rv-success/20 text-rv-success border-rv-success/30',
     icon: '🌱',
   },
   veteran: {
     label: 'Veteran',
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    color: 'bg-rv-warning/20 text-rv-warning border-rv-warning/30',
     icon: '⭐',
   },
   expert: {
     label: 'Expert',
-    color: 'bg-red-100 text-red-800 border-red-200',
+    color: 'bg-rv-danger/20 text-rv-danger border-rv-danger/30',
     icon: '🔥',
   },
 };
