@@ -13,7 +13,10 @@
       "Bash(PATH=\"/usr/local/bin:$PATH\" /usr/local/bin/node:*)",
       "Bash(PATH=\"/usr/local/bin:$PATH\" /usr/local/bin/npm install:*)",
       "Bash(PATH=\"/usr/local/bin:$PATH\" /usr/local/bin/npm run build:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []
