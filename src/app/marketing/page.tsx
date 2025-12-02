@@ -78,7 +78,7 @@ export default function MarketingPage() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 leading-tight text-brand-black">
-              RuleVision is the Duolingo/Rosetta Stone for basketball referees.
+              RuleVision is the Duolingo for basketball referees.
             </h1>
             {/* NBA Accent Line */}
             <div className="flex w-full max-w-4xl mb-6">
@@ -155,7 +155,7 @@ export default function MarketingPage() {
                 </li>
               </ul>
               <p className="text-brand-gray italic text-sm">
-                This makes RuleVision the Duolingo/Rosetta Stone for NBA rules. No one else offers that.
+                This makes RuleVision the Duolingo for NBA rules. No one else offers that.
               </p>
             </div>
 
