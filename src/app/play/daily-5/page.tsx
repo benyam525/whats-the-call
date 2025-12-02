@@ -19,10 +19,10 @@ export default function Daily5Page() {
   useEffect(() => {
     const fetchDailyQuestions = async () => {
       try {
-        const res = await fetch('/api/daily-case');
+        const res = await fetch('/api/daily-case?mode=daily5');
         const data = await res.json();
 
-        if (data.success) {
+        if (data.success && data.questions) {
           setQuestions(data.questions);
           setStreak(data.streak || 0);
         }
