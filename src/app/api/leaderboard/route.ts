@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getLeaderboard, getWeeklyLeaderboard } from '@/lib/storage';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
