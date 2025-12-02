@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { recordVote, getVoteStats } from '@/lib/storage';
 import { AnswerKey } from '@/data/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
