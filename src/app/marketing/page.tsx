@@ -77,9 +77,14 @@ export default function MarketingPage() {
       <section className="bg-white py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-6">
           <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-tight text-brand-black">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 leading-tight text-brand-black">
               RuleVision is the Duolingo/Rosetta Stone for basketball referees.
             </h1>
+            {/* NBA Accent Line */}
+            <div className="flex w-full max-w-4xl mb-6">
+              <div className="h-[3px] flex-1" style={{ backgroundColor: '#C9082A' }} />
+              <div className="h-[3px] flex-1" style={{ backgroundColor: '#17408B' }} />
+            </div>
             <p className="text-xl md:text-2xl text-brand-gray mb-10 leading-relaxed max-w-3xl">
               RuleVision turns the NBA rulebook into a daily training system that helps officials build instinct, accuracy, and confidence—through scenario-based drills, rapid-fire questions, and adaptive practice.
             </p>
@@ -104,9 +109,14 @@ export default function MarketingPage() {
       {/* Core Features Section */}
       <section id="how-it-works" className="py-24 bg-brand-card">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-brand-black tracking-tighter">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-brand-black tracking-tighter">
             Why RuleVision Works
           </h2>
+          {/* NBA Accent Line */}
+          <div className="flex w-full max-w-md mx-auto mb-12">
+            <div className="h-[3px] flex-1" style={{ backgroundColor: '#C9082A' }} />
+            <div className="h-[3px] flex-1" style={{ backgroundColor: '#17408B' }} />
+          </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Feature 1 */}
@@ -246,6 +256,11 @@ export default function MarketingPage() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-brand-black tracking-tighter">
               🔥 RuleVision Pricing
             </h2>
+            {/* NBA Accent Line */}
+            <div className="flex w-full max-w-md mx-auto mb-4">
+              <div className="h-[3px] flex-1" style={{ backgroundColor: '#C9082A' }} />
+              <div className="h-[3px] flex-1" style={{ backgroundColor: '#17408B' }} />
+            </div>
             <p className="text-xl text-brand-black mb-2">
               Train Smarter. See the Call Before It Happens.
             </p>
