@@ -493,6 +493,24 @@ export function getDailyQuestion(): CasebookQuestion {
   return casebookQuestions[index];
 }
 
+// Helper function to get multiple daily questions (for Daily 5)
+export function getDailyQuestions(count: number = 5): CasebookQuestion[] {
+  const today = new Date();
+  const dayOfYear = Math.floor(
+    (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  const questions: CasebookQuestion[] = [];
+  const totalQuestions = casebookQuestions.length;
+
+  for (let i = 0; i < count; i++) {
+    const index = (dayOfYear * count + i) % totalQuestions;
+    questions.push(casebookQuestions[index]);
+  }
+
+  return questions;
+}
+
 // Get all unique categories
 export function getCategories(): string[] {
   return [...new Set(casebookQuestions.map(q => q.category))];
