@@ -1,10 +1,11 @@
-// NBA Casebook Questions - Sample Set
+// NBA Casebook Questions - Combined Set
 // Source: Official 2023-24 NBA Casebook
 // Each question includes page number and question number for reference
 
 import { CasebookQuestion, Category, Difficulty } from './types';
+import { casebookQuestionsBatch2 } from './casebook-questions-batch2-consolidated';
 
-export const casebookQuestions: CasebookQuestion[] = [
+const casebookQuestionsBase: CasebookQuestion[] = [
   // ============================================
   // AWAY-FROM-THE-PLAY FOULS (Page 4-5, Q1-7)
   // ============================================
@@ -465,6 +466,12 @@ export const casebookQuestions: CasebookQuestion[] = [
     ruleReference: 'Rule 14, Section II (b); Rule 14, Section V (a and b)',
     casebookReference: 'Page 17-18, Question 52(2)'
   }
+];
+
+// Combine base questions with batch 2
+export const casebookQuestions: CasebookQuestion[] = [
+  ...casebookQuestionsBase,
+  ...casebookQuestionsBatch2,
 ];
 
 // Helper function to get a random question
