@@ -7,7 +7,17 @@ export type Category =
   | 'Captains'
   | 'Choice of Baskets'
   | 'Clear-Path-to-the-Basket'
-  | "Coach's Challenge";
+  | "Coach's Challenge"
+  | 'Coaches'
+  | 'Continuation of Play'
+  | 'Correctable Errors'
+  | 'Court Dimensions'
+  | 'Delay-of-Game'
+  | 'Disagreement By Officials'
+  | 'Disconcertion of Free Throw Shooter'
+  | 'Double Fouls'
+  | 'Dribbling'
+  | 'Eight-Second Violation';
 
 export type Difficulty = 'rookie' | 'veteran' | 'expert';
 
