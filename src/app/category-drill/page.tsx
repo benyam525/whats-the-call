@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { CasebookQuestion, AnswerKey } from '@/data/types';
 import { casebookQuestions, getCategories } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
+import { useAnswerTracking } from '@/hooks/useAnswerTracking';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { RuleCitation } from '@/components/RuleCitation';
 import { HomeButton } from '@/components/HomeButton';
@@ -22,6 +23,8 @@ interface CategoryStats {
 
 export default function CategoryDrill() {
   const visitorId = useVisitorId();
+  const { trackAnswer } = useAnswerTracking();
+  const questionStartTime = useRef<number>(Date.now());
 
   const [gameState, setGameState] = useState<GameState>('select-category');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -70,13 +73,15 @@ export default function CategoryDrill() {
     setSelectedAnswer(null);
     setShowResult(false);
     setGameState('playing');
+    questionStartTime.current = Date.now();
   };
 
   const currentQuestion = categoryQuestions[currentIndex];
 
   const handleAnswer = async (answer: AnswerKey) => {
-    if (showResult || !currentQuestion) return;
+    if (showResult || !currentQuestion || !visitorId) return;
 
+    const responseTimeMs = Date.now() - questionStartTime.current;
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
     setLastAnswerCorrect(isCorrect);
@@ -89,8 +94,21 @@ export default function CategoryDrill() {
     setScore(newScore);
     setShowResult(true);
 
-    // Record progress
-    if (visitorId && selectedCategory) {
+    // Track answer for dashboard
+    trackAnswer({
+      visitorId,
+      questionId: currentQuestion.id,
+      category: currentQuestion.category,
+      difficulty: currentQuestion.difficulty,
+      mode: 'category_drill',
+      answerGiven: answer,
+      correctAnswer: currentQuestion.correctAnswer,
+      isCorrect,
+      responseTimeMs,
+    });
+
+    // Record progress (existing API)
+    if (selectedCategory) {
       try {
         await fetch('/api/category/progress', {
           method: 'POST',
@@ -128,6 +146,7 @@ export default function CategoryDrill() {
       setSelectedAnswer(null);
       setShowResult(false);
       setShowFeedback(false);
+      questionStartTime.current = Date.now();
     }
   }, [currentIndex, categoryQuestions.length, selectedCategory, score]);
 

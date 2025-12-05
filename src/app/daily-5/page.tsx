@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { CasebookQuestion, AnswerKey } from '@/data/types';
 import { useVisitorId } from '@/hooks/useVisitorId';
+import { useAnswerTracking } from '@/hooks/useAnswerTracking';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { RuleCitation } from '@/components/RuleCitation';
 import { HomeButton } from '@/components/HomeButton';
@@ -20,6 +21,8 @@ interface DailyProgress {
 
 export default function Daily5() {
   const visitorId = useVisitorId();
+  const { trackAnswer } = useAnswerTracking();
+  const questionStartTime = useRef<number>(Date.now());
 
   const [gameState, setGameState] = useState<GameState>('loading');
   const [questions, setQuestions] = useState<CasebookQuestion[]>([]);
@@ -71,12 +74,26 @@ export default function Daily5() {
   const currentQuestion = questions[progress.currentIndex];
 
   const handleAnswer = async (answer: AnswerKey) => {
-    if (showResult || !currentQuestion) return;
+    if (showResult || !currentQuestion || !visitorId) return;
 
+    const responseTimeMs = Date.now() - questionStartTime.current;
     setSelectedAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
     setLastAnswerCorrect(isCorrect);
     setShowFeedback(true);
+
+    // Track answer for dashboard
+    trackAnswer({
+      visitorId,
+      questionId: currentQuestion.id,
+      category: currentQuestion.category,
+      difficulty: currentQuestion.difficulty,
+      mode: 'daily_5',
+      answerGiven: answer,
+      correctAnswer: currentQuestion.correctAnswer,
+      isCorrect,
+      responseTimeMs,
+    });
 
     const newProgress = {
       ...progress,
@@ -124,6 +141,7 @@ export default function Daily5() {
       setSelectedAnswer(null);
       setShowResult(false);
       setShowFeedback(false);
+      questionStartTime.current = Date.now();
     }
   }, [progress, questions.length, visitorId, lastAnswerCorrect]);
 
