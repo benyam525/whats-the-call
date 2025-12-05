@@ -17,7 +17,16 @@ export type Category =
   | 'Disconcertion of Free Throw Shooter'
   | 'Double Fouls'
   | 'Dribbling'
-  | 'Eight-Second Violation';
+  | 'Eight-Second Violation'
+  | 'Fighting'
+  | 'Flagrant Fouls'
+  | 'Free Throws'
+  | 'Game Clock & Timing'
+  | 'Goaltending (Basket Interference)'
+  | 'Hostile Acts'
+  | 'Inadvertent Whistle'
+  | 'Injury/Ejection of Players'
+  | 'Instant Replay';
 
 export type Difficulty = 'rookie' | 'veteran' | 'expert';
 
