@@ -1,11 +1,12 @@
 'use client';
 
-import { Suspense, useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CasebookQuestion, AnswerKey, Difficulty, VoteStats } from '@/data/types';
 import { casebookQuestions, getCategories } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
 import { useStreak } from '@/hooks/useStreak';
+import { useAnswerTracking } from '@/hooks/useAnswerTracking';
 import { StreakBadge } from '@/components/StreakBadge';
 import { VoteSplit } from '@/components/VoteSplit';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
@@ -25,6 +26,8 @@ function FilmRoomContent() {
   const searchParams = useSearchParams();
   const visitorId = useVisitorId();
   const { streak, loading: streakLoading, recordAnswer } = useStreak(visitorId);
+  const { trackAnswer } = useAnswerTracking();
+  const questionStartTime = useRef<number>(Date.now());
 
   const [currentQuestion, setCurrentQuestion] = useState<CasebookQuestion | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerKey | null>(null);
@@ -75,6 +78,7 @@ function FilmRoomContent() {
     setVoteStats(null);
     setIsFromEmail(false);
     setShowFeedback(false);
+    questionStartTime.current = Date.now();
   }, [getFilteredQuestions, usedQuestionIds]);
 
   // Handle deep link from email
@@ -104,8 +108,9 @@ function FilmRoomContent() {
   }, [selectedCategory, selectedDifficulty]);
 
   const handleAnswer = async (answer: AnswerKey) => {
-    if (showResult || !currentQuestion) return;
+    if (showResult || !currentQuestion || !visitorId) return;
 
+    const responseTimeMs = Date.now() - questionStartTime.current;
     setSelectedAnswer(answer);
 
     const isCorrect = answer === currentQuestion.correctAnswer;
@@ -129,6 +134,19 @@ function FilmRoomContent() {
 
     // Record answer for streak
     await recordAnswer(isCorrect);
+
+    // Track answer for dashboard
+    trackAnswer({
+      visitorId,
+      questionId: currentQuestion.id,
+      category: currentQuestion.category,
+      difficulty: currentQuestion.difficulty,
+      mode: 'film_room',
+      answerGiven: answer,
+      correctAnswer: currentQuestion.correctAnswer,
+      isCorrect,
+      responseTimeMs,
+    });
 
     // Update local score
     if (isCorrect) {

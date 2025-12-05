@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { CasebookQuestion, AnswerKey, Difficulty } from '@/data/types';
 import { casebookQuestions } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
+import { useAnswerTracking } from '@/hooks/useAnswerTracking';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { HomeButton, ResetButton } from '@/components/HomeButton';
 import { Timer } from '@/components/Timer';
@@ -17,6 +18,8 @@ const TIMER_SECONDS = 10;
 
 export default function SuddenDeath() {
   const visitorId = useVisitorId();
+  const { trackAnswer, resetSession } = useAnswerTracking();
+  const questionStartTime = useRef<number>(Date.now());
 
   const [gameState, setGameState] = useState<GameState>('ready');
   const [currentQuestion, setCurrentQuestion] = useState<CasebookQuestion | null>(null);
@@ -90,6 +93,7 @@ export default function SuddenDeath() {
     setShowFeedback(false);
     setTimerRunning(true);
     setTimerKey(prev => prev + 1);
+    questionStartTime.current = Date.now();
   }, [getCurrentDifficulty, usedQuestionIds]);
 
   const startGame = () => {
@@ -97,6 +101,7 @@ export default function SuddenDeath() {
     setUsedQuestionIds(new Set());
     setGameState('playing');
     setDifficultyReached('rookie');
+    resetSession(); // Start fresh session for dashboard tracking
     loadNewQuestion();
   };
 
@@ -136,14 +141,34 @@ export default function SuddenDeath() {
     setLastAnswerCorrect(false);
     setShowFeedback(true);
 
+    // Track timeout as a wrong answer
+    if (visitorId && currentQuestion) {
+      trackAnswer({
+        visitorId,
+        questionId: currentQuestion.id,
+        category: currentQuestion.category,
+        difficulty: currentQuestion.difficulty,
+        mode: 'sudden_death',
+        answerGiven: 'timeout',
+        correctAnswer: currentQuestion.correctAnswer,
+        isCorrect: false,
+        responseTimeMs: TIMER_SECONDS * 1000,
+        timeAllowedMs: TIMER_SECONDS * 1000,
+        streakPosition: score + 1,
+      });
+    }
+
     // End game after showing feedback
     setTimeout(() => {
       endGame(score);
     }, 1500);
-  }, [score, endGame]);
+  }, [score, endGame, visitorId, currentQuestion, trackAnswer]);
 
   const handleAnswer = async (answer: AnswerKey) => {
-    if (showResult || !currentQuestion) return;
+    if (showResult || !currentQuestion || !visitorId) return;
+
+    const responseTimeMs = Date.now() - questionStartTime.current;
+    const timeAllowedMs = TIMER_SECONDS * 1000;
 
     setTimerRunning(false);
     setSelectedAnswer(answer);
@@ -152,6 +177,21 @@ export default function SuddenDeath() {
     setLastAnswerCorrect(isCorrect);
     setShowFeedback(true);
     setShowResult(true);
+
+    // Track answer for dashboard (with streak position and timing)
+    trackAnswer({
+      visitorId,
+      questionId: currentQuestion.id,
+      category: currentQuestion.category,
+      difficulty: currentQuestion.difficulty,
+      mode: 'sudden_death',
+      answerGiven: answer,
+      correctAnswer: currentQuestion.correctAnswer,
+      isCorrect,
+      responseTimeMs,
+      timeAllowedMs,
+      streakPosition: score + 1, // Current position in streak (1-indexed)
+    });
 
     if (isCorrect) {
       const newScore = score + 1;
