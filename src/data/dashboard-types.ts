@@ -239,14 +239,54 @@ export interface FocusPlan {
 export interface DayViewData {
   date: string;
   summary: DailySummary;
-  readinessScores: RefReadinessScores;
-  hourlyActivity?: HourlyActivity[];
+  hourlyBreakdown: HourlyActivity[];
+  sessionDetails: SessionDetail[];
+  categoryBreakdown: CategoryBreakdown[];
+  modeBreakdown: DayModeBreakdown;
+  insights: DayInsight[];
+  comparisonToAverage: ComparisonToAverage;
 }
 
 export interface HourlyActivity {
   hour: number;
-  questionsAnswered: number;
+  questions: number;
   accuracy: number;
+}
+
+export interface SessionDetail {
+  startTime: string;
+  endTime: string;
+  mode: string;
+  questions: number;
+  correct: number;
+  accuracy: number;
+  bestStreak?: number;
+  category?: string;
+}
+
+export interface CategoryBreakdown {
+  category: string;
+  questions: number;
+  correct: number;
+  accuracy: number;
+}
+
+export interface DayModeBreakdown {
+  filmRoom: { questions: number; accuracy: number; timeMinutes: number };
+  daily5: { questions: number; accuracy: number; timeMinutes: number };
+  suddenDeath: { questions: number; accuracy: number; timeMinutes: number; bestStreak?: number };
+  categoryDrill: { questions: number; accuracy: number; timeMinutes: number };
+}
+
+export interface DayInsight {
+  type: 'positive' | 'improvement' | 'focus' | 'warning';
+  message: string;
+}
+
+export interface ComparisonToAverage {
+  questionsVsAvg: number;
+  accuracyVsAvg: number;
+  timeVsAvg: number;
 }
 
 export interface WeekViewData {
@@ -256,8 +296,18 @@ export interface WeekViewData {
   avgAccuracy: number;
   daysActive: number;
   readinessChange: number;
-  dailyBreakdown: DayViewData[];
+  dailyBreakdown: DailyBreakdownItem[];
   categoryFocus: CategoryFocus[];
+  weeklyInsights?: WeeklyInsight[];
+  modeStats?: WeekModeStats;
+  personalBests?: PersonalBest[];
+}
+
+export interface DailyBreakdownItem {
+  date: string;
+  questions: number;
+  accuracy: number;
+  streakMaintained: boolean;
 }
 
 export interface CategoryFocus {
@@ -266,14 +316,35 @@ export interface CategoryFocus {
   accuracy: number;
 }
 
+export interface WeeklyInsight {
+  type: 'achievement' | 'improvement' | 'streak' | 'focus';
+  message: string;
+}
+
+export interface WeekModeStats {
+  filmRoom: { sessions: number; questions: number; avgAccuracy: number };
+  daily5: { sessions: number; questions: number; avgAccuracy: number };
+  suddenDeath: { sessions: number; questions: number; avgAccuracy: number; bestStreak?: number };
+  categoryDrill: { sessions: number; questions: number; avgAccuracy: number };
+}
+
+export interface PersonalBest {
+  category: string;
+  value: number;
+  date: string;
+  previous: number;
+}
+
 export interface SeasonViewData {
   startDate: string;
   endDate: string;
   monthlyTrends: MonthlyTrend[];
   categoryImprovement: CategoryImprovement[];
-  composureTrend: ComposureTrend[];
-  commitmentTrend: CommitmentTrend[];
+  composureTrend: ComposureTrendItem[];
+  commitmentTrend: CommitmentTrendItem[];
   milestones: Milestone[];
+  seasonStats?: SeasonStats;
+  ranking?: SeasonRanking;
 }
 
 export interface MonthlyTrend {
@@ -281,6 +352,7 @@ export interface MonthlyTrend {
   questionsAnswered: number;
   accuracy: number;
   readinessScore: number;
+  daysActive?: number;
 }
 
 export interface CategoryImprovement {
@@ -290,23 +362,37 @@ export interface CategoryImprovement {
   improvement: number;
 }
 
-export interface ComposureTrend {
+export interface ComposureTrendItem {
   month: string;
-  pressureAccuracy: number;
-  calmAccuracy: number;
-  gap: number;
+  avgStreakLength: number;
+  maxStreak: number;
 }
 
-export interface CommitmentTrend {
+export interface CommitmentTrendItem {
   month: string;
   daysActive: number;
   avgQuestionsPerDay: number;
-  streakBest: number;
+}
+
+export interface SeasonStats {
+  totalQuestions: number;
+  avgAccuracy: number;
+  totalTimeMinutes: number;
+  longestStreak: number;
+  perfectDaily5s: number;
+  categoriesMastered: number;
+}
+
+export interface SeasonRanking {
+  percentile: number;
+  tier: string;
+  totalRefs: number;
+  yourRank: number;
 }
 
 export interface Milestone {
   date: string;
-  type: 'streak' | 'mastery' | 'score' | 'volume';
+  type: 'streak' | 'mastery' | 'score' | 'volume' | 'rank';
   title: string;
   description: string;
 }

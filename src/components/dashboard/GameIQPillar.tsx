@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { GameIQPillarData, CategoryMastery, ConfidenceLevel, Difficulty } from '@/data/dashboard-types';
 import { ReadinessRing, MiniRing } from './ReadinessRing';
 
@@ -9,6 +10,14 @@ interface GameIQPillarProps {
 
 export function GameIQPillar({ data }: GameIQPillarProps) {
   const { overallScore, masteryGrid, topStrengths, blindSpots } = data;
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Show first 6 categories when collapsed, all when expanded
+  const visibleCategories = isExpanded
+    ? masteryGrid.categories
+    : masteryGrid.categories.slice(0, 6);
+
+  const hasMore = masteryGrid.categories.length > 6;
 
   return (
     <div className="bg-white rounded-2xl border border-brand-border p-6">
@@ -22,28 +31,56 @@ export function GameIQPillar({ data }: GameIQPillarProps) {
       </div>
 
       {/* Category Mastery Grid / Heatmap */}
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold text-brand-black mb-3 uppercase tracking-wide">
-          Category Mastery
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-brand-black uppercase tracking-wide">
+            Category Mastery
+          </h3>
+          <span className="text-xs text-brand-gray">
+            {masteryGrid.categories.length} categories
+          </span>
+        </div>
+        <div className="overflow-x-auto -mx-2 px-2">
+          <table className="w-full text-sm min-w-[500px]">
             <thead>
               <tr className="text-xs text-brand-gray uppercase tracking-wide">
-                <th className="text-left py-2 pr-4">Category</th>
-                <th className="text-center py-2 px-2 w-20">Rookie</th>
-                <th className="text-center py-2 px-2 w-20">Veteran</th>
-                <th className="text-center py-2 px-2 w-20">Expert</th>
-                <th className="text-center py-2 pl-4 w-24">Overall</th>
+                <th className="text-left py-2 pr-2">Category</th>
+                <th className="text-center py-2 px-1 w-14">Rk</th>
+                <th className="text-center py-2 px-1 w-14">Vet</th>
+                <th className="text-center py-2 px-1 w-14">Exp</th>
+                <th className="text-center py-2 pl-2 w-20">Total</th>
               </tr>
             </thead>
             <tbody>
-              {masteryGrid.categories.map((cat) => (
+              {visibleCategories.map((cat) => (
                 <CategoryRow key={cat.category} category={cat} />
               ))}
             </tbody>
           </table>
         </div>
+
+        {hasMore && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-full mt-3 py-2 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors flex items-center justify-center gap-1"
+          >
+            {isExpanded ? (
+              <>
+                Show Less
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+              </>
+            ) : (
+              <>
+                Show All {masteryGrid.categories.length} Categories
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Concept Coverage */}
@@ -94,29 +131,34 @@ function CategoryRow({ category }: CategoryRowProps) {
     return category.difficultyBreakdown.find(d => d.difficulty === difficulty);
   };
 
+  // Truncate long category names
+  const shortName = category.category.length > 20
+    ? category.category.substring(0, 18) + '...'
+    : category.category;
+
   return (
     <tr className="border-t border-brand-border">
-      <td className="py-3 pr-4">
-        <div className="font-medium text-brand-black truncate max-w-[180px]" title={category.category}>
-          {category.category}
+      <td className="py-2 pr-2">
+        <div className="font-medium text-brand-black text-xs" title={category.category}>
+          {shortName}
         </div>
         <div className="text-xs text-brand-gray">
           {category.total} reps
         </div>
       </td>
-      <td className="py-3 px-2">
+      <td className="py-2 px-1">
         <MasteryCell data={getDifficultyData('rookie')} />
       </td>
-      <td className="py-3 px-2">
+      <td className="py-2 px-1">
         <MasteryCell data={getDifficultyData('veteran')} />
       </td>
-      <td className="py-3 px-2">
+      <td className="py-2 px-1">
         <MasteryCell data={getDifficultyData('expert')} />
       </td>
-      <td className="py-3 pl-4">
-        <div className="flex items-center justify-center gap-2">
-          <MiniRing score={category.accuracy} color={getConfidenceColor(category.confidence)} size={32} />
-          <span className="text-sm font-medium">{category.accuracy}%</span>
+      <td className="py-2 pl-2">
+        <div className="flex items-center justify-center gap-1">
+          <MiniRing score={category.accuracy} color={getConfidenceColor(category.confidence)} size={24} />
+          <span className="text-xs font-bold">{category.accuracy}%</span>
         </div>
       </td>
     </tr>
@@ -135,7 +177,7 @@ function MasteryCell({ data }: MasteryCellProps) {
   if (!data || data.total === 0) {
     return (
       <div className="flex justify-center">
-        <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+        <div className="w-7 h-6 rounded bg-gray-100 flex items-center justify-center text-gray-400 text-[10px]">
           --
         </div>
       </div>
@@ -147,7 +189,7 @@ function MasteryCell({ data }: MasteryCellProps) {
   return (
     <div className="flex justify-center">
       <div
-        className={`w-8 h-8 rounded flex items-center justify-center text-xs font-medium ${bgColor}`}
+        className={`w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold ${bgColor}`}
         title={`${data.accuracy}% (${data.total} reps)`}
       >
         {data.accuracy}
