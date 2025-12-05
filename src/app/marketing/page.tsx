@@ -113,7 +113,7 @@ export default function MarketingPage() {
             {/* Questions Counter */}
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold tracking-tighter">
-                106<span className="text-2xl md:text-3xl align-top">+</span>
+                262<span className="text-2xl md:text-3xl align-top">+</span>
               </div>
               <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
                 Scenario Questions
@@ -126,7 +126,7 @@ export default function MarketingPage() {
             {/* Categories Counter */}
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold tracking-tighter">
-                20
+                29
               </div>
               <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
                 Rule Categories

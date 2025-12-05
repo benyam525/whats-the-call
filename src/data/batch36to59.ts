@@ -274,13 +274,7 @@ export const casebookQuestionsBatch13: CasebookQuestion[] = [
     ruling: 'Following the ruling on the floor, the officials will use instant replay to review the flagrant foul and to rule on any other unsportsmanlike acts which may have gone unnoticed immediately prior to and/or after the foul. If the foul is ruled a FF2, personal fouls and team fouls are charged to Team A and Team B respectively in both situations.\n\nSituation (1) – Team A in the penalty: The coach of Team A will select a substitute from Team B’s bench to shoot the free throws awarded to Player B2 for the loose ball foul by A2. No players will occupy the free throw lane lines. The coach of Team A will then select an eligible substitute for Player A2, who fouled out. That substitute will attempt the two free throws awarded for the flagrant foul, and Team A will inbound the ball at the free throw line extended.\n\nSituation (2) – Team A not in the penalty: The coach of Team B selects an eligible substitute for Player B2. The coach of Team A selects an eligible substitute to replace Player A2, who fouled out. That substitute attempts the two free throws for the flagrant foul, and Team A inbounds the ball at the free throw line extended.',
     ruleReference: 'Rule 9, Section II (a) (Exception 1 and 3); Rule 13, Section I (a)(4); Rule 13, Section II (c)',
     casebookReference: 'Page 44, Question 142'
-  }
-];// casebook-questions-batch5.ts
-// Free Throws – Casebook Questions 147–170
-
-import { CasebookQuestion } from './types';
-
-export const casebookQuestionsBatch5: CasebookQuestion[] = [
+  },
   {
     id: 'freethrows-001',
     category: 'Free Throws',
@@ -744,13 +738,7 @@ export const casebookQuestionsBatch5: CasebookQuestion[] = [
       'A personal foul is assessed to B1 for pushing A2 into A1. If A1’s field goal is successful, A2 is awarded one free throw regardless of the penalty situation. If the field goal attempt is unsuccessful, A1 is awarded two free throws.',
     ruleReference: 'Rule 12B, Section I (Penalty 3 and 4)',
     casebookReference: 'Page 51, Question 170'
-  }
-];// casebook-questions-gameclock.ts
-// Game Clock – Casebook Questions 171–184
-
-import { CasebookQuestion } from './types';
-
-export const casebookQuestionsGameClock: CasebookQuestion[] = [
+  },
   {
     id: 'gameclock-001',
     category: 'Game Clock & Timing',
@@ -1018,11 +1006,7 @@ export const casebookQuestionsGameClock: CasebookQuestion[] = [
       'The game clock is only reset in the specific case of a shot-clock violation where time continues to run. There is no violation here, just a standard timeout request, so the clock remains at 23.0.',
     ruleReference: 'Rule 7, Section II (d)',
     casebookReference: 'Page 52, Question 184'
-  }// casebook-questions-batch7.ts
-
-import { CasebookQuestion } from './types';
-
-export const casebookQuestionsBatch7: CasebookQuestion[] = [
+  },
   {
     id: 'goaltending-001',
     category: 'Goaltending (Basket Interference)',
@@ -1386,16 +1370,7 @@ export const casebookQuestionsBatch7: CasebookQuestion[] = [
       'No points can be scored if the rim is in an off-center position when the ball passes through. Had A1 released the rim and it returned to its normal position before the ball passed through, two points would be scored.',
     ruleReference: 'Rule 11, Section I (h)',
     casebookReference: 'Page 57, Question 203'
-  }
-];
-
-];
-
-// casebook-questions-batch8.ts
-
-import { CasebookQuestion } from './types';
-
-export const casebookQuestionsBatch8: CasebookQuestion[] = [
+  },
   {
     id: 'hostile-acts-001',
     category: 'Hostile Acts',
@@ -1475,8 +1450,8 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
       'Because Team A clearly would have imminently gained possession (no defenders nearby and the ball easily within A1’s grasp), possession is awarded to Team A. The game clock is reset to 24.8 seconds—the time of the original error—and the shot clock is reset to 24 seconds.',
     ruleReference: 'Rule 4, Section XIV; Rule 5, Section VIII; Rule 7, Section VI (a)',
     casebookReference: 'Page 58, Question 207'
-  }
-{
+  },
+  {
   id: 'fighting-120',
   category: 'Fighting',
   difficulty: 'veteran',
@@ -1640,8 +1615,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
   ruleReference:
     'Rule 9, Section II (a) (Exception 1); Rule 12A, Section VI (a); Rule 12B, Section IX (a and b); Rule 13, Section I (a)(4); Rule 13, Section II (d)',
   casebookReference: 'Page 38, Question 126 (2)'
-}
-
+},
 {
   id: 'flagrant-fouls-127',
   category: 'Flagrant Fouls',
@@ -1912,8 +1886,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
   ruleReference:
     'Rule 9, Section II (a) (Exception 1 and 3); Rule 13, Section I (a)(4); Rule 13, Section II (c)',
   casebookReference: 'Page 44, Question 142'
-}
-
+},
 {
   id: 'inadvertent-whistle-206',
   category: 'Inadvertent Whistle',
@@ -2035,7 +2008,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
     'According to the Casebook, if the personal foul is a Flagrant Foul Penalty 2 (FF2 – Penalty 2), A1 may return to the game later even though he could not attempt his free throws. If the personal foul is a Flagrant Foul Penalty 1 (FF1 – Penalty 1), A1 may not re-enter the game once he is unable to attempt his free throws.',
   ruleReference: 'Rule 9, Section II (3); Rule 12B, Section IV',
   casebookReference: 'Page 58, Question 210 (2)'
-}
+},
 {
   id: 'instant-replay-211',
   category: 'Instant Replay',
@@ -2242,7 +2215,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
     'When the game clock is seen to have frozen during a last-second scoring play, the Replay Center Official will digitally time how long the clock froze or time the play from the start of the sequence until the ball is released. Based on that precise timing, the Replay Center Official will rule whether the shot was released before the end of the period and whether the basket should count.',
   ruleReference: 'Rule 13, Section I (a)(5)',
   casebookReference: 'Page 61, Question 220'
-}
+},
 {
   id: 'instant-replay-221',
   category: 'Instant Replay',
@@ -2447,7 +2420,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
   ruleReference:
     'Rule 2, Section VI (a); Rule 13, Section I (a)(9)',
   casebookReference: 'Page 62, Question 230'
-}
+},
 {
   id: 'instant-replay-231',
   category: 'Instant Replay',
@@ -2656,7 +2629,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
   ruleReference:
     'Rule 13, Section I (a)(5); Rule 13, Section II (e)',
   casebookReference: 'Page 65, Question 240'
-}
+},
 {
   id: 'instant-replay-241',
   category: 'Instant Replay',
@@ -2861,8 +2834,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
   ruleReference:
     'Rule 13, Section I (a)(11); Rule 13, Section II (k)',
   casebookReference: 'Page 67, Question 250'
-}
-
+},
 {
   id: 'instant-replay-251',
   category: 'Instant Replay',
@@ -3040,8 +3012,7 @@ export const casebookQuestionsBatch8: CasebookQuestion[] = [
   },
   correctAnswer: 'c',
   ruling:
-    'Situation (1): During the first 46 minutes of regulation or first 3 minutes of OT, either the Replay Center Official or on-court officials may trigger replay prior to the end of the next timeout/period break.  
-Situation (2): During the last 2 minutes of the fourth or any OT, only the on-court officials may trigger replay, and it must occur immediately following the basket.',
+    'Situation (1): During the first 46 minutes of regulation or first 3 minutes of OT, either the Replay Center Official or on-court officials may trigger replay prior to the end of the next timeout/period break.\n\nSituation (2): During the last 2 minutes of the fourth or any OT, only the on-court officials may trigger replay, and it must occur immediately following the basket.',
   ruleReference:
     'Rule 13, Section I (b)(1); Rule 13, Section II (b)(1); Rule 13, Section II (f)(1)',
   casebookReference: 'Page 69–70, Question 259'
@@ -3083,8 +3054,7 @@ Situation (2): During the last 2 minutes of the fourth or any OT, only the on-co
   },
   correctAnswer: 'c',
   ruling:
-    'Situation (1): During the first 46 minutes of regulation, the Replay Center Official has first responsibility to trigger replay if uncertain, and may do so before the next timeout or period break.  
-Situation (2): In the last two minutes, only the on-court officials may trigger replay, and they must do so immediately following the basket.',
+    'Situation (1): During the first 46 minutes of regulation, the Replay Center Official has first responsibility to trigger replay if uncertain, and may do so before the next timeout or period break.\n\nSituation (2): In the last two minutes, only the on-court officials may trigger replay, and they must do so immediately following the basket.',
   ruleReference:
     'Rule 13, Section II (a)(1); Rule 13, Section II (a)(7); Rule 13, Section II (g)',
   casebookReference: 'Page 70–71, Question 261'

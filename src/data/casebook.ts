@@ -4,6 +4,7 @@
 
 import { CasebookQuestion, Category, Difficulty } from './types';
 import { casebookQuestionsBatch2 } from './casebook-questions-batch2-consolidated';
+import { casebookQuestionsBatch13 } from './batch36to59';
 
 const casebookQuestionsBase: CasebookQuestion[] = [
   // ============================================
@@ -468,10 +469,11 @@ const casebookQuestionsBase: CasebookQuestion[] = [
   }
 ];
 
-// Combine base questions with batch 2
+// Combine all question batches
 export const casebookQuestions: CasebookQuestion[] = [
   ...casebookQuestionsBase,
   ...casebookQuestionsBatch2,
+  ...casebookQuestionsBatch13,
 ];
 
 // Helper function to get a random question
