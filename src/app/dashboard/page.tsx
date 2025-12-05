@@ -12,6 +12,7 @@ import {
   StrengthsWeaknesses,
   FocusPlanCard,
   TimeViewSelector,
+  DayView,
   WeekView,
   SeasonView,
 } from '@/components/dashboard';
@@ -121,14 +122,14 @@ function DashboardContent() {
 
         {/* Time View */}
         <div className="mb-6">
+          {timeView === 'day' && dashboardData.dayView && (
+            <DayView data={dashboardData.dayView} />
+          )}
           {timeView === 'week' && dashboardData.weekView && (
             <WeekView data={dashboardData.weekView} />
           )}
           {timeView === 'season' && dashboardData.seasonView && (
             <SeasonView data={dashboardData.seasonView} />
-          )}
-          {timeView === 'day' && (
-            <TodayView summary={dashboardData.heroStrip.todaySummary} />
           )}
         </div>
 

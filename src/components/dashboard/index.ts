@@ -5,4 +5,4 @@ export { DecisionExecutionPillar } from './DecisionExecutionPillar';
 export { CommitmentPillar } from './CommitmentPillar';
 export { StrengthsWeaknesses } from './StrengthsWeaknesses';
 export { FocusPlanCard } from './FocusPlan';
-export { TimeViewSelector, WeekView, SeasonView } from './TimeViewSelector';
+export { TimeViewSelector, DayView, WeekView, SeasonView } from './TimeViewSelector';
