@@ -106,6 +106,53 @@ export default function MarketingPage() {
         </div>
       </section>
 
+      {/* Question Bank Stats Banner */}
+      <section className="py-8 bg-brand-black text-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+            {/* Questions Counter */}
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold tracking-tighter">
+                106<span className="text-2xl md:text-3xl align-top">+</span>
+              </div>
+              <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
+                Scenario Questions
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="hidden md:block w-px h-16 bg-gray-700" />
+
+            {/* Categories Counter */}
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold tracking-tighter">
+                20
+              </div>
+              <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
+                Rule Categories
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="hidden md:block w-px h-16 bg-gray-700" />
+
+            {/* Growing Badge */}
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 bg-green-600 px-4 py-2 rounded-full mb-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-300 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-300"></span>
+                </span>
+                <span className="text-sm font-semibold">Growing Weekly</span>
+              </div>
+              <div className="text-sm text-gray-400">
+                New questions added regularly
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Core Features Section */}
       <section id="how-it-works" className="py-24 bg-brand-card">
         <div className="max-w-7xl mx-auto px-6">
