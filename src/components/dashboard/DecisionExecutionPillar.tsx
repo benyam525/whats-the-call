@@ -2,12 +2,14 @@
 
 import { DecisionExecutionPillarData, ComposureCurvePoint } from '@/data/dashboard-types';
 import { ReadinessRing } from './ReadinessRing';
+import { SubscriptionTier, canAccess } from '@/lib/subscription';
 
 interface DecisionExecutionPillarProps {
   data: DecisionExecutionPillarData;
+  userTier?: SubscriptionTier;
 }
 
-export function DecisionExecutionPillar({ data }: DecisionExecutionPillarProps) {
+export function DecisionExecutionPillar({ data, userTier = 'elite' }: DecisionExecutionPillarProps) {
   const { overallScore, pressurePerformance, decisionSpeed, composureCurve, clutchSituations, composureDropPoint } = data;
 
   return (

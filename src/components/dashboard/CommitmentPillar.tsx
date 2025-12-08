@@ -2,12 +2,14 @@
 
 import { CommitmentPillarData, ModeBreakdown } from '@/data/dashboard-types';
 import { ReadinessRing } from './ReadinessRing';
+import { SubscriptionTier, canAccess } from '@/lib/subscription';
 
 interface CommitmentPillarProps {
   data: CommitmentPillarData;
+  userTier?: SubscriptionTier;
 }
 
-export function CommitmentPillar({ data }: CommitmentPillarProps) {
+export function CommitmentPillar({ data, userTier = 'elite' }: CommitmentPillarProps) {
   const { overallScore, consistency, trainingLoad, focusQuality } = data;
 
   return (

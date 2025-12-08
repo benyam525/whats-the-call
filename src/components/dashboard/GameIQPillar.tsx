@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { GameIQPillarData, CategoryMastery, ConfidenceLevel, Difficulty } from '@/data/dashboard-types';
 import { ReadinessRing, MiniRing } from './ReadinessRing';
+import { SubscriptionTier, canAccess } from '@/lib/subscription';
 
 interface GameIQPillarProps {
   data: GameIQPillarData;
+  userTier?: SubscriptionTier;
 }
 
-export function GameIQPillar({ data }: GameIQPillarProps) {
+export function GameIQPillar({ data, userTier = 'elite' }: GameIQPillarProps) {
   const { overallScore, masteryGrid, topStrengths, blindSpots } = data;
   const [isExpanded, setIsExpanded] = useState(false);
 

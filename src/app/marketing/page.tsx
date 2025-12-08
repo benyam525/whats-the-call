@@ -301,7 +301,7 @@ export default function MarketingPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-brand-black tracking-tighter">
-              🔥 RuleVision Pricing
+              RuleVision Pricing
             </h2>
             {/* NBA Accent Line */}
             <div className="flex w-full max-w-md mx-auto mb-4">
@@ -318,15 +318,15 @@ export default function MarketingPage() {
 
           {/* Pricing Grid */}
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {/* Rookie - Free */}
+            {/* Free Tier */}
             <div className="bg-white border border-brand-border rounded-2xl p-8">
-              <h3 className="text-2xl font-bold mb-2 text-brand-black">Rookie</h3>
+              <h3 className="text-2xl font-bold mb-2 text-brand-black">Free</h3>
               <div className="mb-4">
                 <span className="text-4xl font-bold text-brand-black">$0</span>
                 <span className="text-brand-gray"> / forever</span>
               </div>
               <p className="text-brand-gray mb-6 text-sm leading-relaxed">
-                For new officials and curious learners. Build the habit. Test your instincts.
+                For new officials and curious learners. Build the habit.
               </p>
               <div className="mb-6">
                 <p className="text-sm font-semibold text-brand-black mb-3">Includes:</p>
@@ -337,24 +337,24 @@ export default function MarketingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">1 Sudden Death attempt</span>
+                    <span className="text-brand-gray">1 Sudden Death attempt per day</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">"Personal Foul Basics" category unlocked</span>
+                    <span className="text-brand-gray">"Personal Fouls" category unlocked only</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Limited streak tracking</span>
+                    <span className="text-brand-gray">Basic streak tracking</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Basic performance stats</span>
+                    <span className="text-brand-gray">Limited performance stats</span>
                   </li>
                 </ul>
               </div>
               <p className="text-xs text-brand-gray mb-6">
-                Perfect for: Referees who want a taste of RuleVision before committing.
+                Perfect for: New officials getting started and fans who want to test their knowledge.
               </p>
               <Link
                 href="/"
@@ -364,22 +364,22 @@ export default function MarketingPage() {
               </Link>
             </div>
 
-            {/* Veteran - Most Popular */}
+            {/* Pro Tier - Most Popular */}
             <div className="bg-white border-2 border-brand-black rounded-2xl p-8 relative transform md:scale-105 shadow-xl">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-black px-4 py-1 rounded-full text-sm font-bold text-white">
-                ⭐ Most Popular
+                Most Popular
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-brand-black">Veteran</h3>
+              <h3 className="text-2xl font-bold mb-2 text-brand-black">Pro</h3>
               <div className="mb-4">
-                <span className="text-4xl font-bold text-brand-black">$7.99</span>
+                <span className="text-4xl font-bold text-brand-black">$19</span>
                 <span className="text-brand-gray">/mo</span>
-                <p className="text-sm text-brand-gray">or $59/year — Save 40% with annual</p>
+                <p className="text-sm text-brand-gray">or $149/year — <span className="text-green-600 font-semibold">Save 35%</span></p>
               </div>
               <p className="text-brand-gray mb-6 text-sm leading-relaxed">
-                For officials who take their craft seriously. Unlimited reps. Real improvement.
+                For officials who take their craft seriously.
               </p>
               <div className="mb-6">
-                <p className="text-sm font-semibold text-brand-black mb-3">Everything in Rookie, plus:</p>
+                <p className="text-sm font-semibold text-brand-black mb-3">Everything in Free, plus:</p>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
@@ -391,7 +391,11 @@ export default function MarketingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">All rule categories unlocked</span>
+                    <span className="text-brand-gray">All 29 rule categories unlocked</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="text-brand-black mt-1">✓</span>
+                    <span className="text-brand-gray">Full rulebook explanations on every question</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
@@ -399,104 +403,157 @@ export default function MarketingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Full rulebook explanations</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
                     <span className="text-brand-gray">Bookmarking for tricky questions</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Mastery dashboard</span>
+                    <span className="text-brand-gray">Mastery dashboard (abbreviated)</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
                     <span className="text-brand-gray">Full Daily 5 access</span>
                   </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="text-brand-black mt-1">✓</span>
+                    <span className="text-brand-gray">Category Drill mode</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="text-brand-black mt-1">✓</span>
+                    <span className="text-brand-gray">Film Room mode</span>
+                  </li>
                 </ul>
               </div>
               <p className="text-xs text-brand-gray mb-6">
-                Perfect for: High school, AAU, and rec officials wanting to sharpen judgment every day.
+                Perfect for: High school, AAU, and rec officials who want daily reps.
               </p>
               <Link
                 href="/"
                 className="block w-full bg-brand-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors"
               >
-                Go Veteran
+                Go Pro
               </Link>
             </div>
 
-            {/* Expert */}
-            <div className="bg-white border border-brand-border rounded-2xl p-8">
-              <h3 className="text-2xl font-bold mb-2 text-brand-black">Expert</h3>
+            {/* Elite Tier */}
+            <div className="bg-white border border-brand-border rounded-2xl p-8 relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 px-4 py-1 rounded-full text-sm font-bold text-white">
+                For Serious Officials
+              </div>
+              <h3 className="text-2xl font-bold mb-2 text-brand-black">Elite</h3>
               <div className="mb-4">
-                <span className="text-4xl font-bold text-brand-black">$14.99</span>
+                <span className="text-4xl font-bold text-brand-black">$39</span>
                 <span className="text-brand-gray">/mo</span>
-                <p className="text-sm text-brand-gray">or $99/year</p>
+                <p className="text-sm text-brand-gray">or $299/year — <span className="text-green-600 font-semibold">Save 36%</span></p>
               </div>
               <p className="text-brand-gray mb-6 text-sm leading-relaxed">
-                For the ambitious official chasing the next level.
+                For officials chasing the next level.
               </p>
               <div className="mb-6">
-                <p className="text-sm font-semibold text-brand-black mb-3">Everything in Veteran, plus:</p>
+                <p className="text-sm font-semibold text-brand-black mb-3">Everything in Pro, plus:</p>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Custom difficulty tuning</span>
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Full dashboard with all analytics</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Advanced analytics & trends</span>
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Advanced analytics & trend tracking</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
+                    <span className="text-purple-600 mt-1">✓</span>
                     <span className="text-brand-gray">Performance breakdown by rule section</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Personalized "Weakness → Training Path" recommendations</span>
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Personalized "weakness → drill" recommendations</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Exam Mode (50-question timed assessments)</span>
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Exam Mode (timed 50-question assessments)</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Printable performance report</span>
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Printable performance reports (PDF export)</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Early access to new question packs</span>
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Priority access to new question packs</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Custom difficulty tuning</span>
                   </li>
                 </ul>
               </div>
               <p className="text-xs text-brand-gray mb-6">
-                Perfect for: Officials aiming for college, pro-am, G-League, or simply elite mastery of the rulebook.
+                Perfect for: Officials pursuing college, G-League, or professional advancement.
               </p>
               <Link
                 href="/"
-                className="block w-full bg-brand-black text-white text-center py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+                className="block w-full bg-purple-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
               >
-                Become an Expert
+                Go Elite
               </Link>
             </div>
           </div>
 
-          {/* Add-on */}
-          <div className="max-w-3xl mx-auto bg-brand-card border border-brand-border rounded-2xl p-8">
+          {/* For Associations B2B Section */}
+          <div className="max-w-4xl mx-auto bg-gray-50 border border-brand-border rounded-2xl p-8 mb-12">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-2 text-brand-black">RuleVision Certification Exam™</h3>
-                <p className="text-xl font-bold text-brand-black mb-3">$29 one-time</p>
+                <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-3">
+                  Trusted by 50+ associations
+                </div>
+                <h3 className="text-2xl font-bold mb-2 text-brand-black">Train Your Entire Officiating Staff</h3>
+                <p className="text-lg text-brand-gray mb-3">Bulk licensing for associations, camps, and training programs.</p>
                 <p className="text-brand-gray text-sm">
-                  Get certified in RuleVision Level 1, Level 2, or Level 3. Download your certificate, share it with assignors, and add it to your referee résumé.
+                  Give every official in your organization access to RuleVision. Get group analytics, branded certificates, and dedicated support. State associations, conference officiating coordinators, and referee camps trust RuleVision to sharpen their crews.
                 </p>
               </div>
               <Link
-                href="/"
+                href="/contact"
                 className="bg-brand-black text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors whitespace-nowrap"
               >
-                Take the Exam
+                Request a Quote
+              </Link>
+            </div>
+          </div>
+
+          {/* Certification Tiers */}
+          <div className="max-w-4xl mx-auto bg-brand-card border border-brand-border rounded-2xl p-8">
+            <h3 className="text-2xl font-bold mb-6 text-brand-black text-center">RuleVision Certification</h3>
+            <div className="grid md:grid-cols-3 gap-6 mb-6">
+              <div className="bg-white rounded-xl p-6 text-center border border-brand-border">
+                <div className="text-3xl mb-2">🥉</div>
+                <h4 className="font-bold text-brand-black mb-1">Level 1</h4>
+                <p className="text-2xl font-bold text-brand-black mb-2">$49</p>
+                <p className="text-xs text-brand-gray">Foundation certification</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 text-center border border-brand-border">
+                <div className="text-3xl mb-2">🥈</div>
+                <h4 className="font-bold text-brand-black mb-1">Level 2</h4>
+                <p className="text-2xl font-bold text-brand-black mb-2">$79</p>
+                <p className="text-xs text-brand-gray">Advanced certification</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 text-center border border-brand-border">
+                <div className="text-3xl mb-2">🥇</div>
+                <h4 className="font-bold text-brand-black mb-1">Level 3</h4>
+                <p className="text-2xl font-bold text-brand-black mb-2">$99</p>
+                <p className="text-xs text-brand-gray">Elite certification</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-brand-gray mb-4">
+                <strong>Annual Recertification:</strong> $29 to maintain active status
+              </p>
+              <p className="text-sm text-brand-gray mb-4">
+                Includes: Timed proctored-style assessment • Downloadable certificate with unique ID • Digital badge for LinkedIn • Shareable verification link • Listed in RuleVision Certified Directory
+              </p>
+              <Link
+                href="/"
+                className="inline-block bg-brand-black text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors"
+              >
+                Get Certified
               </Link>
             </div>
           </div>

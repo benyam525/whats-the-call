@@ -16,17 +16,23 @@ import {
   WeekView,
   SeasonView,
 } from '@/components/dashboard';
+import { LockedFeature } from '@/components/LockedFeature';
 import { DashboardData, TimeView } from '@/data/dashboard-types';
 import { getDummyDashboardData } from '@/lib/dummy-dashboard-data';
+import { SubscriptionTier, canAccess } from '@/lib/subscription';
 
 function DashboardContent() {
   const searchParams = useSearchParams();
   const isDemo = searchParams.get('demo') === 'true';
+  const tierParam = searchParams.get('tier') as SubscriptionTier | null;
   const visitorId = useVisitorId();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [timeView, setTimeView] = useState<TimeView>('week');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  // For now, tier can be set via URL param for testing, defaults to 'elite' in demo mode
+  // In production, this would come from user auth/session
+  const userTier: SubscriptionTier = tierParam || (isDemo ? 'elite' : 'free');
 
   useEffect(() => {
     async function fetchDashboard() {
@@ -71,6 +77,11 @@ function DashboardContent() {
     return <DashboardSkeleton />;
   }
 
+  const tierLabel = userTier === 'free' ? 'Free' : userTier === 'pro' ? 'Pro' : 'Elite';
+  const tierColor = userTier === 'free' ? 'bg-gray-100 text-gray-800' :
+                    userTier === 'pro' ? 'bg-orange-100 text-orange-800' :
+                    'bg-purple-100 text-purple-800';
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -90,6 +101,9 @@ function DashboardContent() {
                   Demo Mode
                 </span>
               )}
+              <span className={`px-3 py-1 ${tierColor} text-xs font-medium rounded-full`}>
+                {tierLabel}
+              </span>
               <TimeViewSelector currentView={timeView} onViewChange={setTimeView} />
               <Link
                 href="/"
@@ -104,20 +118,41 @@ function DashboardContent() {
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Hero Strip */}
-        <HeroStrip data={dashboardData.heroStrip} />
+        {/* Hero Strip - shows basic for free, full for pro+ */}
+        <HeroStrip data={dashboardData.heroStrip} userTier={userTier} />
 
-        {/* Three Pillars */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-6">
-          <GameIQPillar data={dashboardData.gameIQ} />
-          <DecisionExecutionPillar data={dashboardData.decisionExecution} />
-          <CommitmentPillar data={dashboardData.commitment} />
-        </div>
+        {/* Three Pillars - blurred for free tier */}
+        <LockedFeature
+          feature="THREE_PILLARS"
+          userTier={userTier}
+          blurMode={true}
+          className="mb-6"
+        >
+          <div className="grid lg:grid-cols-3 gap-6 mb-6">
+            <GameIQPillar data={dashboardData.gameIQ} userTier={userTier} />
+            <DecisionExecutionPillar data={dashboardData.decisionExecution} userTier={userTier} />
+            <CommitmentPillar data={dashboardData.commitment} userTier={userTier} />
+          </div>
+        </LockedFeature>
 
         {/* Strengths/Weaknesses + Focus Plan */}
         <div className="grid lg:grid-cols-2 gap-6 mb-6">
-          <StrengthsWeaknesses data={dashboardData.strengthsWeaknesses} />
-          <FocusPlanCard data={dashboardData.focusPlan} />
+          <LockedFeature
+            feature="STRENGTHS_WEAKNESSES"
+            userTier={userTier}
+            blurMode={true}
+          >
+            <StrengthsWeaknesses data={dashboardData.strengthsWeaknesses} />
+          </LockedFeature>
+
+          <LockedFeature
+            feature="FOCUS_PLAN"
+            userTier={userTier}
+            blurMode={userTier === 'pro'}
+            lockMessage="Get a personalized training plan based on your weaknesses → Upgrade to Elite"
+          >
+            <FocusPlanCard data={dashboardData.focusPlan} />
+          </LockedFeature>
         </div>
 
         {/* Time View */}
@@ -132,6 +167,34 @@ function DashboardContent() {
             <SeasonView data={dashboardData.seasonView} />
           )}
         </div>
+
+        {/* Upgrade CTA for free users */}
+        {userTier === 'free' && (
+          <div className="bg-gradient-to-r from-orange-500 to-purple-600 rounded-2xl p-8 text-white text-center mb-6">
+            <h3 className="text-2xl font-bold mb-2">Unlock Your Full Potential</h3>
+            <p className="text-white/80 mb-4">
+              Get unlimited questions, all 29 rule categories, and the full analytics dashboard.
+            </p>
+            <Link
+              href="/marketing#pricing"
+              className="inline-block px-6 py-3 bg-white text-brand-black rounded-lg font-bold hover:bg-gray-100 transition-colors"
+            >
+              Upgrade to Pro
+            </Link>
+          </div>
+        )}
+
+        {/* Printable Report CTA for pro users */}
+        {userTier === 'pro' && (
+          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center mb-6">
+            <p className="text-sm text-purple-800">
+              Need to share progress with your assignor?
+              <Link href="/marketing#pricing" className="font-semibold ml-1 underline">
+                Upgrade to Elite for printable PDF reports →
+              </Link>
+            </p>
+          </div>
+        )}
 
         {/* Footer CTA */}
         <div className="text-center py-8">
