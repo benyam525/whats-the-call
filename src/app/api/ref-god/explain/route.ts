@@ -145,8 +145,9 @@ Important:
 
   } catch (error) {
     console.error('Ref God explain error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to generate explanation' },
+      { error: 'Failed to generate explanation', details: errorMessage },
       { status: 500 }
     );
   }

@@ -54,9 +54,13 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
       }
 
       const data = await response.json();
+      if (data.error) {
+        throw new Error(data.details || data.error);
+      }
       setExplanation(data.sections);
     } catch (err) {
-      setError('Failed to load Ref God explanation. Please try again.');
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+      setError(`Failed to load Ref God explanation: ${errorMsg}`);
       console.error('Ref God error:', err);
     } finally {
       setIsLoading(false);
