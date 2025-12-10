@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { casebookQuestions } from '@/data/casebook';
 
 const gameModes = [
   {
@@ -50,6 +51,9 @@ export default function HomePage() {
             />
           </Link>
           <div className="flex items-center gap-8">
+            <Link href="/dashboard" className="text-brand-gray hover:text-brand-black transition-colors">
+              Dashboard
+            </Link>
             <Link href="/ref-god" className="text-brand-gray hover:text-brand-black transition-colors">
               Ref God
             </Link>
@@ -62,6 +66,15 @@ export default function HomePage() {
           </div>
         </div>
       </nav>
+
+      {/* Questions Count Banner */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-sm font-medium">
+            <span className="font-bold">{casebookQuestions.length}</span> official NBA casebook questions now available in RuleVision
+          </p>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className="max-w-4xl mx-auto px-6 py-24 text-center">
@@ -115,6 +128,9 @@ export default function HomePage() {
           <div className="flex items-center justify-between text-sm text-brand-gray">
             <p>© 2024 RuleVision</p>
             <div className="flex gap-6">
+              <Link href="/dashboard" className="hover:text-brand-black transition-colors">
+                Dashboard
+              </Link>
               <Link href="/ref-god" className="hover:text-brand-black transition-colors">
                 Ref God
               </Link>
