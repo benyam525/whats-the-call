@@ -49,11 +49,11 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to get explanation');
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.details || data.error || `HTTP ${response.status}`);
+      }
       if (data.error) {
         throw new Error(data.details || data.error);
       }
