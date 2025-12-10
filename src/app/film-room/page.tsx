@@ -13,6 +13,7 @@ import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { RuleCitation } from '@/components/RuleCitation';
 import { HomeButton } from '@/components/HomeButton';
 import { ResultFeedback, ResultHeader } from '@/components/ResultFeedback';
+import { RefGodPanel, GoDeeperButton } from '@/components/RefGodPanel';
 
 function LoadingSpinner() {
   return (
@@ -40,6 +41,7 @@ function FilmRoomContent() {
   const [isFromEmail, setIsFromEmail] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
+  const [showRefGodPanel, setShowRefGodPanel] = useState(false);
 
   const categories = getCategories();
 
@@ -78,6 +80,7 @@ function FilmRoomContent() {
     setVoteStats(null);
     setIsFromEmail(false);
     setShowFeedback(false);
+    setShowRefGodPanel(false);
     questionStartTime.current = Date.now();
   }, [getFilteredQuestions, usedQuestionIds]);
 
@@ -317,9 +320,25 @@ function FilmRoomContent() {
                 questionText={currentQuestion.question}
                 scenarioText={currentQuestion.scenario}
               />
+
+              {/* Go Deeper Button */}
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <GoDeeperButton onClick={() => setShowRefGodPanel(true)} className="w-full" />
+              </div>
             </div>
           )}
         </div>
+
+        {/* Ref God Panel */}
+        {currentQuestion && selectedAnswer && (
+          <RefGodPanel
+            isOpen={showRefGodPanel}
+            onClose={() => setShowRefGodPanel(false)}
+            question={currentQuestion}
+            userAnswer={selectedAnswer}
+            wasCorrect={selectedAnswer === currentQuestion.correct_answer}
+          />
+        )}
 
         {/* Next Question Button */}
         {showResult && (

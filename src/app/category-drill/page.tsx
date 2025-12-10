@@ -8,6 +8,7 @@ import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { RuleCitation } from '@/components/RuleCitation';
 import { HomeButton } from '@/components/HomeButton';
 import { ResultFeedback, ResultHeader } from '@/components/ResultFeedback';
+import { RefGodPanel, GoDeeperButton } from '@/components/RefGodPanel';
 
 type GameState = 'select-category' | 'playing' | 'completed';
 
@@ -33,6 +34,7 @@ export default function CategoryDrill() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [categoryStats, setCategoryStats] = useState<CategoryStats>({});
+  const [showRefGodPanel, setShowRefGodPanel] = useState(false);
 
   const categories = getParentCategories();
 
@@ -392,15 +394,34 @@ export default function CategoryDrill() {
                   questionText={currentQuestion.question}
                   scenarioText={currentQuestion.scenario}
                 />
+
+                {/* Go Deeper Button */}
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <GoDeeperButton onClick={() => setShowRefGodPanel(true)} className="w-full" />
+                </div>
               </div>
             )}
           </div>
         )}
 
+        {/* Ref God Panel */}
+        {currentQuestion && selectedAnswer && (
+          <RefGodPanel
+            isOpen={showRefGodPanel}
+            onClose={() => setShowRefGodPanel(false)}
+            question={currentQuestion}
+            userAnswer={selectedAnswer}
+            wasCorrect={selectedAnswer === currentQuestion.correct_answer}
+          />
+        )}
+
         {showResult && (
           <div className="mt-6 text-center">
             <button
-              onClick={handleNext}
+              onClick={() => {
+                setShowRefGodPanel(false);
+                handleNext();
+              }}
               className="btn-primary"
             >
               {currentIndex < categoryQuestions.length - 1 ? 'Next Question' : 'See Results'}

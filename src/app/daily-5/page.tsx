@@ -9,6 +9,7 @@ import { RuleCitation } from '@/components/RuleCitation';
 import { HomeButton } from '@/components/HomeButton';
 import { ResultFeedback, ResultHeader } from '@/components/ResultFeedback';
 import { NamePrompt } from '@/components/NamePrompt';
+import { RefGodPanel, GoDeeperButton } from '@/components/RefGodPanel';
 import { getDailyQuestions, getTodayDateString } from '@/lib/daily-questions';
 
 type GameState = 'loading' | 'playing' | 'completed' | 'already-completed';
@@ -38,6 +39,7 @@ export default function Daily5() {
   const [streak, setStreak] = useState<{ current: number; longest: number } | null>(null);
   const [showNamePrompt, setShowNamePrompt] = useState(false);
   const [todayScore, setTodayScore] = useState<number | null>(null);
+  const [showRefGodPanel, setShowRefGodPanel] = useState(false);
 
   // Load questions and check completion status
   useEffect(() => {
@@ -141,6 +143,7 @@ export default function Daily5() {
       setSelectedAnswer(null);
       setShowResult(false);
       setShowFeedback(false);
+      setShowRefGodPanel(false);
       questionStartTime.current = Date.now();
     }
   }, [progress, questions.length, visitorId, lastAnswerCorrect]);
@@ -458,9 +461,25 @@ export default function Daily5() {
                   questionText={currentQuestion.question}
                   scenarioText={currentQuestion.scenario}
                 />
+
+                {/* Go Deeper Button */}
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <GoDeeperButton onClick={() => setShowRefGodPanel(true)} className="w-full" />
+                </div>
               </div>
             )}
           </div>
+        )}
+
+        {/* Ref God Panel */}
+        {currentQuestion && selectedAnswer && (
+          <RefGodPanel
+            isOpen={showRefGodPanel}
+            onClose={() => setShowRefGodPanel(false)}
+            question={currentQuestion}
+            userAnswer={selectedAnswer}
+            wasCorrect={selectedAnswer === currentQuestion.correct_answer}
+          />
         )}
 
         {showResult && (
