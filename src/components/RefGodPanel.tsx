@@ -36,7 +36,7 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
     setError(null);
 
     try {
-      const response = await fetch('/api/ref-god/explain', {
+      const response = await fetch('/api/ref-iq/explain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -60,8 +60,8 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
       setExplanation(data.sections);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Unknown error';
-      setError(`Failed to load Ref God explanation: ${errorMsg}`);
-      console.error('Ref God error:', err);
+      setError(`Failed to load Ref IQ explanation: ${errorMsg}`);
+      console.error('Ref IQ error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +95,7 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
         <div className="flex items-center justify-between px-5 pb-4 pt-0 md:pt-4 border-b border-white/10">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🏀</span>
-            <h2 className="text-xl font-bold text-white tracking-tight">REF GOD</h2>
+            <h2 className="text-xl font-bold text-white tracking-tight">REF IQ</h2>
           </div>
           <button
             onClick={onClose}
@@ -112,7 +112,7 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <div className="w-12 h-12 border-4 border-green-500/30 border-t-green-500 rounded-full animate-spin mb-4" />
-              <p className="text-white/60 text-sm">Ref God is reviewing the play...</p>
+              <p className="text-white/60 text-sm">Ref IQ is reviewing the play...</p>
             </div>
           ) : error ? (
             <div className="text-center py-12">

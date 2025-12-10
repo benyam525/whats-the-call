@@ -97,7 +97,7 @@ ANSWER:`,
     });
 
   } catch (error) {
-    console.error('Ref God error:', error);
+    console.error('Ref IQ error:', error);
     return NextResponse.json(
       { error: 'Failed to process question' },
       { status: 500 }

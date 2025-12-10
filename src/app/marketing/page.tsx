@@ -136,11 +136,11 @@ export default function MarketingPage() {
             {/* Divider */}
             <div className="hidden md:block w-px h-16 bg-gray-700" />
 
-            {/* Ref God Badge */}
+            {/* Ref IQ Badge */}
             <div className="text-center">
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 rounded-full mb-2">
                 <span className="text-lg">🏀</span>
-                <span className="text-sm font-semibold">Powered by Ref God</span>
+                <span className="text-sm font-semibold">Powered by Ref IQ</span>
               </div>
               <div className="text-sm text-gray-400">
                 AI-driven rule explanations
@@ -293,7 +293,7 @@ export default function MarketingPage() {
         </div>
       </section>
 
-      {/* Ref God Section */}
+      {/* Ref IQ Section */}
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -303,10 +303,10 @@ export default function MarketingPage() {
                 <span className="text-sm font-semibold text-white">AI-Powered</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-brand-black tracking-tighter">
-                Ref God: Your AI Rules Expert
+                Ref IQ: Your AI Rules Expert
               </h2>
               <p className="text-xl text-brand-gray mb-6 leading-relaxed">
-                Miss a question? Tap &quot;Go Deeper&quot; and Ref God explains exactly why — citing the specific rule, common mistakes officials make, and what NBA refs look for in that situation.
+                Miss a question? Tap &quot;Go Deeper&quot; and Ref IQ explains exactly why — citing the specific rule, common mistakes officials make, and what NBA refs look for in that situation.
               </p>
               <p className="text-lg text-brand-gray mb-8 leading-relaxed">
                 Every explanation is grounded in the official NBA Rulebook and Casebook. No guessing, no hallucinations — just the rule, explained like a veteran ref in the locker room.
@@ -333,7 +333,7 @@ export default function MarketingPage() {
             <div className="bg-brand-black rounded-2xl p-8 text-white">
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-3xl">🏀</span>
-                <span className="text-2xl font-bold">REF GOD</span>
+                <span className="text-2xl font-bold">REF IQ</span>
               </div>
               <div className="space-y-4">
                 <div>
@@ -481,7 +481,7 @@ export default function MarketingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Ref God "Go Deeper" on answered questions</span>
+                    <span className="text-brand-gray">Ref IQ "Go Deeper" on answered questions</span>
                   </li>
                 </ul>
               </div>
@@ -527,7 +527,7 @@ export default function MarketingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Ref God "Go Deeper"</span>
+                    <span className="text-brand-gray">Ref IQ "Go Deeper"</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
@@ -810,7 +810,7 @@ export default function MarketingPage() {
             </div>
             <div className="flex items-center gap-3 justify-center">
               <span className="text-brand-black">✓</span>
-              <span className="text-brand-gray">Ref God AI explanations</span>
+              <span className="text-brand-gray">Ref IQ AI explanations</span>
             </div>
             <div className="flex items-center gap-3 justify-center">
               <span className="text-brand-black">✓</span>

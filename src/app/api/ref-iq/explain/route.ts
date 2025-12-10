@@ -76,8 +76,8 @@ export async function POST(request: NextRequest) {
       .map((r: any) => `[${r.section_id}] ${r.section_name}\n${r.content}`)
       .join('\n\n---\n\n');
 
-    // Build the structured prompt for Ref God explanation
-    const prompt = `You are Ref God, the ultimate NBA rules expert. A user just answered a question in a basketball officiating training app.
+    // Build the structured prompt for Ref IQ explanation
+    const prompt = `You are Ref IQ, the ultimate NBA rules expert. A user just answered a question in a basketball officiating training app.
 
 QUESTION: ${question}
 CORRECT ANSWER: ${correctAnswer}
@@ -119,7 +119,7 @@ Important:
       messages: [
         {
           role: 'system',
-          content: 'You are Ref God, the most knowledgeable and trusted NBA rules expert. You explain rulings with authority and clarity, always grounding your explanations in the official rulebook. You help officials understand not just what the rule is, but why it matters and how to apply it correctly.'
+          content: 'You are Ref IQ, the most knowledgeable and trusted NBA rules expert. You explain rulings with authority and clarity, always grounding your explanations in the official rulebook. You help officials understand not just what the rule is, but why it matters and how to apply it correctly.'
         },
         {
           role: 'user',
@@ -131,7 +131,7 @@ Important:
     const fullExplanation = response.choices[0]?.message?.content || '';
 
     // Parse the response into sections
-    const sections = parseRefGodResponse(fullExplanation);
+    const sections = parseRefIQResponse(fullExplanation);
 
     return NextResponse.json({
       explanation: fullExplanation,
@@ -144,7 +144,7 @@ Important:
     });
 
   } catch (error) {
-    console.error('Ref God explain error:', error);
+    console.error('Ref IQ explain error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
       { error: 'Failed to generate explanation', details: errorMessage },
@@ -153,7 +153,7 @@ Important:
   }
 }
 
-function parseRefGodResponse(text: string): {
+function parseRefIQResponse(text: string): {
   ruling: string;
   rule: string;
   whyItMatters: string;

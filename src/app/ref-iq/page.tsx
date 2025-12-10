@@ -27,7 +27,7 @@ const SUGGESTED_QUESTIONS = [
   { text: "When is goaltending called?", icon: "🖐️" },
 ];
 
-function RefGodContent() {
+function RefIQContent() {
   const searchParams = useSearchParams();
   const { askRefGod, loading } = useRefGod();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -114,7 +114,7 @@ function RefGodContent() {
                   <span className="text-4xl">🏀</span>
                 </div>
                 <h1 className="text-4xl font-bold text-brand-black mb-2 tracking-tight">
-                  Ref God
+                  Ref IQ
                 </h1>
                 <p className="text-lg text-brand-gray">
                   Your AI-powered NBA rules expert
@@ -160,7 +160,7 @@ function RefGodContent() {
 
               {/* Tagline */}
               <p className="mt-10 text-sm text-brand-gray italic">
-                &quot;When in doubt, ask Ref God.&quot;
+                &quot;When in doubt, ask Ref IQ.&quot;
               </p>
             </div>
           ) : (
@@ -180,7 +180,7 @@ function RefGodContent() {
                   {message.type === 'assistant' && (
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-lg">🏀</span>
-                      <span className="text-sm font-semibold text-brand-black">Ref God</span>
+                      <span className="text-sm font-semibold text-brand-black">Ref IQ</span>
                     </div>
                   )}
                   <p className={`whitespace-pre-wrap leading-relaxed ${
@@ -221,7 +221,7 @@ function RefGodContent() {
               <div className="bg-brand-card border border-brand-border rounded-2xl px-5 py-4">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-lg">🏀</span>
-                  <span className="text-sm font-semibold text-brand-black">Ref God</span>
+                  <span className="text-sm font-semibold text-brand-black">Ref IQ</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex gap-1">
@@ -277,14 +277,14 @@ function RefGodContent() {
   );
 }
 
-export default function RefGodPage() {
+export default function RefIQPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-black"></div>
       </div>
     }>
-      <RefGodContent />
+      <RefIQContent />
     </Suspense>
   );
 }

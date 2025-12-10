@@ -12,7 +12,7 @@ interface AskRefGodButtonProps {
 }
 
 /**
- * Button to ask Ref God about a specific question/scenario
+ * Button to ask Ref IQ about a specific question/scenario
  * Can be used inline (shows answer below) or opens full page
  */
 export function AskRefGodButton({
@@ -30,8 +30,8 @@ export function AskRefGodButton({
 
   const handleAsk = async () => {
     if (variant === 'modal') {
-      // Navigate to Ref God page with pre-filled question
-      window.location.href = `/ref-god?q=${encodeURIComponent(fullQuestion)}`;
+      // Navigate to Ref IQ page with pre-filled question
+      window.location.href = `/ref-iq?q=${encodeURIComponent(fullQuestion)}`;
       return;
     }
 
@@ -42,11 +42,11 @@ export function AskRefGodButton({
   if (variant === 'modal') {
     return (
       <Link
-        href={`/ref-god?q=${encodeURIComponent(fullQuestion)}`}
+        href={`/ref-iq?q=${encodeURIComponent(fullQuestion)}`}
         className={`inline-flex items-center gap-2 px-4 py-2 bg-rv-slate border border-white/10 rounded-lg text-rv-silver hover:border-rv-gold/50 hover:text-white transition-colors ${className}`}
       >
         <span>🏀</span>
-        <span>Ask Ref God</span>
+        <span>Ask Ref IQ</span>
       </Link>
     );
   }
@@ -60,13 +60,13 @@ export function AskRefGodButton({
           className="inline-flex items-center gap-2 px-4 py-2 bg-rv-slate border border-white/10 rounded-lg text-rv-silver hover:border-rv-gold/50 hover:text-white transition-colors disabled:opacity-50"
         >
           <span>🏀</span>
-          <span>{loading ? 'Asking...' : 'Ask Ref God'}</span>
+          <span>{loading ? 'Asking...' : 'Ask Ref IQ'}</span>
         </button>
       ) : (
         <div className="bg-rv-slate border border-white/10 rounded-xl p-5 mt-4">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">🏀</span>
-            <span className="text-sm font-semibold text-rv-gold">Ref God</span>
+            <span className="text-sm font-semibold text-rv-gold">Ref IQ</span>
           </div>
 
           {loading ? (
@@ -106,7 +106,7 @@ export function AskRefGodButton({
 
               <div className="mt-4 pt-4 border-t border-white/10">
                 <Link
-                  href="/ref-god"
+                  href="/ref-iq"
                   className="text-sm text-rv-gold hover:underline"
                 >
                   Ask more questions →
@@ -123,16 +123,16 @@ export function AskRefGodButton({
 }
 
 /**
- * Compact inline link to Ref God
+ * Compact inline link to Ref IQ
  */
-export function RefGodLink({ className = '' }: { className?: string }) {
+export function RefIQLink({ className = '' }: { className?: string }) {
   return (
     <Link
-      href="/ref-god"
+      href="/ref-iq"
       className={`inline-flex items-center gap-1 text-rv-gold hover:underline ${className}`}
     >
       <span>🏀</span>
-      <span>Ask Ref God</span>
+      <span>Ask Ref IQ</span>
     </Link>
   );
 }

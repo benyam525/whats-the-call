@@ -48,21 +48,21 @@ const faqs: FAQItem[] = [
     question: 'How does Category Drill work?',
     answer: 'Category Drill lets you focus on specific rule categories like Fouls, Violations, or Out of Bounds. Track your mastery percentage for each category and target your weak areas.'
   },
-  // Ref God
+  // Ref IQ
   {
-    category: 'Ref God AI',
-    question: 'What is Ref God?',
-    answer: 'Ref God is our AI-powered rules expert trained on the complete 2025-26 NBA rulebook. Ask any question about NBA rules and get instant, accurate answers with rule citations.'
+    category: 'Ref IQ AI',
+    question: 'What is Ref IQ?',
+    answer: 'Ref IQ is our AI-powered rules expert trained on the complete 2025-26 NBA rulebook. Ask any question about NBA rules and get instant, accurate answers with rule citations.'
   },
   {
-    category: 'Ref God AI',
+    category: 'Ref IQ AI',
     question: 'What is "Go Deeper"?',
     answer: 'After answering a question, tap "Go Deeper" to get an AI-generated breakdown including: The Ruling (why the answer is correct), The Rule (exact rule text), Why It Matters (game impact), Common Mistakes (what refs get wrong), and a Pro Tip.'
   },
   {
-    category: 'Ref God AI',
-    question: 'How accurate is Ref God?',
-    answer: 'Ref God uses RAG (Retrieval Augmented Generation) to search the official NBA rulebook and provide answers grounded in actual rule text. Every answer includes source citations so you can verify the information.'
+    category: 'Ref IQ AI',
+    question: 'How accurate is Ref IQ?',
+    answer: 'Ref IQ uses RAG (Retrieval Augmented Generation) to search the official NBA rulebook and provide answers grounded in actual rule text. Every answer includes source citations so you can verify the information.'
   },
   // Progress & Stats
   {
@@ -212,14 +212,14 @@ export default function FAQPage() {
         <div className="mt-12 text-center p-8 bg-brand-card rounded-2xl border border-brand-border">
           <h2 className="text-xl font-bold text-brand-black mb-2">Still have questions?</h2>
           <p className="text-brand-gray mb-4">
-            Ask Ref God anything about NBA rules, or explore our documentation.
+            Ask Ref IQ anything about NBA rules, or explore our documentation.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link
-              href="/ref-god"
+              href="/ref-iq"
               className="px-6 py-3 bg-brand-black text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
             >
-              Ask Ref God
+              Ask Ref IQ
             </Link>
             <Link
               href="/docs"

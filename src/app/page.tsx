@@ -105,8 +105,8 @@ export default function HomePage() {
               <Link href="/dashboard" className="hover:text-brand-black transition-colors">
                 Dashboard
               </Link>
-              <Link href="/ref-god" className="hover:text-brand-black transition-colors">
-                Ref God
+              <Link href="/ref-iq" className="hover:text-brand-black transition-colors">
+                Ref IQ
               </Link>
               <Link href="/about" className="hover:text-brand-black transition-colors">
                 About

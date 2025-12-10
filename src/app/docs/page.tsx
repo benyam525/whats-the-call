@@ -32,7 +32,7 @@ const docSections: DocSection[] = [
 
 **What You'll Find:**
 - **Game Modes** — Four different ways to practice
-- **Ref God AI** — Instant answers to any rules question
+- **Ref IQ AI** — Instant answers to any rules question
 - **Progress Tracking** — See your improvement over time
 - **Leaderboards** — Compete with other officials
 
@@ -186,19 +186,19 @@ Target specific rule categories for focused improvement.
     ]
   },
   {
-    id: 'ref-god',
-    title: 'Ref God AI',
+    id: 'ref-iq',
+    title: 'Ref IQ AI',
     icon: '🏀',
     description: 'Your AI-powered rules expert',
     articles: [
       {
         id: 'asking-questions',
-        title: 'Asking Ref God',
-        content: `**What is Ref God?**
-Ref God is an AI assistant trained on the complete 2025-26 NBA rulebook. Ask anything about rules and get accurate, cited answers.
+        title: 'Asking Ref IQ',
+        content: `**What is Ref IQ?**
+Ref IQ is an AI assistant trained on the complete 2025-26 NBA rulebook. Ask anything about rules and get accurate, cited answers.
 
 **How to Use:**
-1. Go to the Ref God page
+1. Go to the Ref IQ page
 2. Type your question (or tap a suggested question)
 3. Get an instant answer with rule citations
 
@@ -255,9 +255,9 @@ After answering any question, tap "Go Deeper" to get an AI-generated comprehensi
       {
         id: 'rag-technology',
         title: 'How It Works (RAG)',
-        content: `**The Technology Behind Ref God**
+        content: `**The Technology Behind Ref IQ**
 
-Ref God uses RAG (Retrieval Augmented Generation) to provide accurate answers.
+Ref IQ uses RAG (Retrieval Augmented Generation) to provide accurate answers.
 
 **How RAG Works:**
 1. Your question is converted to an embedding (vector)
