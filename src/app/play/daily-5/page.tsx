@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { CaseQuestion, AnswerKey } from '@/data/types';
 import { useVisitorId } from '@/hooks/useVisitorId';
+import { RefGodPanel, GoDeeperButton } from '@/components/RefGodPanel';
 
 export default function Daily5Page() {
   const visitorId = useVisitorId();
@@ -15,6 +16,7 @@ export default function Daily5Page() {
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [showRefGodPanel, setShowRefGodPanel] = useState(false);
 
   useEffect(() => {
     const fetchDailyQuestions = async () => {
@@ -52,6 +54,7 @@ export default function Daily5Page() {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
       setShowResult(false);
+      setShowRefGodPanel(false);
     } else {
       setCompleted(true);
     }
@@ -210,9 +213,25 @@ export default function Daily5Page() {
                     </div>
                   )}
                 </div>
+
+                {/* Go Deeper Button */}
+                <div className="mt-4 pt-4 border-t border-brand-border">
+                  <GoDeeperButton onClick={() => setShowRefGodPanel(true)} className="w-full" />
+                </div>
               </div>
             )}
           </div>
+        )}
+
+        {/* Ref God Panel */}
+        {currentQuestion && selectedAnswer && (
+          <RefGodPanel
+            isOpen={showRefGodPanel}
+            onClose={() => setShowRefGodPanel(false)}
+            question={currentQuestion}
+            userAnswer={selectedAnswer}
+            wasCorrect={selectedAnswer === currentQuestion.correct_answer}
+          />
         )}
 
         {/* Next Button */}
