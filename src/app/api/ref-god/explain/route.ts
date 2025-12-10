@@ -168,18 +168,34 @@ function parseRefGodResponse(text: string): {
     proTip: '',
   };
 
-  // Extract each section using regex
-  const rulingMatch = text.match(/THE RULING\n([\s\S]*?)(?=\nTHE RULE|\n\n[A-Z]|$)/i);
-  const ruleMatch = text.match(/THE RULE\n([\s\S]*?)(?=\nWHY IT MATTERS|\n\n[A-Z]|$)/i);
-  const whyMatch = text.match(/WHY IT MATTERS\n([\s\S]*?)(?=\nCOMMON MISTAKES|\n\n[A-Z]|$)/i);
-  const mistakesMatch = text.match(/COMMON MISTAKES\n([\s\S]*?)(?=\nPRO TIP|\n\n[A-Z]|$)/i);
-  const tipMatch = text.match(/PRO TIP\n([\s\S]*?)$/i);
+  // Clean up markdown formatting (GPT sometimes adds ** or #)
+  const cleanText = text
+    .replace(/\*\*/g, '')
+    .replace(/^#+\s*/gm, '')
+    .replace(/\r\n/g, '\n');
+
+  // More flexible regex patterns that handle various GPT output formats
+  // Matches: "THE RULING", "THE RULING:", "The Ruling", etc.
+  const rulingMatch = cleanText.match(/THE RULING:?\s*\n([\s\S]*?)(?=\n\s*THE RULE|\n\s*WHY IT MATTERS|$)/i);
+  const ruleMatch = cleanText.match(/THE RULE:?\s*\n([\s\S]*?)(?=\n\s*WHY IT MATTERS|\n\s*COMMON MISTAKES|$)/i);
+  const whyMatch = cleanText.match(/WHY IT MATTERS:?\s*\n([\s\S]*?)(?=\n\s*COMMON MISTAKES|\n\s*PRO TIP|$)/i);
+  const mistakesMatch = cleanText.match(/COMMON MISTAKES:?\s*\n([\s\S]*?)(?=\n\s*PRO TIP|$)/i);
+  const tipMatch = cleanText.match(/PRO TIP:?\s*\n([\s\S]*?)$/i);
 
   if (rulingMatch) sections.ruling = rulingMatch[1].trim();
   if (ruleMatch) sections.rule = ruleMatch[1].trim();
   if (whyMatch) sections.whyItMatters = whyMatch[1].trim();
   if (mistakesMatch) sections.commonMistakes = mistakesMatch[1].trim();
   if (tipMatch) sections.proTip = tipMatch[1].trim();
+
+  // Log for debugging
+  console.log('Parsed sections:', {
+    hasRuling: !!sections.ruling,
+    hasRule: !!sections.rule,
+    hasWhyItMatters: !!sections.whyItMatters,
+    hasCommonMistakes: !!sections.commonMistakes,
+    hasProTip: !!sections.proTip,
+  });
 
   return sections;
 }

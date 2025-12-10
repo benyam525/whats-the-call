@@ -79,7 +79,7 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
 
       {/* Panel */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-rv-slate rounded-t-3xl transform transition-transform duration-300 ease-out ${
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-brand-black rounded-t-3xl transform transition-transform duration-300 ease-out ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{ maxHeight: '85vh' }}
@@ -109,15 +109,15 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
         <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(85vh - 80px)' }}>
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
-              <div className="w-12 h-12 border-3 border-rv-success/30 border-t-rv-success rounded-full animate-spin mb-4" />
+              <div className="w-12 h-12 border-4 border-green-500/30 border-t-green-500 rounded-full animate-spin mb-4" />
               <p className="text-white/60 text-sm">Ref God is reviewing the play...</p>
             </div>
           ) : error ? (
             <div className="text-center py-12">
-              <p className="text-rv-danger mb-4">{error}</p>
+              <p className="text-red-400 mb-4">{error}</p>
               <button
                 onClick={fetchExplanation}
-                className="px-4 py-2 bg-rv-success text-white rounded-lg text-sm font-medium hover:bg-rv-success/90 transition-colors"
+                className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
               >
                 Try Again
               </button>
@@ -126,25 +126,25 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
             <div className="space-y-6">
               {/* The Ruling */}
               <section>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-rv-success mb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-green-400 mb-2">
                   THE RULING
                 </h3>
-                <p className="text-white leading-relaxed">{explanation.ruling}</p>
+                <p className="text-white leading-relaxed">{explanation.ruling || 'No ruling available'}</p>
               </section>
 
               {/* The Rule */}
               <section>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-rv-warning mb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
                   THE RULE
                 </h3>
-                <div className="bg-rv-navy/50 rounded-xl p-4 border border-white/5">
+                <div className="bg-gray-800/50 rounded-xl p-4 border border-white/5">
                   <p className="text-white/90 leading-relaxed italic">
-                    {showFullRule ? explanation.rule : truncateText(explanation.rule, 200)}
+                    {explanation.rule ? (showFullRule ? explanation.rule : truncateText(explanation.rule, 200)) : 'No rule text available'}
                   </p>
-                  {explanation.rule.length > 200 && (
+                  {explanation.rule && explanation.rule.length > 200 && (
                     <button
                       onClick={() => setShowFullRule(!showFullRule)}
-                      className="text-rv-success text-sm mt-2 hover:underline"
+                      className="text-green-400 text-sm mt-2 hover:underline"
                     >
                       {showFullRule ? 'Show less' : 'View full rule text'}
                     </button>
@@ -154,26 +154,26 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
 
               {/* Why It Matters */}
               <section>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-rv-accent mb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-blue-400 mb-2">
                   WHY IT MATTERS
                 </h3>
-                <p className="text-white/80 leading-relaxed">{explanation.whyItMatters}</p>
+                <p className="text-white/80 leading-relaxed">{explanation.whyItMatters || 'No information available'}</p>
               </section>
 
               {/* Common Mistakes */}
               <section>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-rv-danger mb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-red-400 mb-2">
                   COMMON MISTAKES
                 </h3>
-                <p className="text-white/80 leading-relaxed">{explanation.commonMistakes}</p>
+                <p className="text-white/80 leading-relaxed">{explanation.commonMistakes || 'No information available'}</p>
               </section>
 
               {/* Pro Tip */}
-              <section className="bg-gradient-to-r from-rv-success/20 to-rv-success/5 rounded-xl p-4 border border-rv-success/30">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-rv-success mb-2 flex items-center gap-2">
+              <section className="bg-gradient-to-r from-green-500/20 to-green-500/5 rounded-xl p-4 border border-green-500/30">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-green-400 mb-2 flex items-center gap-2">
                   <span>💡</span> PRO TIP
                 </h3>
-                <p className="text-white leading-relaxed">{explanation.proTip}</p>
+                <p className="text-white leading-relaxed">{explanation.proTip || 'No pro tip available'}</p>
               </section>
 
               {/* Rule reference if available */}
@@ -189,7 +189,7 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
         </div>
 
         {/* Bottom safe area padding for mobile */}
-        <div className="h-6 bg-rv-slate" />
+        <div className="h-6 bg-brand-black" />
       </div>
     </>
   );
