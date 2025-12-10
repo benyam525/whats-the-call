@@ -79,47 +79,55 @@ export async function POST(request: NextRequest) {
     // Build the structured prompt for Ref IQ explanation
     const prompt = `You are Ref IQ, the ultimate NBA rules expert. A user just answered a question in a basketball officiating training app.
 
+CRITICAL: THE CORRECT ANSWER IS AUTHORITATIVE AND CANNOT BE CONTRADICTED.
+This answer comes from the official NBA Casebook and has been verified by professional officials.
+
+=== VERIFIED CORRECT INFORMATION ===
 QUESTION: ${question}
 CORRECT ANSWER: ${correctAnswer}
-${explanation ? `BASIC EXPLANATION: ${explanation}` : ''}
+${explanation ? `OFFICIAL EXPLANATION: ${explanation}` : ''}
 ${ruleReference ? `RULE REFERENCE: ${ruleReference}` : ''}
+
+=== USER CONTEXT ===
 USER'S ANSWER: ${userAnswer || 'Not provided'}
 USER WAS: ${wasCorrect ? 'CORRECT' : 'INCORRECT'}
 
-RELEVANT RULES FROM THE OFFICIAL NBA RULEBOOK:
+=== SUPPORTING RULE TEXT (for additional context only) ===
 ${ruleContext}
 
-Using ONLY the official rule text provided above, generate a comprehensive explanation with these EXACT sections. Be authoritative but accessible:
+YOUR TASK: Explain WHY the correct answer "${correctAnswer}" is correct. Do NOT suggest any other answer could be correct. The correct answer is final.
+
+Generate your explanation with these EXACT sections:
 
 THE RULING
-[2-3 sentences explaining why the correct answer is correct. Be direct and confident.]
+[2-3 sentences explaining why "${correctAnswer}" is the correct call. Start by affirming the correct answer, then explain the reasoning.]
 
 THE RULE
-[Quote the specific rule language that applies. Include the rule number/section. Format: "Per Rule X, Section Y: '[exact quote]'"]
+[Quote rule language that SUPPORTS the correct answer. If the supporting text doesn't perfectly match, explain the principle. Format: "Per Rule X, Section Y: '[quote]'"]
 
 WHY IT MATTERS
 [2-3 sentences on why this call matters in a real game. What's the game impact?]
 
 COMMON MISTAKES
-[2-3 sentences on what officials often get wrong with this type of call and why.]
+[2-3 sentences on what officials often get wrong with this type of call and why they might incorrectly choose a different answer.]
 
 PRO TIP
-[1-2 sentences of practical advice for spotting this call. What should refs watch for?]
+[1-2 sentences of practical advice for getting this call right.]
 
-Important:
-- Only cite rules from the provided text
-- Be specific and practical
-- Write for aspiring officials who want to level up
-- Keep each section concise but valuable`;
+CRITICAL RULES:
+- Your explanation MUST support the correct answer: "${correctAnswer}"
+- NEVER contradict or cast doubt on the correct answer
+- If the rule text seems ambiguous, defer to the correct answer as authoritative
+- The casebook answer is always right - explain why it's right`;
 
     const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       max_tokens: 1000,
-      temperature: 0.7,
+      temperature: 0.3, // Lower temperature for more consistent, authoritative responses
       messages: [
         {
           role: 'system',
-          content: 'You are Ref IQ, the most knowledgeable and trusted NBA rules expert. You explain rulings with authority and clarity, always grounding your explanations in the official rulebook. You help officials understand not just what the rule is, but why it matters and how to apply it correctly.'
+          content: `You are Ref IQ, the most knowledgeable NBA rules expert. Your job is to EXPLAIN why a given correct answer is correct - never to determine or question what the correct answer is. The correct answer provided to you comes from the official NBA Casebook and is always authoritative. Your role is educational: help users understand WHY the ruling is correct, not to second-guess it. If rule text seems to conflict with the correct answer, the correct answer wins - explain the nuance or exception that makes it correct.`
         },
         {
           role: 'user',
