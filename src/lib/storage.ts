@@ -16,7 +16,7 @@ export async function getVoteStats(questionId: string): Promise<VoteStats> {
     // Return empty stats if no votes yet
     return {
       questionId,
-      votes: { a: 0, b: 0, c: 0, d: 0 },
+      votes: { A: 0, B: 0, C: 0, D: 0 },
       totalVotes: 0,
     };
   }
@@ -25,10 +25,10 @@ export async function getVoteStats(questionId: string): Promise<VoteStats> {
   return {
     questionId: row.question_id,
     votes: {
-      a: row.votes_a,
-      b: row.votes_b,
-      c: row.votes_c,
-      d: row.votes_d,
+      A: row.votes_a,
+      B: row.votes_b,
+      C: row.votes_c,
+      D: row.votes_d,
     },
     totalVotes: row.total_votes,
   };

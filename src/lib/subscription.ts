@@ -167,6 +167,74 @@ export const CERTIFICATION_PRICING = {
   recertification: { price: 29, name: 'Annual Recertification' },
 };
 
+// Default tier for new users
+export const DEFAULT_TIER: SubscriptionTier = 'free';
+
+// Daily limits per tier
+export const DAILY_LIMITS: Record<SubscriptionTier, { questions: number; suddenDeath: number }> = {
+  free: { questions: 5, suddenDeath: 1 },
+  pro: { questions: Infinity, suddenDeath: Infinity },
+  elite: { questions: Infinity, suddenDeath: Infinity },
+};
+
+// Free categories (only these are unlocked for free tier)
+export const FREE_CATEGORIES = ['personal_fouls'];
+
+// Check if user can access a feature
+export function canAccessFeature(tier: SubscriptionTier, feature: GatedFeature): boolean {
+  return canAccess(feature, tier);
+}
+
+// Check if user can access a category
+export function canAccessCategory(tier: SubscriptionTier, category: string): boolean {
+  if (tier !== 'free') return true;
+  return FREE_CATEGORIES.includes(category);
+}
+
+// Check if user can access a game mode
+export function canAccessGameMode(tier: SubscriptionTier, mode: string): boolean {
+  if (tier !== 'free') return true;
+  // Free tier can access basic modes
+  return ['sudden-death', 'daily-5'].includes(mode);
+}
+
+// Check if user has remaining questions for the day
+export function hasRemainingQuestions(tier: SubscriptionTier, questionsAnswered: number): boolean {
+  const limit = DAILY_LIMITS[tier].questions;
+  return limit === Infinity || questionsAnswered < limit;
+}
+
+// Check if user has remaining sudden death attempts for the day
+export function hasRemainingSuddenDeath(tier: SubscriptionTier, attemptsUsed: number): boolean {
+  const limit = DAILY_LIMITS[tier].suddenDeath;
+  return limit === Infinity || attemptsUsed < limit;
+}
+
+// Get remaining questions for the day
+export function getRemainingQuestions(tier: SubscriptionTier, questionsAnswered: number): number | 'unlimited' {
+  const limit = DAILY_LIMITS[tier].questions;
+  if (limit === Infinity) return 'unlimited';
+  return Math.max(0, limit - questionsAnswered);
+}
+
+// Get remaining sudden death attempts for the day
+export function getRemainingSuddenDeath(tier: SubscriptionTier, attemptsUsed: number): number | 'unlimited' {
+  const limit = DAILY_LIMITS[tier].suddenDeath;
+  if (limit === Infinity) return 'unlimited';
+  return Math.max(0, limit - attemptsUsed);
+}
+
+// Check for dev tier override (for testing)
+export function getDevTierOverride(): SubscriptionTier | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const tierParam = params.get('tier');
+  if (tierParam && ['free', 'pro', 'elite'].includes(tierParam)) {
+    return tierParam as SubscriptionTier;
+  }
+  return null;
+}
+
 // Feature lists for marketing page
 export const TIER_FEATURES: Record<SubscriptionTier, string[]> = {
   free: [

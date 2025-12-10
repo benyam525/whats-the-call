@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { CasebookQuestion, AnswerKey, Difficulty } from '@/data/types';
+import { CasebookQuestion, AnswerKey } from '@/data/types';
+
+type SuddenDeathDifficulty = 'rookie' | 'veteran' | 'expert';
 import { casebookQuestions } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
@@ -30,7 +32,7 @@ export default function SuddenDeath() {
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [bestScore, setBestScore] = useState<number | null>(null);
   const [showNamePrompt, setShowNamePrompt] = useState(false);
-  const [difficultyReached, setDifficultyReached] = useState<Difficulty>('beginner');
+  const [difficultyReached, setDifficultyReached] = useState<SuddenDeathDifficulty>('rookie');
 
   // Fetch best score
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function SuddenDeath() {
     fetchBestScore();
   }, [visitorId]);
 
-  const getCurrentDifficulty = useCallback((): Difficulty => {
+  const getCurrentDifficulty = useCallback((): SuddenDeathDifficulty => {
     return getSuddenDeathDifficulty(score);
   }, [score]);
 
@@ -96,7 +98,7 @@ export default function SuddenDeath() {
     setScore(0);
     setUsedQuestionIds(new Set());
     setGameState('playing');
-    setDifficultyReached('beginner');
+    setDifficultyReached('rookie');
     loadNewQuestion();
   };
 

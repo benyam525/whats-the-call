@@ -2,11 +2,14 @@
 
 import { Difficulty } from '@/data/types';
 
+// Support both difficulty systems
+type AllDifficulty = Difficulty | 'rookie' | 'veteran';
+
 interface DifficultyBadgeProps {
-  difficulty: Difficulty;
+  difficulty: AllDifficulty;
 }
 
-const difficultyConfig: Record<Difficulty, { label: string; color: string; icon: string }> = {
+const difficultyConfig: Record<AllDifficulty, { label: string; color: string; icon: string }> = {
   beginner: {
     label: 'Beginner',
     color: 'bg-rv-success/20 text-rv-success border-rv-success/30',
@@ -27,10 +30,20 @@ const difficultyConfig: Record<Difficulty, { label: string; color: string; icon:
     color: 'bg-rv-danger/20 text-rv-danger border-rv-danger/30',
     icon: '🔥',
   },
+  rookie: {
+    label: 'Rookie',
+    color: 'bg-rv-success/20 text-rv-success border-rv-success/30',
+    icon: '🌱',
+  },
+  veteran: {
+    label: 'Veteran',
+    color: 'bg-rv-warning/20 text-rv-warning border-rv-warning/30',
+    icon: '⭐',
+  },
 };
 
 export function DifficultyBadge({ difficulty }: DifficultyBadgeProps) {
-  const config = difficultyConfig[difficulty];
+  const config = difficultyConfig[difficulty] || difficultyConfig.beginner;
 
   return (
     <span

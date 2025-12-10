@@ -139,11 +139,11 @@ function FilmRoomContent() {
     trackAnswer({
       visitorId,
       questionId: currentQuestion.id,
-      category: currentQuestion.category,
-      difficulty: currentQuestion.difficulty,
+      category: currentQuestion.category || currentQuestion.parent_category || 'unknown',
+      difficulty: currentQuestion.difficulty as 'rookie' | 'veteran' | 'expert',
       mode: 'film_room',
       answerGiven: answer,
-      correctAnswer: currentQuestion.correctAnswer,
+      correctAnswer: currentQuestion.correct_answer,
       isCorrect,
       responseTimeMs,
     });

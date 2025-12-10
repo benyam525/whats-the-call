@@ -332,7 +332,8 @@ export async function getCategoryMasteryGrid(visitorId: string): Promise<Categor
   const allCategories = getCategories();
   const questionsByCategory: Record<string, number> = {};
   casebookQuestions.forEach(q => {
-    questionsByCategory[q.category] = (questionsByCategory[q.category] || 0) + 1;
+    const cat = q.category || q.parent_category || 'unknown';
+    questionsByCategory[cat] = (questionsByCategory[cat] || 0) + 1;
   });
 
   // Get category_difficulty_mastery data

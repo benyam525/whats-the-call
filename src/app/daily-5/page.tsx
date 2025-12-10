@@ -86,11 +86,11 @@ export default function Daily5() {
     trackAnswer({
       visitorId,
       questionId: currentQuestion.id,
-      category: currentQuestion.category,
-      difficulty: currentQuestion.difficulty,
+      category: currentQuestion.category || currentQuestion.parent_category || 'unknown',
+      difficulty: currentQuestion.difficulty as 'rookie' | 'veteran' | 'expert',
       mode: 'daily_5',
       answerGiven: answer,
-      correctAnswer: currentQuestion.correctAnswer,
+      correctAnswer: currentQuestion.correct_answer,
       isCorrect,
       responseTimeMs,
     });

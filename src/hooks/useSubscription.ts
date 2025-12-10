@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { SubscriptionTier, DAILY_LIMITS } from '@/data/types';
 import {
   canAccessFeature,
   canAccessCategory,
@@ -12,8 +11,11 @@ import {
   getRemainingSuddenDeath,
   getDevTierOverride,
   DEFAULT_TIER,
+  DAILY_LIMITS,
+  SubscriptionTier,
+  GatedFeature,
 } from '@/lib/subscription';
-import type { GatedFeature, ParentCategory } from '@/data/types';
+import type { ParentCategory } from '@/data/types';
 
 // Storage keys
 const STORAGE_KEYS = {

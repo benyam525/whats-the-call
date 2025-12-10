@@ -97,7 +97,7 @@ export default function CategoryDrillPage() {
       // Get unique sub-categories (casebook_category) for this parent
       const subCategoryMap = new Map<string, number>();
       parentQuestions.forEach(q => {
-        const subCat = q.casebook_category || q.category;
+        const subCat = q.casebook_category || q.category || 'unknown';
         subCategoryMap.set(subCat, (subCategoryMap.get(subCat) || 0) + 1);
       });
 
