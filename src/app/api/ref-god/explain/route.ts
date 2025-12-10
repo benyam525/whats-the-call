@@ -113,8 +113,8 @@ Important:
 - Keep each section concise but valuable`;
 
     const response = await getOpenAI().chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 1500,
+      model: 'gpt-4o-mini',
+      max_tokens: 1000,
       temperature: 0.7,
       messages: [
         {

@@ -66,10 +66,10 @@ export async function POST(request: NextRequest) {
       .map((r: any) => `[${r.section_id}] ${r.section_name}\n${r.content}`)
       .join('\n\n---\n\n');
 
-    // 4. Ask GPT-4
+    // 4. Ask GPT-4o-mini for faster responses
     const response = await getOpenAI().chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 1024,
+      model: 'gpt-4o-mini',
+      max_tokens: 800,
       messages: [
         {
           role: 'user',

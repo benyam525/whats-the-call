@@ -19,11 +19,12 @@ interface Message {
 }
 
 const SUGGESTED_QUESTIONS = [
-  "What is a flagrant foul?",
-  "When can a coach challenge a call?",
-  "What is the gather step rule?",
-  "How does the shot clock work after an offensive rebound?",
-  "What constitutes a technical foul?",
+  { text: "What is a flagrant foul?", icon: "💥" },
+  { text: "When can a coach challenge?", icon: "🚩" },
+  { text: "Explain the gather step", icon: "👟" },
+  { text: "Shot clock after offensive rebound?", icon: "⏱️" },
+  { text: "What's a clear path foul?", icon: "🛤️" },
+  { text: "When is goaltending called?", icon: "🖐️" },
 ];
 
 function RefGodContent() {
@@ -126,30 +127,62 @@ function RefGodContent() {
         <div className="max-w-3xl mx-auto space-y-6">
           {messages.length === 0 ? (
             // Welcome state with suggestions
-            <div className="text-center py-12">
-              <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-brand-card border border-brand-border flex items-center justify-center">
-                <span className="text-5xl">🏀</span>
+            <div className="text-center py-8">
+              {/* Hero Section */}
+              <div className="relative mb-8">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-orange-500/20 blur-3xl -z-10" />
+                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                  <span className="text-4xl">🏀</span>
+                </div>
+                <h1 className="text-4xl font-bold text-brand-black mb-2 tracking-tight">
+                  Ref God
+                </h1>
+                <p className="text-lg text-brand-gray">
+                  Your AI-powered NBA rules expert
+                </p>
               </div>
-              <h1 className="text-3xl font-bold text-brand-black mb-3 tracking-tight">Ref God</h1>
-              <p className="text-brand-gray mb-10 max-w-md mx-auto leading-relaxed">
-                I&apos;m trained on the complete 2025-26 NBA rulebook. Ask me anything about NBA rules, officiating, or game situations.
-              </p>
 
+              {/* Value Props */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
+                <div className="bg-brand-card rounded-xl p-4 border border-brand-border">
+                  <div className="text-2xl mb-2">📖</div>
+                  <p className="text-sm font-medium text-brand-black">Full 2025-26 Rulebook</p>
+                  <p className="text-xs text-brand-gray mt-1">Every rule at your fingertips</p>
+                </div>
+                <div className="bg-brand-card rounded-xl p-4 border border-brand-border">
+                  <div className="text-2xl mb-2">⚡</div>
+                  <p className="text-sm font-medium text-brand-black">Instant Answers</p>
+                  <p className="text-xs text-brand-gray mt-1">Get rulings in seconds</p>
+                </div>
+                <div className="bg-brand-card rounded-xl p-4 border border-brand-border">
+                  <div className="text-2xl mb-2">🎯</div>
+                  <p className="text-sm font-medium text-brand-black">Cited Sources</p>
+                  <p className="text-xs text-brand-gray mt-1">Rule references included</p>
+                </div>
+              </div>
+
+              {/* Suggested Questions */}
               <div className="space-y-4">
-                <p className="text-sm text-brand-gray font-medium">Try asking:</p>
-                <div className="flex flex-wrap justify-center gap-3">
+                <p className="text-sm text-brand-gray font-medium uppercase tracking-wider">Popular Questions</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
                   {SUGGESTED_QUESTIONS.map((q, idx) => (
                     <button
                       key={idx}
-                      onClick={() => handleSubmit(q)}
+                      onClick={() => handleSubmit(q.text)}
                       disabled={loading}
-                      className="px-4 py-2.5 bg-brand-card border border-brand-border rounded-full text-sm text-brand-black hover:bg-gray-100 hover:border-gray-300 transition-all disabled:opacity-50"
+                      className="flex items-center gap-3 px-4 py-3 bg-white border border-brand-border rounded-xl text-sm text-brand-black hover:bg-brand-card hover:border-gray-300 hover:shadow-sm transition-all disabled:opacity-50 text-left"
                     >
-                      {q}
+                      <span className="text-xl">{q.icon}</span>
+                      <span>{q.text}</span>
                     </button>
                   ))}
                 </div>
               </div>
+
+              {/* Tagline */}
+              <p className="mt-10 text-sm text-brand-gray italic">
+                &quot;When in doubt, ask Ref God.&quot;
+              </p>
             </div>
           ) : (
             // Messages

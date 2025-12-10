@@ -77,20 +77,22 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
         onClick={onClose}
       />
 
-      {/* Panel */}
+      {/* Panel - Full width on mobile, centered modal on desktop */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-brand-black rounded-t-3xl transform transition-transform duration-300 ease-out ${
-          isOpen ? 'translate-y-0' : 'translate-y-full'
-        }`}
+        className={`fixed z-50 bg-brand-black transform transition-transform duration-300 ease-out
+          bottom-0 left-0 right-0 rounded-t-3xl
+          md:bottom-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-2xl md:max-w-lg md:w-full md:mx-4
+          ${isOpen ? 'translate-y-0 md:translate-y-[-50%]' : 'translate-y-full md:translate-y-[100vh]'}
+        `}
         style={{ maxHeight: '85vh' }}
       >
-        {/* Handle bar */}
-        <div className="flex justify-center pt-3 pb-2">
+        {/* Handle bar - only show on mobile */}
+        <div className="flex justify-center pt-3 pb-2 md:hidden">
           <div className="w-12 h-1.5 bg-white/20 rounded-full" />
         </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pb-4 border-b border-white/10">
+        <div className="flex items-center justify-between px-5 pb-4 pt-0 md:pt-4 border-b border-white/10">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🏀</span>
             <h2 className="text-xl font-bold text-white tracking-tight">REF GOD</h2>
@@ -189,7 +191,7 @@ export function RefGodPanel({ isOpen, onClose, question, userAnswer, wasCorrect 
         </div>
 
         {/* Bottom safe area padding for mobile */}
-        <div className="h-6 bg-brand-black" />
+        <div className="h-6 md:h-4 bg-brand-black" />
       </div>
     </>
   );
