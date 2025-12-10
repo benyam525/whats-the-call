@@ -49,7 +49,7 @@ export default function FilmRoomPage() {
     );
   }
 
-  const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+  const isCorrect = selectedAnswer === currentQuestion.correct_answer;
 
   return (
     <div className="min-h-screen bg-white">
@@ -86,13 +86,13 @@ export default function FilmRoomPage() {
           {/* Answer Options */}
           <div className="p-6 space-y-3">
             {(Object.entries(currentQuestion.options) as [AnswerKey, string][])
-              .filter(([, value]) => value)
+              .filter(([key, value]) => value && key === key.toUpperCase())
               .map(([key, value]) => {
                 let buttonClass = 'w-full text-left p-4 rounded-lg border-2 transition-all ';
 
                 if (!showResult) {
                   buttonClass += 'border-brand-border hover:border-brand-black cursor-pointer';
-                } else if (key === currentQuestion.correctAnswer) {
+                } else if (key === currentQuestion.correct_answer) {
                   buttonClass += 'border-green-500 bg-green-50';
                 } else if (key === selectedAnswer) {
                   buttonClass += 'border-red-500 bg-red-50';

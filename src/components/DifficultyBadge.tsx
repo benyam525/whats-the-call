@@ -7,15 +7,20 @@ interface DifficultyBadgeProps {
 }
 
 const difficultyConfig: Record<Difficulty, { label: string; color: string; icon: string }> = {
-  rookie: {
-    label: 'Rookie',
+  beginner: {
+    label: 'Beginner',
     color: 'bg-rv-success/20 text-rv-success border-rv-success/30',
     icon: '🌱',
   },
-  veteran: {
-    label: 'Veteran',
+  intermediate: {
+    label: 'Intermediate',
     color: 'bg-rv-warning/20 text-rv-warning border-rv-warning/30',
     icon: '⭐',
+  },
+  advanced: {
+    label: 'Advanced',
+    color: 'bg-rv-accent/20 text-rv-accent border-rv-accent/30',
+    icon: '🎯',
   },
   expert: {
     label: 'Expert',

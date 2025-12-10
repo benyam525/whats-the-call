@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { CasebookQuestion, AnswerKey, Difficulty } from '@/data/types';
 import { casebookQuestions } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
-import { useAnswerTracking } from '@/hooks/useAnswerTracking';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { HomeButton, ResetButton } from '@/components/HomeButton';
 import { Timer } from '@/components/Timer';
@@ -18,8 +17,6 @@ const TIMER_SECONDS = 10;
 
 export default function SuddenDeath() {
   const visitorId = useVisitorId();
-  const { trackAnswer, resetSession } = useAnswerTracking();
-  const questionStartTime = useRef<number>(Date.now());
 
   const [gameState, setGameState] = useState<GameState>('ready');
   const [currentQuestion, setCurrentQuestion] = useState<CasebookQuestion | null>(null);
@@ -33,7 +30,7 @@ export default function SuddenDeath() {
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [bestScore, setBestScore] = useState<number | null>(null);
   const [showNamePrompt, setShowNamePrompt] = useState(false);
-  const [difficultyReached, setDifficultyReached] = useState<Difficulty>('rookie');
+  const [difficultyReached, setDifficultyReached] = useState<Difficulty>('beginner');
 
   // Fetch best score
   useEffect(() => {
@@ -93,15 +90,13 @@ export default function SuddenDeath() {
     setShowFeedback(false);
     setTimerRunning(true);
     setTimerKey(prev => prev + 1);
-    questionStartTime.current = Date.now();
   }, [getCurrentDifficulty, usedQuestionIds]);
 
   const startGame = () => {
     setScore(0);
     setUsedQuestionIds(new Set());
     setGameState('playing');
-    setDifficultyReached('rookie');
-    resetSession(); // Start fresh session for dashboard tracking
+    setDifficultyReached('beginner');
     loadNewQuestion();
   };
 
@@ -141,57 +136,22 @@ export default function SuddenDeath() {
     setLastAnswerCorrect(false);
     setShowFeedback(true);
 
-    // Track timeout as a wrong answer
-    if (visitorId && currentQuestion) {
-      trackAnswer({
-        visitorId,
-        questionId: currentQuestion.id,
-        category: currentQuestion.category,
-        difficulty: currentQuestion.difficulty,
-        mode: 'sudden_death',
-        answerGiven: 'timeout',
-        correctAnswer: currentQuestion.correctAnswer,
-        isCorrect: false,
-        responseTimeMs: TIMER_SECONDS * 1000,
-        timeAllowedMs: TIMER_SECONDS * 1000,
-        streakPosition: score + 1,
-      });
-    }
-
     // End game after showing feedback
     setTimeout(() => {
       endGame(score);
     }, 1500);
-  }, [score, endGame, visitorId, currentQuestion, trackAnswer]);
+  }, [score, endGame]);
 
   const handleAnswer = async (answer: AnswerKey) => {
-    if (showResult || !currentQuestion || !visitorId) return;
-
-    const responseTimeMs = Date.now() - questionStartTime.current;
-    const timeAllowedMs = TIMER_SECONDS * 1000;
+    if (showResult || !currentQuestion) return;
 
     setTimerRunning(false);
     setSelectedAnswer(answer);
 
-    const isCorrect = answer === currentQuestion.correctAnswer;
+    const isCorrect = answer === currentQuestion.correct_answer;
     setLastAnswerCorrect(isCorrect);
     setShowFeedback(true);
     setShowResult(true);
-
-    // Track answer for dashboard (with streak position and timing)
-    trackAnswer({
-      visitorId,
-      questionId: currentQuestion.id,
-      category: currentQuestion.category,
-      difficulty: currentQuestion.difficulty,
-      mode: 'sudden_death',
-      answerGiven: answer,
-      correctAnswer: currentQuestion.correctAnswer,
-      isCorrect,
-      responseTimeMs,
-      timeAllowedMs,
-      streakPosition: score + 1, // Current position in streak (1-indexed)
-    });
 
     if (isCorrect) {
       const newScore = score + 1;
@@ -231,11 +191,11 @@ export default function SuddenDeath() {
       return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-danger/50 hover:bg-rv-steel cursor-pointer text-white';
     }
 
-    if (option === currentQuestion?.correctAnswer) {
+    if (option === currentQuestion?.correct_answer) {
       return base + 'border-rv-success bg-rv-success/20 text-rv-success';
     }
 
-    if (option === selectedAnswer && option !== currentQuestion?.correctAnswer) {
+    if (option === selectedAnswer && option !== currentQuestion?.correct_answer) {
       return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
     }
 
@@ -424,7 +384,7 @@ export default function SuddenDeath() {
 
             <div className="p-5 space-y-3">
               {(Object.entries(currentQuestion.options) as [AnswerKey, string][])
-                .filter(([, value]) => value)
+                .filter(([key, value]) => value && key === key.toUpperCase())
                 .map(([key, value]) => (
                   <button
                     key={key}

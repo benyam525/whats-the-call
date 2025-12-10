@@ -4,14 +4,24 @@ import { VoteStats, AnswerKey } from '@/data/types';
 
 interface VoteSplitProps {
   stats: VoteStats;
-  options: { a: string; b: string; c: string; d?: string };
+  options: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+    a?: string;
+    b?: string;
+    c?: string;
+    d?: string;
+  };
   selectedAnswer: AnswerKey;
   correctAnswer: AnswerKey;
 }
 
 export function VoteSplit({ stats, options, selectedAnswer, correctAnswer }: VoteSplitProps) {
-  const availableOptions = (Object.entries(options) as [AnswerKey, string][])
-    .filter(([, value]) => value);
+  // Only use uppercase keys (A, B, C, D)
+  const availableOptions = (Object.entries(options) as [string, string][])
+    .filter(([key, value]) => value && key === key.toUpperCase()) as [AnswerKey, string][];
 
   const getPercentage = (key: AnswerKey): number => {
     if (stats.totalVotes === 0) return 0;

@@ -78,7 +78,7 @@ export default function Daily5() {
 
     const responseTimeMs = Date.now() - questionStartTime.current;
     setSelectedAnswer(answer);
-    const isCorrect = answer === currentQuestion.correctAnswer;
+    const isCorrect = answer === currentQuestion.correct_answer;
     setLastAnswerCorrect(isCorrect);
     setShowFeedback(true);
 
@@ -164,7 +164,7 @@ export default function Daily5() {
     const finalScore = progress.score;
     const emojis = questions.map((q) => {
       const answer = progress.answers[q.id];
-      return answer === q.correctAnswer ? '🟩' : '🟥';
+      return answer === q.correct_answer ? '🟩' : '🟥';
     }).join('');
 
     return `RuleVision Daily 5 - ${getTodayDateString()}\n${emojis}\n${finalScore}/5\n\nPlay at: ${window.location.origin}`;
@@ -193,11 +193,11 @@ export default function Daily5() {
       return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-gold/50 hover:bg-rv-steel cursor-pointer text-white';
     }
 
-    if (option === currentQuestion?.correctAnswer) {
+    if (option === currentQuestion?.correct_answer) {
       return base + 'border-rv-success bg-rv-success/20 text-rv-success';
     }
 
-    if (option === selectedAnswer && option !== currentQuestion?.correctAnswer) {
+    if (option === selectedAnswer && option !== currentQuestion?.correct_answer) {
       return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
     }
 
@@ -315,7 +315,7 @@ export default function Daily5() {
             <div className="flex justify-center gap-2 mb-6">
               {questions.map((q) => {
                 const answer = progress.answers[q.id];
-                const isCorrect = answer === q.correctAnswer;
+                const isCorrect = answer === q.correct_answer;
                 return (
                   <div
                     key={q.id}
@@ -394,7 +394,7 @@ export default function Daily5() {
               let bgColor = 'bg-rv-steel';
 
               if (i < progress.currentIndex || (i === progress.currentIndex && showResult)) {
-                bgColor = answer === q?.correctAnswer ? 'bg-rv-success' : 'bg-rv-danger';
+                bgColor = answer === q?.correct_answer ? 'bg-rv-success' : 'bg-rv-danger';
               } else if (i === progress.currentIndex) {
                 bgColor = 'bg-rv-gold';
               }
@@ -424,7 +424,7 @@ export default function Daily5() {
 
             <div className="p-5 space-y-3">
               {(Object.entries(currentQuestion.options) as [AnswerKey, string][])
-                .filter(([, value]) => value)
+                .filter(([key, value]) => value && key === key.toUpperCase())
                 .map(([key, value]) => (
                   <button
                     key={key}
@@ -441,13 +441,13 @@ export default function Daily5() {
             {showResult && selectedAnswer && (
               <div
                 className={`p-5 border-t ${
-                  selectedAnswer === currentQuestion.correctAnswer
+                  selectedAnswer === currentQuestion.correct_answer
                     ? 'border-rv-success/30 bg-rv-success/10'
                     : 'border-rv-danger/30 bg-rv-danger/10'
                 }`}
               >
                 <ResultHeader
-                  isCorrect={selectedAnswer === currentQuestion.correctAnswer}
+                  isCorrect={selectedAnswer === currentQuestion.correct_answer}
                   streakCount={progress.score}
                 />
 
@@ -455,6 +455,8 @@ export default function Daily5() {
                   ruling={currentQuestion.ruling}
                   ruleReference={currentQuestion.ruleReference}
                   casebookReference={currentQuestion.casebookReference}
+                  questionText={currentQuestion.question}
+                  scenarioText={currentQuestion.scenario}
                 />
               </div>
             )}

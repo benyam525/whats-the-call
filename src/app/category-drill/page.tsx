@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { CasebookQuestion, AnswerKey } from '@/data/types';
-import { casebookQuestions, getCategories } from '@/data/casebook';
+import { useState, useEffect, useCallback } from 'react';
+import { CasebookQuestion, AnswerKey, ParentCategory, PARENT_CATEGORY_NAMES } from '@/data/types';
+import { casebookQuestions, getParentCategories } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
-import { useAnswerTracking } from '@/hooks/useAnswerTracking';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { RuleCitation } from '@/components/RuleCitation';
 import { HomeButton } from '@/components/HomeButton';
@@ -23,11 +22,9 @@ interface CategoryStats {
 
 export default function CategoryDrill() {
   const visitorId = useVisitorId();
-  const { trackAnswer } = useAnswerTracking();
-  const questionStartTime = useRef<number>(Date.now());
 
   const [gameState, setGameState] = useState<GameState>('select-category');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<ParentCategory | null>(null);
   const [categoryQuestions, setCategoryQuestions] = useState<CasebookQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState({ correct: 0, total: 0 });
@@ -37,7 +34,7 @@ export default function CategoryDrill() {
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false);
   const [categoryStats, setCategoryStats] = useState<CategoryStats>({});
 
-  const categories = getCategories();
+  const categories = getParentCategories();
 
   // Fetch category stats
   useEffect(() => {
@@ -62,8 +59,8 @@ export default function CategoryDrill() {
     fetchStats();
   }, [visitorId]);
 
-  const startCategory = (category: string) => {
-    const questions = casebookQuestions.filter(q => q.category === category);
+  const startCategory = (category: ParentCategory) => {
+    const questions = casebookQuestions.filter(q => q.parent_category === category);
     // Shuffle questions
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
     setCategoryQuestions(shuffled);
@@ -73,17 +70,15 @@ export default function CategoryDrill() {
     setSelectedAnswer(null);
     setShowResult(false);
     setGameState('playing');
-    questionStartTime.current = Date.now();
   };
 
   const currentQuestion = categoryQuestions[currentIndex];
 
   const handleAnswer = async (answer: AnswerKey) => {
-    if (showResult || !currentQuestion || !visitorId) return;
+    if (showResult || !currentQuestion) return;
 
-    const responseTimeMs = Date.now() - questionStartTime.current;
     setSelectedAnswer(answer);
-    const isCorrect = answer === currentQuestion.correctAnswer;
+    const isCorrect = answer === currentQuestion.correct_answer;
     setLastAnswerCorrect(isCorrect);
     setShowFeedback(true);
 
@@ -94,21 +89,8 @@ export default function CategoryDrill() {
     setScore(newScore);
     setShowResult(true);
 
-    // Track answer for dashboard
-    trackAnswer({
-      visitorId,
-      questionId: currentQuestion.id,
-      category: currentQuestion.category,
-      difficulty: currentQuestion.difficulty,
-      mode: 'category_drill',
-      answerGiven: answer,
-      correctAnswer: currentQuestion.correctAnswer,
-      isCorrect,
-      responseTimeMs,
-    });
-
-    // Record progress (existing API)
-    if (selectedCategory) {
+    // Record progress
+    if (visitorId && selectedCategory) {
       try {
         await fetch('/api/category/progress', {
           method: 'POST',
@@ -146,7 +128,6 @@ export default function CategoryDrill() {
       setSelectedAnswer(null);
       setShowResult(false);
       setShowFeedback(false);
-      questionStartTime.current = Date.now();
     }
   }, [currentIndex, categoryQuestions.length, selectedCategory, score]);
 
@@ -170,11 +151,11 @@ export default function CategoryDrill() {
       return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-success/50 hover:bg-rv-steel cursor-pointer text-white';
     }
 
-    if (option === currentQuestion?.correctAnswer) {
+    if (option === currentQuestion?.correct_answer) {
       return base + 'border-rv-success bg-rv-success/20 text-rv-success';
     }
 
-    if (option === selectedAnswer && option !== currentQuestion?.correctAnswer) {
+    if (option === selectedAnswer && option !== currentQuestion?.correct_answer) {
       return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
     }
 
@@ -207,9 +188,10 @@ export default function CategoryDrill() {
 
           <div className="space-y-3">
             {categories.map(category => {
-              const questionCount = casebookQuestions.filter(q => q.category === category).length;
+              const questionCount = casebookQuestions.filter(q => q.parent_category === category).length;
               const mastery = getMasteryPercentage(category);
               const stats = categoryStats[category];
+              const displayName = PARENT_CATEGORY_NAMES[category] || category;
 
               return (
                 <button
@@ -219,7 +201,7 @@ export default function CategoryDrill() {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-white group-hover:text-rv-success transition-colors">{category}</h3>
+                      <h3 className="font-semibold text-white group-hover:text-rv-success transition-colors">{displayName}</h3>
                       <p className="text-sm text-rv-silver/60">
                         {questionCount} questions
                         {stats && stats.total > 0 && (
@@ -271,7 +253,7 @@ export default function CategoryDrill() {
                   <span className="text-xl">📚</span>
                   <h1 className="text-2xl font-bold tracking-tight text-white">Drill Complete!</h1>
                 </div>
-                <p className="text-rv-silver/60 text-sm">{selectedCategory}</p>
+                <p className="text-rv-silver/60 text-sm">{selectedCategory ? PARENT_CATEGORY_NAMES[selectedCategory] : ''}</p>
               </div>
               <HomeButton />
             </div>
@@ -334,7 +316,7 @@ export default function CategoryDrill() {
             <div>
               <div className="flex items-center gap-3 mb-1">
                 <span className="text-xl">📚</span>
-                <h1 className="text-xl font-bold tracking-tight text-white">{selectedCategory}</h1>
+                <h1 className="text-xl font-bold tracking-tight text-white">{selectedCategory ? PARENT_CATEGORY_NAMES[selectedCategory] : ''}</h1>
               </div>
               <p className="text-rv-silver/60 text-sm">
                 Question {currentIndex + 1} of {categoryQuestions.length}
@@ -376,7 +358,7 @@ export default function CategoryDrill() {
 
             <div className="p-5 space-y-3">
               {(Object.entries(currentQuestion.options) as [AnswerKey, string][])
-                .filter(([, value]) => value)
+                .filter(([key, value]) => value && key === key.toUpperCase())
                 .map(([key, value]) => (
                   <button
                     key={key}
@@ -393,13 +375,13 @@ export default function CategoryDrill() {
             {showResult && selectedAnswer && (
               <div
                 className={`p-5 border-t ${
-                  selectedAnswer === currentQuestion.correctAnswer
+                  selectedAnswer === currentQuestion.correct_answer
                     ? 'border-rv-success/30 bg-rv-success/10'
                     : 'border-rv-danger/30 bg-rv-danger/10'
                 }`}
               >
                 <ResultHeader
-                  isCorrect={selectedAnswer === currentQuestion.correctAnswer}
+                  isCorrect={selectedAnswer === currentQuestion.correct_answer}
                   streakCount={score.correct}
                 />
 
@@ -407,6 +389,8 @@ export default function CategoryDrill() {
                   ruling={currentQuestion.ruling}
                   ruleReference={currentQuestion.ruleReference}
                   casebookReference={currentQuestion.casebookReference}
+                  questionText={currentQuestion.question}
+                  scenarioText={currentQuestion.scenario}
                 />
               </div>
             )}

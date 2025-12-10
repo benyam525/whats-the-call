@@ -15,7 +15,9 @@ import {
   DayView,
   WeekView,
   SeasonView,
+  CategoryMastery,
 } from '@/components/dashboard';
+import { casebookQuestions } from '@/data/casebook';
 import { LockedFeature } from '@/components/LockedFeature';
 import { DashboardData, TimeView } from '@/data/dashboard-types';
 import { getDummyDashboardData } from '@/lib/dummy-dashboard-data';
@@ -116,6 +118,15 @@ function DashboardContent() {
         </div>
       </header>
 
+      {/* Questions Count Banner */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p className="text-sm font-medium">
+            <span className="font-bold">{casebookQuestions.length}</span> official NBA casebook questions now available in RuleVision
+          </p>
+        </div>
+      </div>
+
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Strip - shows basic for free, full for pro+ */}
@@ -153,6 +164,11 @@ function DashboardContent() {
           >
             <FocusPlanCard data={dashboardData.focusPlan} />
           </LockedFeature>
+        </div>
+
+        {/* Category Mastery - expandable parent/sub-category structure */}
+        <div className="mb-6">
+          <CategoryMastery />
         </div>
 
         {/* Time View */}

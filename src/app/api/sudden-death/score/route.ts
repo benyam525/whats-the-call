@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       .insert({
         visitor_id: visitorId,
         score,
-        difficulty_reached: difficultyReached || 'rookie',
+        difficulty_reached: difficultyReached || 'beginner',
       });
 
     if (error) {

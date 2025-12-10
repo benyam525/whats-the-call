@@ -50,8 +50,8 @@ export default function HomePage() {
             />
           </Link>
           <div className="flex items-center gap-8">
-            <Link href="/dashboard" className="text-brand-gray hover:text-brand-black transition-colors">
-              Dashboard
+            <Link href="/ref-god" className="text-brand-gray hover:text-brand-black transition-colors">
+              Ref God
             </Link>
             <Link href="/about" className="text-brand-gray hover:text-brand-black transition-colors">
               About
@@ -115,8 +115,8 @@ export default function HomePage() {
           <div className="flex items-center justify-between text-sm text-brand-gray">
             <p>© 2024 RuleVision</p>
             <div className="flex gap-6">
-              <Link href="/dashboard" className="hover:text-brand-black transition-colors">
-                Dashboard
+              <Link href="/ref-god" className="hover:text-brand-black transition-colors">
+                Ref God
               </Link>
               <Link href="/about" className="hover:text-brand-black transition-colors">
                 About

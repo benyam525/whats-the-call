@@ -113,7 +113,7 @@ function FilmRoomContent() {
     const responseTimeMs = Date.now() - questionStartTime.current;
     setSelectedAnswer(answer);
 
-    const isCorrect = answer === currentQuestion.correctAnswer;
+    const isCorrect = answer === currentQuestion.correct_answer;
     setLastAnswerCorrect(isCorrect);
     setShowFeedback(true);
 
@@ -165,11 +165,11 @@ function FilmRoomContent() {
       return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-accent/50 hover:bg-rv-steel cursor-pointer text-white';
     }
 
-    if (option === currentQuestion?.correctAnswer) {
+    if (option === currentQuestion?.correct_answer) {
       return base + 'border-rv-success bg-rv-success/20 text-rv-success';
     }
 
-    if (option === selectedAnswer && option !== currentQuestion?.correctAnswer) {
+    if (option === selectedAnswer && option !== currentQuestion?.correct_answer) {
       return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
     }
 
@@ -272,7 +272,7 @@ function FilmRoomContent() {
           {/* Answer Options */}
           <div className="p-5 space-y-3">
             {(Object.entries(currentQuestion.options) as [AnswerKey, string][])
-              .filter(([, value]) => value)
+              .filter(([key, value]) => value && key === key.toUpperCase())
               .map(([key, value]) => (
                 <button
                   key={key}
@@ -289,13 +289,13 @@ function FilmRoomContent() {
           {/* Result Section */}
           {showResult && selectedAnswer && (
             <div className={`p-5 border-t ${
-              selectedAnswer === currentQuestion.correctAnswer
+              selectedAnswer === currentQuestion.correct_answer
                 ? 'border-rv-success/30 bg-rv-success/10'
                 : 'border-rv-danger/30 bg-rv-danger/10'
             }`}>
               {/* Result Header */}
               <ResultHeader
-                isCorrect={selectedAnswer === currentQuestion.correctAnswer}
+                isCorrect={selectedAnswer === currentQuestion.correct_answer}
                 streakCount={streak?.currentStreak}
               />
 
@@ -305,7 +305,7 @@ function FilmRoomContent() {
                   stats={voteStats}
                   options={currentQuestion.options}
                   selectedAnswer={selectedAnswer}
-                  correctAnswer={currentQuestion.correctAnswer}
+                  correctAnswer={currentQuestion.correct_answer}
                 />
               )}
 
@@ -314,6 +314,8 @@ function FilmRoomContent() {
                 ruling={currentQuestion.ruling}
                 ruleReference={currentQuestion.ruleReference}
                 casebookReference={currentQuestion.casebookReference}
+                questionText={currentQuestion.question}
+                scenarioText={currentQuestion.scenario}
               />
             </div>
           )}

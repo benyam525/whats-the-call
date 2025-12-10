@@ -1,12 +1,29 @@
 'use client';
 
+import Link from 'next/link';
+
 interface RuleCitationProps {
-  ruling: string;
+  ruling?: string;
   ruleReference?: string;
   casebookReference?: string;
+  questionText?: string;
+  scenarioText?: string;
+  showAskRefGod?: boolean;
 }
 
-export function RuleCitation({ ruling, ruleReference, casebookReference }: RuleCitationProps) {
+export function RuleCitation({
+  ruling,
+  ruleReference,
+  casebookReference,
+  questionText,
+  scenarioText,
+  showAskRefGod = true
+}: RuleCitationProps) {
+  // Build the Ref God question from scenario and question
+  const refGodQuestion = scenarioText && questionText
+    ? `${scenarioText}\n\nQuestion: ${questionText}`
+    : questionText || ruling || '';
+
   return (
     <div className="bg-rv-navy/50 rounded-lg overflow-hidden border border-white/5 mt-4">
       {/* Header */}
@@ -30,9 +47,11 @@ export function RuleCitation({ ruling, ruleReference, casebookReference }: RuleC
       </div>
 
       {/* Ruling text */}
-      <div className="p-4">
-        <p className="text-rv-silver leading-relaxed text-sm">{ruling}</p>
-      </div>
+      {ruling && (
+        <div className="p-4">
+          <p className="text-rv-silver leading-relaxed text-sm">{ruling}</p>
+        </div>
+      )}
 
       {/* Rule reference */}
       {ruleReference && (
@@ -54,6 +73,22 @@ export function RuleCitation({ ruling, ruleReference, casebookReference }: RuleC
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Ask Ref God button */}
+      {showAskRefGod && refGodQuestion && (
+        <div className="border-t border-white/5 px-4 py-3">
+          <Link
+            href={`/ref-god?q=${encodeURIComponent(refGodQuestion)}`}
+            className="inline-flex items-center gap-2 text-sm text-rv-silver hover:text-rv-gold transition-colors"
+          >
+            <span>🏀</span>
+            <span>Still confused? Ask Ref God</span>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </Link>
         </div>
       )}
     </div>
