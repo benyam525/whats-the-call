@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { CasebookQuestion, AnswerKey } from '@/data/types';
 
 type SuddenDeathDifficulty = 'rookie' | 'veteran' | 'expert';
 import { casebookQuestions } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
-import { HomeButton, ResetButton } from '@/components/HomeButton';
 import { Timer } from '@/components/Timer';
 import { ResultFeedback } from '@/components/ResultFeedback';
 import { NamePrompt } from '@/components/NamePrompt';
@@ -187,76 +187,83 @@ export default function SuddenDeath() {
   };
 
   const getButtonClass = (option: AnswerKey) => {
-    const base = 'w-full text-left p-4 rounded-lg border transition-all duration-200 ';
+    const base = 'w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ';
 
     if (!showResult) {
-      return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-danger/50 hover:bg-rv-steel cursor-pointer text-white';
+      return base + 'bg-white border-gray-200 hover:border-red-300 hover:bg-red-50/50 cursor-pointer text-gray-900';
     }
 
     if (option === currentQuestion?.correct_answer) {
-      return base + 'border-rv-success bg-rv-success/20 text-rv-success';
+      return base + 'border-emerald-500 bg-emerald-50 text-emerald-900';
     }
 
     if (option === selectedAnswer && option !== currentQuestion?.correct_answer) {
-      return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
+      return base + 'border-red-500 bg-red-50 text-red-900';
     }
 
-    return base + 'bg-rv-steel/30 border-white/5 opacity-50 text-rv-silver/60';
+    return base + 'bg-gray-50 border-gray-100 opacity-50 text-gray-400';
   };
 
   // Ready state
   if (gameState === 'ready') {
     return (
-      <main className="min-h-screen bg-rv-navy">
-        <header className="header-gradient py-5 px-4">
-          <div className="max-w-3xl mx-auto">
+      <main className="min-h-screen bg-gray-50">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+          <div className="max-w-3xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-xl">💀</span>
-                  <h1 className="text-2xl font-bold tracking-tight text-white">Sudden Death</h1>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center text-xl">
+                  💀
                 </div>
-                <p className="text-rv-silver/60 text-sm">One wrong answer ends it all</p>
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">Sudden Death</h1>
+                  <p className="text-gray-500 text-sm">One wrong answer ends it all</p>
+                </div>
               </div>
-              <HomeButton />
+              <Link
+                href="/dashboard"
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                ← Back
+              </Link>
             </div>
           </div>
         </header>
 
         <div className="max-w-3xl mx-auto px-4 py-8">
-          <div className="bg-rv-slate rounded-xl border border-white/5 p-8 text-center">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
             <div className="text-6xl mb-4">💀</div>
-            <h2 className="text-2xl font-bold text-white mb-4">How It Works</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">How It Works</h2>
 
-            <div className="text-left bg-rv-navy/50 rounded-lg p-6 mb-6 space-y-3 border border-white/5">
+            <div className="text-left bg-gray-50 rounded-xl p-6 mb-6 space-y-3 border border-gray-100">
               <div className="flex items-start gap-3">
                 <span className="text-xl">⏱️</span>
-                <p className="text-rv-silver"><strong className="text-white">10 seconds</strong> per question</p>
+                <p className="text-gray-600"><strong className="text-gray-900">10 seconds</strong> per question</p>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-xl">📈</span>
-                <p className="text-rv-silver">Difficulty <strong className="text-white">increases</strong> as you progress</p>
+                <p className="text-gray-600">Difficulty <strong className="text-gray-900">increases</strong> as you progress</p>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-xl">❌</span>
-                <p className="text-rv-silver"><strong className="text-white">One wrong answer</strong> or timeout = Game Over</p>
+                <p className="text-gray-600"><strong className="text-gray-900">One wrong answer</strong> or timeout = Game Over</p>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-xl">🏆</span>
-                <p className="text-rv-silver">Score 10+ to join the <strong className="text-white">leaderboard</strong></p>
+                <p className="text-gray-600">Score 10+ to join the <strong className="text-gray-900">leaderboard</strong></p>
               </div>
             </div>
 
             {bestScore !== null && bestScore > 0 && (
-              <div className="bg-rv-danger/10 border border-rv-danger/20 rounded-lg p-4 mb-6">
-                <div className="text-sm text-rv-silver/60">Your Best</div>
-                <div className="text-3xl font-bold text-rv-danger">{bestScore}</div>
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                <div className="text-sm text-gray-500">Your Best</div>
+                <div className="text-3xl font-bold text-red-600">{bestScore}</div>
               </div>
             )}
 
             <button
               onClick={startGame}
-              className="bg-rv-danger text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-red-600 transition-colors shadow-lg"
+              className="bg-red-500 text-white px-8 py-4 rounded-xl text-xl font-bold hover:bg-red-600 transition-colors shadow-sm"
             >
               Start Game
             </button>
@@ -271,7 +278,7 @@ export default function SuddenDeath() {
     const isNewBest = bestScore !== null && score > bestScore;
 
     return (
-      <main className="min-h-screen bg-rv-navy">
+      <main className="min-h-screen bg-gray-50">
         <NamePrompt
           isOpen={showNamePrompt}
           onSubmit={handleNameSubmit}
@@ -280,50 +287,57 @@ export default function SuddenDeath() {
           subtitle="Add your name to the leaderboard:"
         />
 
-        <header className="header-gradient py-5 px-4">
-          <div className="max-w-3xl mx-auto">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+          <div className="max-w-3xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-xl">💀</span>
-                  <h1 className="text-2xl font-bold tracking-tight text-white">Game Over</h1>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center text-xl">
+                  💀
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">Game Over</h1>
                 </div>
               </div>
-              <HomeButton />
+              <Link
+                href="/dashboard"
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                ← Back
+              </Link>
             </div>
           </div>
         </header>
 
         <div className="max-w-3xl mx-auto px-4 py-8">
-          <div className="bg-rv-slate rounded-xl border border-white/5 p-8 text-center">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
             <div className="text-6xl mb-4">
               {score >= 20 ? '🏆' : score >= 10 ? '🎉' : score >= 5 ? '👏' : '💪'}
             </div>
-            <h2 className="text-4xl font-bold text-white mb-2">{score}</h2>
-            <p className="text-rv-silver/60 mb-2">Questions Answered</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-2">{score}</h2>
+            <p className="text-gray-500 mb-2">Questions Answered</p>
 
             {isNewBest && (
-              <div className="text-lg font-bold text-rv-success mb-4">
+              <div className="text-lg font-bold text-emerald-600 mb-4">
                 🎉 New Personal Best!
               </div>
             )}
 
             <div className="flex justify-center gap-4 mb-6">
-              <div className="bg-rv-navy/50 border border-white/5 rounded-lg px-4 py-2">
-                <div className="text-sm text-rv-silver/50">Difficulty Reached</div>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
+                <div className="text-sm text-gray-500">Difficulty Reached</div>
                 <DifficultyBadge difficulty={difficultyReached} />
               </div>
               {bestScore !== null && (
-                <div className="bg-rv-navy/50 border border-white/5 rounded-lg px-4 py-2">
-                  <div className="text-sm text-rv-silver/50">Personal Best</div>
-                  <div className="font-bold text-rv-danger">{Math.max(score, bestScore)}</div>
+                <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
+                  <div className="text-sm text-gray-500">Personal Best</div>
+                  <div className="font-bold text-red-600">{Math.max(score, bestScore)}</div>
                 </div>
               )}
             </div>
 
             <button
               onClick={startGame}
-              className="bg-rv-danger text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-red-600 transition-colors shadow-lg"
+              className="bg-red-500 text-white px-8 py-4 rounded-xl text-xl font-bold hover:bg-red-600 transition-colors shadow-sm"
             >
               Play Again
             </button>
@@ -335,7 +349,7 @@ export default function SuddenDeath() {
 
   // Playing state
   return (
-    <main className="min-h-screen bg-rv-navy">
+    <main className="min-h-screen bg-gray-50">
       <ResultFeedback
         isCorrect={lastAnswerCorrect}
         streak={score}
@@ -343,13 +357,13 @@ export default function SuddenDeath() {
         onAnimationComplete={() => setShowFeedback(false)}
       />
 
-      <header className="header-gradient py-4 px-4">
-        <div className="max-w-3xl mx-auto">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-3xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">{score}</div>
-                <div className="text-xs text-rv-silver/60">Score</div>
+                <div className="text-3xl font-bold text-gray-900">{score}</div>
+                <div className="text-xs text-gray-500">Score</div>
               </div>
               <DifficultyBadge difficulty={getCurrentDifficulty()} />
             </div>
@@ -361,27 +375,32 @@ export default function SuddenDeath() {
               isRunning={timerRunning}
             />
 
-            <ResetButton onClick={() => endGame(score)} label="End Game" />
+            <button
+              onClick={() => endGame(score)}
+              className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              End Game
+            </button>
           </div>
         </div>
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
         {currentQuestion && (
-          <div className="bg-rv-slate rounded-xl border border-white/5 overflow-hidden">
-            <div className="bg-rv-navy/50 px-5 py-3 flex items-center justify-between border-b border-white/5">
-              <span className="text-rv-silver text-sm font-medium">{currentQuestion.category}</span>
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-gray-50 px-5 py-3 flex items-center justify-between border-b border-gray-100">
+              <span className="text-gray-600 text-sm font-medium">{currentQuestion.category}</span>
               <DifficultyBadge difficulty={currentQuestion.difficulty} />
             </div>
 
-            <div className="p-5 border-b border-white/5">
-              <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Scenario</h2>
-              <p className="text-white leading-relaxed">{currentQuestion.scenario}</p>
+            <div className="p-5 border-b border-gray-100">
+              <h2 className="text-xs uppercase tracking-wider text-gray-400 mb-2 font-medium">Scenario</h2>
+              <p className="text-gray-800 leading-relaxed">{currentQuestion.scenario}</p>
             </div>
 
-            <div className="p-5 bg-rv-navy/30">
-              <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Question</h2>
-              <p className="text-lg font-semibold text-white">{currentQuestion.question}</p>
+            <div className="p-5 bg-red-50/50">
+              <h2 className="text-xs uppercase tracking-wider text-red-600/70 mb-2 font-medium">Question</h2>
+              <p className="text-lg font-semibold text-gray-900">{currentQuestion.question}</p>
             </div>
 
             <div className="p-5 space-y-3">
@@ -394,7 +413,7 @@ export default function SuddenDeath() {
                     disabled={showResult}
                     className={getButtonClass(key)}
                   >
-                    <span className="font-bold text-rv-danger mr-3 uppercase">{key}.</span>
+                    <span className="font-bold text-red-600 mr-3 uppercase">{key}.</span>
                     <span>{value}</span>
                   </button>
                 ))}
