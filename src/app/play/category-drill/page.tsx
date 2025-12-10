@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { CaseQuestion, AnswerKey, ParentCategory, PARENT_CATEGORY_NAMES } from '@/data/types';
 import { casebookQuestions, getParentCategories } from '@/data/casebook';
+import { RefGodPanel, GoDeeperButton } from '@/components/RefGodPanel';
 
 interface CategoryStats {
   correct: number;
@@ -81,6 +82,7 @@ export default function CategoryDrillPage() {
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [usedQuestionIds, setUsedQuestionIds] = useState<Set<string>>(new Set());
   const [masteryData, setMasteryData] = useState<MasteryData>({ parents: {}, subs: {} });
+  const [showRefGodPanel, setShowRefGodPanel] = useState(false);
 
   // Load mastery data on mount
   useEffect(() => {
@@ -173,6 +175,7 @@ export default function CategoryDrillPage() {
 
     setSelectedAnswer(null);
     setShowResult(false);
+    setShowRefGodPanel(false);
   }, [getCategoryQuestions, usedQuestionIds]);
 
   useEffect(() => {
@@ -546,9 +549,25 @@ export default function CategoryDrillPage() {
                   </div>
                 )}
               </div>
+
+              {/* Go Deeper Button */}
+              <div className="mt-4 pt-4 border-t border-brand-border">
+                <GoDeeperButton onClick={() => setShowRefGodPanel(true)} className="w-full" />
+              </div>
             </div>
           )}
         </div>
+
+        {/* Ref God Panel */}
+        {currentQuestion && selectedAnswer && (
+          <RefGodPanel
+            isOpen={showRefGodPanel}
+            onClose={() => setShowRefGodPanel(false)}
+            question={currentQuestion}
+            userAnswer={selectedAnswer}
+            wasCorrect={selectedAnswer === currentQuestion.correct_answer}
+          />
+        )}
 
         {/* Next Button */}
         {showResult && (

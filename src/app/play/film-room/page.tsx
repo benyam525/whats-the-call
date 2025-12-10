@@ -5,12 +5,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { CaseQuestion, AnswerKey } from '@/data/types';
 import { casebookQuestions } from '@/data/casebook';
+import { RefGodPanel, GoDeeperButton } from '@/components/RefGodPanel';
 
 export default function FilmRoomPage() {
   const [currentQuestion, setCurrentQuestion] = useState<CaseQuestion | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerKey | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [usedQuestionIds, setUsedQuestionIds] = useState<Set<string>>(new Set());
+  const [showRefGodPanel, setShowRefGodPanel] = useState(false);
 
   const loadNewQuestion = useCallback(() => {
     const available = casebookQuestions.filter(q => !usedQuestionIds.has(q.id));
@@ -28,6 +30,7 @@ export default function FilmRoomPage() {
 
     setSelectedAnswer(null);
     setShowResult(false);
+    setShowRefGodPanel(false);
   }, [usedQuestionIds]);
 
   useEffect(() => {
@@ -150,9 +153,25 @@ export default function FilmRoomPage() {
                   </div>
                 )}
               </div>
+
+              {/* Go Deeper Button */}
+              <div className="mt-4 pt-4 border-t border-brand-border">
+                <GoDeeperButton onClick={() => setShowRefGodPanel(true)} className="w-full" />
+              </div>
             </div>
           )}
         </div>
+
+        {/* Ref God Panel */}
+        {currentQuestion && selectedAnswer && (
+          <RefGodPanel
+            isOpen={showRefGodPanel}
+            onClose={() => setShowRefGodPanel(false)}
+            question={currentQuestion}
+            userAnswer={selectedAnswer}
+            wasCorrect={selectedAnswer === currentQuestion.correct_answer}
+          />
+        )}
 
         {/* Next Button */}
         {showResult && (
