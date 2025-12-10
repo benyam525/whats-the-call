@@ -113,7 +113,7 @@ export default function MarketingPage() {
             {/* Questions Counter */}
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold tracking-tighter">
-                262<span className="text-2xl md:text-3xl align-top">+</span>
+                479
               </div>
               <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
                 Scenario Questions
@@ -126,7 +126,7 @@ export default function MarketingPage() {
             {/* Categories Counter */}
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold tracking-tighter">
-                29
+                14
               </div>
               <div className="text-sm text-gray-400 uppercase tracking-wider mt-1">
                 Rule Categories
@@ -136,17 +136,14 @@ export default function MarketingPage() {
             {/* Divider */}
             <div className="hidden md:block w-px h-16 bg-gray-700" />
 
-            {/* Growing Badge */}
+            {/* Ref God Badge */}
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 bg-green-600 px-4 py-2 rounded-full mb-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-300 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-300"></span>
-                </span>
-                <span className="text-sm font-semibold">Growing Weekly</span>
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 rounded-full mb-2">
+                <span className="text-lg">🏀</span>
+                <span className="text-sm font-semibold">Powered by Ref God</span>
               </div>
               <div className="text-sm text-gray-400">
-                New questions added regularly
+                AI-driven rule explanations
               </div>
             </div>
           </div>
@@ -296,6 +293,137 @@ export default function MarketingPage() {
         </div>
       </section>
 
+      {/* Ref God Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 rounded-full mb-6">
+                <span className="text-lg">🏀</span>
+                <span className="text-sm font-semibold text-white">AI-Powered</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-brand-black tracking-tighter">
+                Ref God: Your AI Rules Expert
+              </h2>
+              <p className="text-xl text-brand-gray mb-6 leading-relaxed">
+                Miss a question? Tap &quot;Go Deeper&quot; and Ref God explains exactly why — citing the specific rule, common mistakes officials make, and what NBA refs look for in that situation.
+              </p>
+              <p className="text-lg text-brand-gray mb-8 leading-relaxed">
+                Every explanation is grounded in the official NBA Rulebook and Casebook. No guessing, no hallucinations — just the rule, explained like a veteran ref in the locker room.
+              </p>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3">
+                  <span className="text-amber-500 text-xl">✓</span>
+                  <span className="text-brand-black">Instant explanations on any question</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-amber-500 text-xl">✓</span>
+                  <span className="text-brand-black">Cites specific rules (e.g., &quot;Rule 12B, Section IV&quot;)</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-amber-500 text-xl">✓</span>
+                  <span className="text-brand-black">Shows common mistakes refs make on that call</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="text-amber-500 text-xl">✓</span>
+                  <span className="text-brand-black">Available to all tiers</span>
+                </li>
+              </ul>
+            </div>
+            <div className="bg-brand-black rounded-2xl p-8 text-white">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-3xl">🏀</span>
+                <span className="text-2xl font-bold">REF GOD</span>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-green-400 mb-2">THE RULING</h4>
+                  <p className="text-white/90 text-sm leading-relaxed">The defensive player did not establish legal guarding position before contact occurred...</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">THE RULE</h4>
+                  <p className="text-white/80 text-sm italic">&quot;Per Rule 12B, Section I: A defender must establish position before the offensive player begins their upward motion...&quot;</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-red-400 mb-2">COMMON MISTAKES</h4>
+                  <p className="text-white/80 text-sm">Officials often focus on the contact rather than when LGP was established...</p>
+                </div>
+                <div className="bg-green-500/20 rounded-lg p-3 border border-green-500/30">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-green-400 mb-1 flex items-center gap-2">
+                    <span>💡</span> PRO TIP
+                  </h4>
+                  <p className="text-white text-sm">Watch the defender&apos;s feet first, then evaluate the contact...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dashboard Section */}
+      <section className="py-24 bg-brand-card">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-brand-black tracking-tighter">
+              State-of-the-Art Dashboard
+            </h2>
+            {/* NBA Accent Line */}
+            <div className="flex w-full max-w-md mx-auto mb-6">
+              <div className="h-[3px] flex-1" style={{ backgroundColor: '#C9082A' }} />
+              <div className="h-[3px] flex-1" style={{ backgroundColor: '#17408B' }} />
+            </div>
+            <p className="text-xl text-brand-gray max-w-3xl mx-auto">
+              Track your mastery across 14 rule categories. See your strengths, weaknesses, and progress over time with visual breakdowns and trend tracking.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white rounded-xl p-6 border border-brand-border">
+              <div className="text-3xl mb-3">📊</div>
+              <h3 className="font-bold text-brand-black mb-2">Overall Readiness Score</h3>
+              <p className="text-sm text-brand-gray">See your game-day readiness at a glance with our composite score.</p>
+            </div>
+            <div className="bg-white rounded-xl p-6 border border-brand-border">
+              <div className="text-3xl mb-3">🎯</div>
+              <h3 className="font-bold text-brand-black mb-2">Category Mastery</h3>
+              <p className="text-sm text-brand-gray">Expandable sub-categories show exactly where you need to improve.</p>
+            </div>
+            <div className="bg-white rounded-xl p-6 border border-brand-border">
+              <div className="text-3xl mb-3">💪</div>
+              <h3 className="font-bold text-brand-black mb-2">Strengths & Weaknesses</h3>
+              <p className="text-sm text-brand-gray">AI-identified areas where you excel and where you need reps.</p>
+            </div>
+            <div className="bg-white rounded-xl p-6 border border-brand-border">
+              <div className="text-3xl mb-3">⚡</div>
+              <h3 className="font-bold text-brand-black mb-2">Decision Speed</h3>
+              <p className="text-sm text-brand-gray">Track how quickly you make correct calls under pressure.</p>
+            </div>
+            <div className="bg-white rounded-xl p-6 border border-brand-border">
+              <div className="text-3xl mb-3">📈</div>
+              <h3 className="font-bold text-brand-black mb-2">Composure Curve</h3>
+              <p className="text-sm text-brand-gray">See how you perform under streak pressure—crucial for crunch time.</p>
+            </div>
+            <div className="bg-white rounded-xl p-6 border border-brand-border">
+              <div className="text-3xl mb-3">📄</div>
+              <h3 className="font-bold text-brand-black mb-2">Printable Reports</h3>
+              <p className="text-sm text-brand-gray">PDF exports for assignors and personal development tracking.</p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 border border-brand-border max-w-3xl mx-auto text-center">
+            <p className="text-brand-gray mb-4">
+              <strong className="text-brand-black">Pro members</strong> get the mastery dashboard. <strong className="text-brand-black">Elite members</strong> unlock full analytics with personalized drill recommendations and printable reports.
+            </p>
+            <Link
+              href="#pricing"
+              className="inline-block bg-brand-black text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors"
+            >
+              See Pricing
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing Section */}
       <section id="pricing" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -351,6 +479,10 @@ export default function MarketingPage() {
                     <span className="text-brand-black mt-1">✓</span>
                     <span className="text-brand-gray">Limited performance stats</span>
                   </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="text-brand-black mt-1">✓</span>
+                    <span className="text-brand-gray">Ref God "Go Deeper" on answered questions</span>
+                  </li>
                 </ul>
               </div>
               <p className="text-xs text-brand-gray mb-6">
@@ -391,11 +523,11 @@ export default function MarketingPage() {
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">All 29 rule categories unlocked</span>
+                    <span className="text-brand-gray">All 14 rule categories unlocked</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
-                    <span className="text-brand-gray">Full rulebook explanations on every question</span>
+                    <span className="text-brand-gray">Ref God "Go Deeper"</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-brand-black mt-1">✓</span>
@@ -462,6 +594,10 @@ export default function MarketingPage() {
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-purple-600 mt-1">✓</span>
                     <span className="text-brand-gray">Performance breakdown by rule section</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <span className="text-purple-600 mt-1">✓</span>
+                    <span className="text-brand-gray">Composure curve analysis</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm">
                     <span className="text-purple-600 mt-1">✓</span>
@@ -670,15 +806,15 @@ export default function MarketingPage() {
           <div className="grid md:grid-cols-2 gap-4 mb-8">
             <div className="flex items-center gap-3 justify-center">
               <span className="text-brand-black">✓</span>
-              <span className="text-brand-gray">Daily practice</span>
+              <span className="text-brand-gray">479 official NBA Casebook scenarios</span>
             </div>
             <div className="flex items-center gap-3 justify-center">
               <span className="text-brand-black">✓</span>
-              <span className="text-brand-gray">NBA rulebook-aligned questions</span>
+              <span className="text-brand-gray">Ref God AI explanations</span>
             </div>
             <div className="flex items-center gap-3 justify-center">
               <span className="text-brand-black">✓</span>
-              <span className="text-brand-gray">Real-world scenarios</span>
+              <span className="text-brand-gray">Real-world game situations</span>
             </div>
             <div className="flex items-center gap-3 justify-center">
               <span className="text-brand-black">✓</span>
