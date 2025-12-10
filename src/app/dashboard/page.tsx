@@ -1,400 +1,438 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useVisitorId } from '@/hooks/useVisitorId';
-import {
-  HeroStrip,
-  GameIQPillar,
-  DecisionExecutionPillar,
-  CommitmentPillar,
-  StrengthsWeaknesses,
-  FocusPlanCard,
-  TimeViewSelector,
-  DayView,
-  WeekView,
-  SeasonView,
-  CategoryMastery,
-} from '@/components/dashboard';
-import { casebookQuestions } from '@/data/casebook';
-import { LockedFeature } from '@/components/LockedFeature';
-import { DashboardData, TimeView } from '@/data/dashboard-types';
-import { getDummyDashboardData } from '@/lib/dummy-dashboard-data';
-import { SubscriptionTier, canAccess } from '@/lib/subscription';
+import { Header } from '@/components/Header';
+import { casebookQuestions, getParentCategories } from '@/data/casebook';
+import { ParentCategory, PARENT_CATEGORY_NAMES } from '@/data/types';
 
-function DashboardContent() {
-  const searchParams = useSearchParams();
-  const isDemo = searchParams.get('demo') === 'true';
-  const tierParam = searchParams.get('tier') as SubscriptionTier | null;
-  const visitorId = useVisitorId();
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [timeView, setTimeView] = useState<TimeView>('week');
-  const [loading, setLoading] = useState(true);
-
-  // For now, tier can be set via URL param for testing, defaults to 'elite' in demo mode
-  // In production, this would come from user auth/session
-  const userTier: SubscriptionTier = tierParam || (isDemo ? 'elite' : 'free');
-
-  useEffect(() => {
-    async function fetchDashboard() {
-      // If demo mode, use dummy data
-      if (isDemo) {
-        setDashboardData(getDummyDashboardData('demo_user'));
-        setLoading(false);
-        return;
-      }
-
-      if (!visitorId) return;
-
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/dashboard?visitorId=${visitorId}`);
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          setDashboardData(result.data);
-        } else {
-          // If no data, show dummy data as preview
-          setDashboardData(getDummyDashboardData(visitorId));
-        }
-      } catch (err) {
-        console.error('Error fetching dashboard:', err);
-        // On error, fall back to dummy data
-        setDashboardData(getDummyDashboardData(visitorId || 'demo_user'));
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchDashboard();
-  }, [visitorId, isDemo]);
-
-  if (loading) {
-    return <DashboardSkeleton />;
-  }
-
-  // If we still don't have data after loading, show skeleton
-  if (!dashboardData) {
-    return <DashboardSkeleton />;
-  }
-
-  const tierLabel = userTier === 'free' ? 'Free' : userTier === 'pro' ? 'Pro' : 'Elite';
-  const tierColor = userTier === 'free' ? 'bg-gray-100 text-gray-800' :
-                    userTier === 'pro' ? 'bg-orange-100 text-orange-800' :
-                    'bg-purple-100 text-purple-800';
-
+// Glass card component
+function GlassCard({ children, className = '', hover = false }: {
+  children: React.ReactNode;
+  className?: string;
+  hover?: boolean;
+}) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-brand-border sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 md:gap-4">
-              <Link href="/" className="flex items-center gap-2">
-                <span className="text-lg md:text-xl font-bold text-brand-black">RuleVision</span>
-              </Link>
-              <span className="text-brand-gray hidden sm:inline">/</span>
-              <span className="text-brand-gray hidden sm:inline">Dashboard</span>
-            </div>
-            <div className="flex items-center gap-2 md:gap-4">
-              {isDemo && (
-                <span className="px-2 md:px-3 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded-full">
-                  Demo
-                </span>
-              )}
-              <span className={`px-2 md:px-3 py-1 ${tierColor} text-xs font-medium rounded-full hidden sm:inline`}>
-                {tierLabel}
-              </span>
-              <TimeViewSelector currentView={timeView} onViewChange={setTimeView} />
-              <Link
-                href="/"
-                className="px-3 md:px-4 py-2 bg-brand-black text-white rounded-lg text-xs md:text-sm font-medium hover:bg-gray-800 transition-colors"
-              >
-                <span className="hidden sm:inline">Start Training</span>
-                <span className="sm:hidden">Train</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Questions Count Banner */}
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-sm font-medium">
-            <span className="font-bold">{casebookQuestions.length}</span> official NBA casebook questions now available in RuleVision
-          </p>
-        </div>
+    <div className={`
+      relative overflow-hidden rounded-3xl
+      bg-white/70 backdrop-blur-xl
+      border border-white/20
+      shadow-[0_8px_32px_rgba(0,0,0,0.08)]
+      ${hover ? 'hover:bg-white/80 hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] transition-all duration-300' : ''}
+      ${className}
+    `}>
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-transparent pointer-events-none" />
+      <div className="relative z-10">
+        {children}
       </div>
-
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Hero Strip - shows basic for free, full for pro+ */}
-        <HeroStrip data={dashboardData.heroStrip} userTier={userTier} />
-
-        {/* Three Pillars - blurred for free tier */}
-        <LockedFeature
-          feature="THREE_PILLARS"
-          userTier={userTier}
-          blurMode={true}
-          className="mb-6"
-        >
-          <div className="grid lg:grid-cols-3 gap-6 mb-6">
-            <GameIQPillar data={dashboardData.gameIQ} userTier={userTier} />
-            <DecisionExecutionPillar data={dashboardData.decisionExecution} userTier={userTier} />
-            <CommitmentPillar data={dashboardData.commitment} userTier={userTier} />
-          </div>
-        </LockedFeature>
-
-        {/* Strengths/Weaknesses + Focus Plan */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-6">
-          <LockedFeature
-            feature="STRENGTHS_WEAKNESSES"
-            userTier={userTier}
-            blurMode={true}
-          >
-            <StrengthsWeaknesses data={dashboardData.strengthsWeaknesses} />
-          </LockedFeature>
-
-          <LockedFeature
-            feature="FOCUS_PLAN"
-            userTier={userTier}
-            blurMode={userTier === 'pro'}
-            lockMessage="Get a personalized training plan based on your weaknesses → Upgrade to Elite"
-          >
-            <FocusPlanCard data={dashboardData.focusPlan} />
-          </LockedFeature>
-        </div>
-
-        {/* Category Mastery - expandable parent/sub-category structure */}
-        <div className="mb-6">
-          <CategoryMastery />
-        </div>
-
-        {/* Time View */}
-        <div className="mb-6">
-          {timeView === 'day' && dashboardData.dayView && (
-            <DayView data={dashboardData.dayView} />
-          )}
-          {timeView === 'week' && dashboardData.weekView && (
-            <WeekView data={dashboardData.weekView} />
-          )}
-          {timeView === 'season' && dashboardData.seasonView && (
-            <SeasonView data={dashboardData.seasonView} />
-          )}
-        </div>
-
-        {/* Upgrade CTA for free users */}
-        {userTier === 'free' && (
-          <div className="bg-gradient-to-r from-orange-500 to-purple-600 rounded-2xl p-8 text-white text-center mb-6">
-            <h3 className="text-2xl font-bold mb-2">Unlock Your Full Potential</h3>
-            <p className="text-white/80 mb-4">
-              Get unlimited questions, all 29 rule categories, and the full analytics dashboard.
-            </p>
-            <Link
-              href="/marketing#pricing"
-              className="inline-block px-6 py-3 bg-white text-brand-black rounded-lg font-bold hover:bg-gray-100 transition-colors"
-            >
-              Upgrade to Pro
-            </Link>
-          </div>
-        )}
-
-        {/* Printable Report CTA for pro users */}
-        {userTier === 'pro' && (
-          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center mb-6">
-            <p className="text-sm text-purple-800">
-              Need to share progress with your assignor?
-              <Link href="/marketing#pricing" className="font-semibold ml-1 underline">
-                Upgrade to Elite for printable PDF reports →
-              </Link>
-            </p>
-          </div>
-        )}
-
-        {/* Footer CTA */}
-        <div className="text-center py-8">
-          <p className="text-brand-gray mb-4">Ready to improve your Ref Readiness?</p>
-          <div className="flex items-center justify-center gap-4">
-            <Link
-              href="/film-room"
-              className="px-6 py-3 bg-brand-black text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
-            >
-              Film Room
-            </Link>
-            <Link
-              href="/sudden-death"
-              className="px-6 py-3 border border-brand-black text-brand-black rounded-lg font-medium hover:bg-gray-50 transition-colors"
-            >
-              Sudden Death
-            </Link>
-            <Link
-              href="/daily-5"
-              className="px-6 py-3 border border-brand-black text-brand-black rounded-lg font-medium hover:bg-gray-50 transition-colors"
-            >
-              Daily 5
-            </Link>
-          </div>
-        </div>
-      </main>
     </div>
   );
 }
 
-function DashboardSkeleton() {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-brand-border">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
-        </div>
-      </header>
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-2xl border border-brand-border p-6 mb-6 animate-pulse">
-          <div className="flex items-center gap-8">
-            <div className="w-60 h-60 bg-gray-200 rounded-full" />
-            <div className="flex-1 space-y-4">
-              <div className="h-6 bg-gray-200 rounded w-1/3" />
-              <div className="h-4 bg-gray-200 rounded w-1/2" />
-              <div className="flex gap-4">
-                <div className="h-20 bg-gray-200 rounded flex-1" />
-                <div className="h-20 bg-gray-200 rounded flex-1" />
-                <div className="h-20 bg-gray-200 rounded flex-1" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="grid lg:grid-cols-3 gap-6 mb-6">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-2xl border border-brand-border p-6 h-96 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-1/3 mb-4" />
-              <div className="space-y-3">
-                <div className="h-4 bg-gray-200 rounded" />
-                <div className="h-4 bg-gray-200 rounded w-4/5" />
-                <div className="h-4 bg-gray-200 rounded w-3/5" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </main>
-    </div>
-  );
-}
-
-interface TodayViewProps {
-  summary: {
-    date: string;
-    questionsAnswered: number;
-    questionsCorrect: number;
-    accuracy: number;
-    timeSpentSeconds: number;
-    streakDays: number;
-    pressureAccuracy: number;
-    calmAccuracy: number;
-    bestSuddenDeathStreak: number;
-    daily5Score: number | null;
-    strengthCategory: string | null;
-    weaknessCategory: string | null;
-  };
-}
-
-function TodayView({ summary }: TodayViewProps) {
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
-  if (summary.questionsAnswered === 0) {
-    return (
-      <div className="bg-white rounded-2xl border border-brand-border p-8 text-center">
-        <div className="text-4xl mb-4">🌅</div>
-        <h2 className="text-xl font-bold text-brand-black mb-2">
-          {formatDate(summary.date)}
-        </h2>
-        <p className="text-brand-gray mb-6">
-          You haven't trained yet today. Start a session to build your streak!
-        </p>
-        <Link
-          href="/film-room"
-          className="inline-block px-6 py-3 bg-brand-black text-white rounded-lg font-medium"
-        >
-          Start Training
-        </Link>
-      </div>
-    );
-  }
+// Circular progress ring
+function ProgressRing({
+  value,
+  size = 120,
+  strokeWidth = 8,
+  color = '#10B981',
+  label,
+  sublabel
+}: {
+  value: number;
+  size?: number;
+  strokeWidth?: number;
+  color?: string;
+  label?: string;
+  sublabel?: string;
+}) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (value / 100) * circumference;
 
   return (
-    <div className="bg-white rounded-2xl border border-brand-border p-6">
-      <h2 className="text-lg font-bold text-brand-black mb-6">
-        {formatDate(summary.date)}
-      </h2>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <TodayStat label="Questions" value={summary.questionsAnswered.toString()} />
-        <TodayStat label="Accuracy" value={`${summary.accuracy}%`} />
-        <TodayStat label="Streak" value={`${summary.streakDays} days`} icon="🔥" />
-        <TodayStat
-          label="Daily 5"
-          value={summary.daily5Score !== null ? `${summary.daily5Score}/5` : 'Not done'}
+    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="transform -rotate-90">
+        {/* Background circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={strokeWidth}
+          className="text-gray-100"
         />
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="p-4 bg-brand-card rounded-lg">
-          <h3 className="text-sm font-medium text-brand-gray mb-2">Performance Split</h3>
-          <div className="flex items-center gap-4">
-            <div className="flex-1">
-              <div className="text-xs text-brand-gray mb-1">Calm</div>
-              <div className="text-lg font-bold text-brand-black">{summary.calmAccuracy}%</div>
-            </div>
-            <div className="flex-1">
-              <div className="text-xs text-brand-gray mb-1">Pressure</div>
-              <div className="text-lg font-bold text-brand-black">{summary.pressureAccuracy}%</div>
-            </div>
-          </div>
-        </div>
-
-        {summary.bestSuddenDeathStreak > 0 && (
-          <div className="p-4 bg-brand-card rounded-lg">
-            <h3 className="text-sm font-medium text-brand-gray mb-2">Best Sudden Death</h3>
-            <div className="text-lg font-bold text-brand-black">
-              {summary.bestSuddenDeathStreak} in a row
-            </div>
-          </div>
-        )}
+        {/* Progress circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          className="transition-all duration-700 ease-out"
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-3xl font-bold text-gray-900">{value}%</span>
+        {label && <span className="text-xs text-gray-500 mt-1">{label}</span>}
+        {sublabel && <span className="text-[10px] text-gray-400">{sublabel}</span>}
       </div>
     </div>
   );
 }
 
-interface TodayStatProps {
+// Stat pill component
+function StatPill({ icon, value, label, trend }: {
+  icon: string;
+  value: string | number;
   label: string;
-  value: string;
-  icon?: string;
-}
-
-function TodayStat({ label, value, icon }: TodayStatProps) {
+  trend?: { value: number; positive: boolean };
+}) {
   return (
-    <div className="text-center p-3 bg-brand-card rounded-lg">
-      <div className="text-xs text-brand-gray uppercase tracking-wide mb-1">{label}</div>
-      <div className="text-xl font-bold text-brand-black flex items-center justify-center gap-1">
-        {icon && <span>{icon}</span>}
-        {value}
+    <div className="flex items-center gap-3 px-4 py-3 bg-white/50 rounded-2xl border border-white/30">
+      <span className="text-2xl">{icon}</span>
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-bold text-gray-900">{value}</span>
+          {trend && (
+            <span className={`text-xs font-medium ${trend.positive ? 'text-green-600' : 'text-red-500'}`}>
+              {trend.positive ? '+' : ''}{trend.value}%
+            </span>
+          )}
+        </div>
+        <span className="text-xs text-gray-500">{label}</span>
       </div>
     </div>
   );
 }
+
+// Mini category card
+function CategoryCard({ name, mastery, questions, color }: {
+  name: string;
+  mastery: number;
+  questions: number;
+  color: string;
+}) {
+  return (
+    <div className="group p-4 bg-white/40 hover:bg-white/60 rounded-2xl border border-white/20 transition-all duration-200 cursor-pointer">
+      <div className="flex items-center justify-between mb-3">
+        <div
+          className="w-3 h-3 rounded-full"
+          style={{ backgroundColor: color }}
+        />
+        <span className="text-xs text-gray-400">{questions}Q</span>
+      </div>
+      <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-1">{name}</h3>
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{ width: `${mastery}%`, backgroundColor: color }}
+          />
+        </div>
+        <span className="text-xs font-medium text-gray-600">{mastery}%</span>
+      </div>
+    </div>
+  );
+}
+
+// Quick action button
+function QuickAction({ icon, label, href, accent = false }: {
+  icon: string;
+  label: string;
+  href: string;
+  accent?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`
+        flex items-center gap-3 px-5 py-4 rounded-2xl font-medium transition-all duration-200
+        ${accent
+          ? 'bg-gradient-to-r from-gray-900 to-gray-800 text-white hover:from-gray-800 hover:to-gray-700 shadow-lg shadow-gray-900/20'
+          : 'bg-white/50 hover:bg-white/70 text-gray-900 border border-white/30'}
+      `}
+    >
+      <span className="text-xl">{icon}</span>
+      <span>{label}</span>
+    </Link>
+  );
+}
+
+const CATEGORY_COLORS = [
+  '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
+  '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1',
+  '#14B8A6', '#A855F7', '#F43F5E', '#22C55E'
+];
+
+const STORAGE_KEY = 'rulevision-category-mastery';
 
 export default function DashboardPage() {
+  const [masteryData, setMasteryData] = useState<{
+    parents: Record<string, { correct: number; total: number }>;
+    subs: Record<string, { correct: number; total: number }>;
+  }>({ parents: {}, subs: {} });
+
+  const [streakDays, setStreakDays] = useState(0);
+  const [totalAnswered, setTotalAnswered] = useState(0);
+
+  // Load data on mount
+  useEffect(() => {
+    // Load mastery data
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        setMasteryData(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error('Error loading mastery data:', e);
+    }
+
+    // Load streak data
+    try {
+      const dailyData = localStorage.getItem('rulevision-daily-5');
+      if (dailyData) {
+        const parsed = JSON.parse(dailyData);
+        setStreakDays(parsed.currentStreak || 0);
+      }
+    } catch (e) {
+      console.error('Error loading streak data:', e);
+    }
+
+    // Calculate total answered
+    try {
+      const stats = localStorage.getItem('rulevision-stats');
+      if (stats) {
+        const parsed = JSON.parse(stats);
+        setTotalAnswered(parsed.totalAnswered || 0);
+      }
+    } catch (e) {
+      console.error('Error loading stats:', e);
+    }
+  }, []);
+
+  // Build category data
+  const categoryData = useMemo(() => {
+    const parentCategories = getParentCategories();
+
+    return parentCategories.map((parent, idx) => {
+      const parentQuestions = casebookQuestions.filter(q => q.parent_category === parent);
+      const stats = masteryData.parents[parent] || { correct: 0, total: 0 };
+      const mastery = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+
+      return {
+        parent,
+        name: PARENT_CATEGORY_NAMES[parent] || parent,
+        questions: parentQuestions.length,
+        mastery,
+        stats,
+        color: CATEGORY_COLORS[idx % CATEGORY_COLORS.length]
+      };
+    });
+  }, [masteryData]);
+
+  // Overall stats
+  const overallStats = useMemo(() => {
+    let totalCorrect = 0;
+    let totalAttempted = 0;
+
+    Object.values(masteryData.parents).forEach(stats => {
+      totalCorrect += stats.correct;
+      totalAttempted += stats.total;
+    });
+
+    const mastery = totalAttempted > 0 ? Math.round((totalCorrect / totalAttempted) * 100) : 0;
+    const categoriesStarted = categoryData.filter(c => c.stats.total > 0).length;
+
+    return {
+      mastery,
+      totalCorrect,
+      totalAttempted,
+      categoriesStarted,
+      totalCategories: categoryData.length
+    };
+  }, [masteryData, categoryData]);
+
+  // Top and weak categories
+  const topCategories = useMemo(() => {
+    return [...categoryData]
+      .filter(c => c.stats.total >= 3)
+      .sort((a, b) => b.mastery - a.mastery)
+      .slice(0, 3);
+  }, [categoryData]);
+
+  const weakCategories = useMemo(() => {
+    return [...categoryData]
+      .filter(c => c.stats.total >= 3)
+      .sort((a, b) => a.mastery - b.mastery)
+      .slice(0, 3);
+  }, [categoryData]);
+
   return (
-    <Suspense fallback={<DashboardSkeleton />}>
-      <DashboardContent />
-    </Suspense>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100">
+      <Header />
+
+      {/* Background decoration */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl" />
+      </div>
+
+      <main className="relative z-10 max-w-6xl mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+          <p className="text-gray-500">Track your progress and master the rules</p>
+        </div>
+
+        {/* Main Stats Grid */}
+        <div className="grid lg:grid-cols-3 gap-6 mb-8">
+          {/* Readiness Score */}
+          <GlassCard className="p-8 lg:col-span-1">
+            <div className="flex flex-col items-center">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-4">
+                Overall Mastery
+              </span>
+              <ProgressRing
+                value={overallStats.mastery}
+                size={160}
+                strokeWidth={12}
+                color={overallStats.mastery >= 70 ? '#10B981' : overallStats.mastery >= 50 ? '#F59E0B' : '#3B82F6'}
+              />
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  {overallStats.totalCorrect} of {overallStats.totalAttempted} correct
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  {overallStats.categoriesStarted} of {overallStats.totalCategories} categories started
+                </p>
+              </div>
+            </div>
+          </GlassCard>
+
+          {/* Quick Stats */}
+          <GlassCard className="p-6 lg:col-span-2">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Stats</h2>
+            <div className="grid grid-cols-2 gap-3">
+              <StatPill
+                icon="🔥"
+                value={streakDays}
+                label="Day Streak"
+              />
+              <StatPill
+                icon="📝"
+                value={totalAnswered || overallStats.totalAttempted}
+                label="Questions Answered"
+              />
+              <StatPill
+                icon="🎯"
+                value={`${overallStats.mastery}%`}
+                label="Accuracy"
+              />
+              <StatPill
+                icon="📚"
+                value={overallStats.categoriesStarted}
+                label="Categories Explored"
+              />
+            </div>
+
+            {/* Strengths & Weaknesses */}
+            {(topCategories.length > 0 || weakCategories.length > 0) && (
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <div className="grid grid-cols-2 gap-4">
+                  {topCategories.length > 0 && (
+                    <div>
+                      <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                        Strongest
+                      </h3>
+                      <div className="space-y-1">
+                        {topCategories.slice(0, 2).map(cat => (
+                          <div key={cat.parent} className="flex items-center gap-2">
+                            <span className="text-green-500 text-sm">●</span>
+                            <span className="text-sm text-gray-700 truncate flex-1">{cat.name}</span>
+                            <span className="text-xs font-medium text-green-600">{cat.mastery}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {weakCategories.length > 0 && (
+                    <div>
+                      <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                        Focus Areas
+                      </h3>
+                      <div className="space-y-1">
+                        {weakCategories.slice(0, 2).map(cat => (
+                          <div key={cat.parent} className="flex items-center gap-2">
+                            <span className="text-amber-500 text-sm">●</span>
+                            <span className="text-sm text-gray-700 truncate flex-1">{cat.name}</span>
+                            <span className="text-xs font-medium text-amber-600">{cat.mastery}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </GlassCard>
+        </div>
+
+        {/* Quick Actions */}
+        <GlassCard className="p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Start Training</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <QuickAction icon="🎬" label="Film Room" href="/film-room" accent />
+            <QuickAction icon="💀" label="Sudden Death" href="/sudden-death" />
+            <QuickAction icon="📅" label="Daily 5" href="/daily-5" />
+            <QuickAction icon="🎯" label="Category Drill" href="/play/category-drill" />
+          </div>
+        </GlassCard>
+
+        {/* Category Mastery Grid */}
+        <GlassCard className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Category Mastery</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                {casebookQuestions.length} questions across {categoryData.length} categories
+              </p>
+            </div>
+            <Link
+              href="/play/category-drill"
+              className="text-sm font-medium text-blue-600 hover:text-blue-700"
+            >
+              View All →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {categoryData.map(cat => (
+              <Link key={cat.parent} href={`/play/category-drill?category=${cat.parent}`}>
+                <CategoryCard
+                  name={cat.name}
+                  mastery={cat.mastery}
+                  questions={cat.questions}
+                  color={cat.color}
+                />
+              </Link>
+            ))}
+          </div>
+        </GlassCard>
+
+        {/* Footer */}
+        <div className="mt-12 text-center">
+          <p className="text-sm text-gray-400">
+            RuleVision · See the Call Before It Happens
+          </p>
+        </div>
+      </main>
+    </div>
   );
 }
