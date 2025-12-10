@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { casebookQuestions } from '@/data/casebook';
+import { Header } from '@/components/Header';
 
 const gameModes = [
   {
@@ -38,34 +39,7 @@ const gameModes = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="border-b border-brand-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/RuleVisionv2.png"
-              alt="RuleVision"
-              width={150}
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <div className="flex items-center gap-8">
-            <Link href="/dashboard" className="text-brand-gray hover:text-brand-black transition-colors">
-              Dashboard
-            </Link>
-            <Link href="/ref-god" className="text-brand-gray hover:text-brand-black transition-colors">
-              Ref God
-            </Link>
-            <Link href="/about" className="text-brand-gray hover:text-brand-black transition-colors">
-              About
-            </Link>
-            <Link href="/leaderboard" className="text-brand-gray hover:text-brand-black transition-colors">
-              Leaderboard
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Questions Count Banner */}
       <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3">

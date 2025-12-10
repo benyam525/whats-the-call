@@ -90,28 +90,29 @@ function DashboardContent() {
       <header className="bg-white border-b border-brand-border sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <Link href="/" className="flex items-center gap-2">
-                <span className="text-xl font-bold text-brand-black">RuleVision</span>
+                <span className="text-lg md:text-xl font-bold text-brand-black">RuleVision</span>
               </Link>
-              <span className="text-brand-gray">/</span>
-              <span className="text-brand-gray">Dashboard</span>
+              <span className="text-brand-gray hidden sm:inline">/</span>
+              <span className="text-brand-gray hidden sm:inline">Dashboard</span>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               {isDemo && (
-                <span className="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded-full">
-                  Demo Mode
+                <span className="px-2 md:px-3 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded-full">
+                  Demo
                 </span>
               )}
-              <span className={`px-3 py-1 ${tierColor} text-xs font-medium rounded-full`}>
+              <span className={`px-2 md:px-3 py-1 ${tierColor} text-xs font-medium rounded-full hidden sm:inline`}>
                 {tierLabel}
               </span>
               <TimeViewSelector currentView={timeView} onViewChange={setTimeView} />
               <Link
                 href="/"
-                className="px-4 py-2 bg-brand-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+                className="px-3 md:px-4 py-2 bg-brand-black text-white rounded-lg text-xs md:text-sm font-medium hover:bg-gray-800 transition-colors"
               >
-                Start Training
+                <span className="hidden sm:inline">Start Training</span>
+                <span className="sm:hidden">Train</span>
               </Link>
             </div>
           </div>

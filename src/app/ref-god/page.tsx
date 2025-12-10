@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRefGod } from '@/hooks/useRefGod';
+import { Header } from '@/components/Header';
 
 interface Message {
   id: string;
@@ -99,28 +99,7 @@ function RefGodContent() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Navigation */}
-      <nav className="border-b border-brand-border flex-shrink-0">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/RuleVisionv2.png"
-              alt="RuleVision"
-              width={150}
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/" className="text-brand-gray hover:text-brand-black transition-colors">
-              Home
-            </Link>
-            <Link href="/leaderboard" className="text-brand-gray hover:text-brand-black transition-colors">
-              Leaderboard
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Chat Area */}
       <div className="flex-1 overflow-y-auto px-4 py-8">

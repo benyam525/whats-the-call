@@ -1,31 +1,10 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { Header } from '@/components/Header';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="border-b border-brand-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/RuleVisionv2.png"
-              alt="RuleVision"
-              width={150}
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <div className="flex items-center gap-8">
-            <Link href="/about" className="text-brand-black font-medium">
-              About
-            </Link>
-            <Link href="/leaderboard" className="text-brand-gray hover:text-brand-black transition-colors">
-              Leaderboard
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Content */}
       <main className="max-w-2xl mx-auto px-6 py-16">
