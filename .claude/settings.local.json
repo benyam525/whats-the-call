@@ -18,14 +18,15 @@
       "Bash(git checkout:*)",
       "Bash(git merge:*)",
       "Bash(git pull:*)",
-      "Bash(npx next build:*)",
-      "Bash(./node_modules/.bin/next build)",
-      "Bash(gh pr create --title \"Add Ref Readiness Dashboard - Oura-style Performance OS\" --body \"$(cat <<''EOF''\n## Summary\n\nThis PR adds a comprehensive **Ref Readiness Dashboard** that transforms RuleVision from a quiz app into a full performance operating system for basketball referees (like Oura for refs).\n\n### Features\n\n**Ref Readiness Score (0-100)** with three pillars:\n- **Game IQ** (82): Category mastery heatmap by difficulty, concept coverage\n- **Decision Execution** (74): Pressure vs calm accuracy, composure curve, clutch situations  \n- **Commitment** (88): Consistency metrics, training load, mode breakdown, focus quality\n\n**Dashboard Components:**\n- Animated circular ring visualizations (Oura-style)\n- Hero Strip with readiness score, pillar mini-rings, and daily stats\n- Strengths/Weaknesses analysis with trend indicators\n- 14-Day Focus Plan with auto-generated goals and actions\n- Time views: Day, Week, and Season with trend charts\n\n**Technical:**\n- Dashboard API endpoint with full data aggregation\n- Answer tracking hook for all game modes with response time\n- Supabase schema for comprehensive analytics\n- Dummy data for dashboard preview/demo mode\n- Updated all game modes to track answers\n\n## Test plan\n- [ ] Visit `/dashboard` to see the full dashboard with demo data\n- [ ] Visit `/dashboard?demo=true` to see demo mode badge\n- [ ] Test Film Room, Sudden Death, Daily 5, Category Drill - all should track answers\n- [ ] Check Day/Week/Season time view switcher\n- [ ] Verify responsive layout on mobile\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\nEOF\n)\")",
-      "Bash(git fetch:*)",
-      "Bash(git rebase:*)",
-      "Bash(git stash:*)",
+      "Bash(python3:*)",
       "Bash(curl:*)",
-      "Bash(fold:*)"
+      "Bash(git fetch:*)",
+      "Bash(npm run dev:*)",
+      "Bash(git reset:*)",
+      "Bash(git stash:*)",
+      "Bash(git stash pop:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(gh run list:*)"
     ],
     "deny": [],
     "ask": []

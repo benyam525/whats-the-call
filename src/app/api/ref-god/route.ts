@@ -1,19 +1,36 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import { NextRequest, NextResponse } from 'next/server';
 
-// Server-side clients (use service role for vector search)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy initialization to avoid build-time errors when env vars are missing
+let supabase: SupabaseClient | null = null;
+let openai: OpenAI | null = null;
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+function getSupabase() {
+  if (!supabase) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) {
+      throw new Error('Supabase environment variables not configured');
+    }
+    supabase = createClient(url, key);
+  }
+  return supabase;
+}
+
+function getOpenAI() {
+  if (!openai) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      throw new Error('OpenAI API key not configured');
+    }
+    openai = new OpenAI({ apiKey });
+  }
+  return openai;
+}
 
 async function getEmbedding(text: string): Promise<number[]> {
-  const response = await openai.embeddings.create({
+  const response = await getOpenAI().embeddings.create({
     model: 'text-embedding-3-small',
     input: text,
   });
@@ -21,7 +38,7 @@ async function getEmbedding(text: string): Promise<number[]> {
 }
 
 async function searchRules(queryEmbedding: number[], matchCount: number = 5) {
-  const { data, error } = await supabase.rpc('search_rules', {
+  const { data, error } = await getSupabase().rpc('search_rules', {
     query_embedding: queryEmbedding,
     match_count: matchCount,
   });
@@ -50,7 +67,7 @@ export async function POST(request: NextRequest) {
       .join('\n\n---\n\n');
 
     // 4. Ask GPT-4
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: 'gpt-4o',
       max_tokens: 1024,
       messages: [
