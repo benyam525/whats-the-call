@@ -50,7 +50,7 @@ function ProgressRing({
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
         <defs>
-          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id="progressGradientDemo" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor={getColor()} stopOpacity="0.8" />
             <stop offset="100%" stopColor={getColor()} />
           </linearGradient>
@@ -70,7 +70,7 @@ function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="url(#progressGradient)"
+          stroke="url(#progressGradientDemo)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
@@ -187,11 +187,6 @@ const CATEGORY_COLORS = [
   '#14B8A6', '#A855F7', '#F43F5E', '#22C55E'
 ];
 
-const STORAGE_KEY = 'rulevision-category-mastery';
-
-// Demo mode flag - use /dashboard/demo for partner presentations
-const DEMO_MODE = false;
-
 // Demo data for impressive partner presentations
 const DEMO_MASTERY_DATA = {
   parents: {
@@ -215,7 +210,7 @@ const DEMO_STREAK = 12;
 const DEMO_TOTAL_ANSWERED = 847;
 const DEMO_BEST_SUDDEN_DEATH = 23;
 
-export default function DashboardPage() {
+export default function DemoDashboardPage() {
   const [masteryData, setMasteryData] = useState<{
     parents: Record<string, { correct: number; total: number }>;
     subs: Record<string, { correct: number; total: number }>;
@@ -225,58 +220,12 @@ export default function DashboardPage() {
   const [totalAnswered, setTotalAnswered] = useState(0);
   const [bestSuddenDeath, setBestSuddenDeath] = useState(0);
 
-  // Load data on mount
+  // Load demo data on mount
   useEffect(() => {
-    // Use demo data for presentations
-    if (DEMO_MODE) {
-      setMasteryData(DEMO_MASTERY_DATA);
-      setStreakDays(DEMO_STREAK);
-      setTotalAnswered(DEMO_TOTAL_ANSWERED);
-      setBestSuddenDeath(DEMO_BEST_SUDDEN_DEATH);
-      return;
-    }
-
-    // Load mastery data
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setMasteryData(JSON.parse(stored));
-      }
-    } catch (e) {
-      console.error('Error loading mastery data:', e);
-    }
-
-    // Load streak data
-    try {
-      const dailyData = localStorage.getItem('rulevision-daily-5');
-      if (dailyData) {
-        const parsed = JSON.parse(dailyData);
-        setStreakDays(parsed.currentStreak || 0);
-      }
-    } catch (e) {
-      console.error('Error loading streak data:', e);
-    }
-
-    // Calculate total answered
-    try {
-      const stats = localStorage.getItem('rulevision-stats');
-      if (stats) {
-        const parsed = JSON.parse(stats);
-        setTotalAnswered(parsed.totalAnswered || 0);
-      }
-    } catch (e) {
-      console.error('Error loading stats:', e);
-    }
-
-    // Get best sudden death
-    try {
-      const sd = localStorage.getItem('rulevision-sudden-death-best');
-      if (sd) {
-        setBestSuddenDeath(parseInt(sd) || 0);
-      }
-    } catch (e) {
-      console.error('Error loading sudden death:', e);
-    }
+    setMasteryData(DEMO_MASTERY_DATA);
+    setStreakDays(DEMO_STREAK);
+    setTotalAnswered(DEMO_TOTAL_ANSWERED);
+    setBestSuddenDeath(DEMO_BEST_SUDDEN_DEATH);
   }, []);
 
   // Build category data
@@ -339,13 +288,10 @@ export default function DashboardPage() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">
-            {DEMO_MODE ? 'Welcome back, Marcus' : 'Welcome back'}
+            Welcome back, Marcus
           </h1>
           <p className="text-gray-500 mt-1">
-            {DEMO_MODE
-              ? "You're on a 12-day streak! Keep it up."
-              : 'Track your progress and continue training'
-            }
+            You&apos;re on a 12-day streak! Keep it up.
           </p>
         </div>
 
@@ -373,12 +319,12 @@ export default function DashboardPage() {
               icon="🔥"
               value={streakDays}
               label="Day Streak"
-              sublabel={streakDays > 0 ? "Keep it going!" : "Start today"}
-              color={streakDays > 0 ? "amber" : "gray"}
+              sublabel="Keep it going!"
+              color="amber"
             />
             <StatCard
               icon="📝"
-              value={totalAnswered || overallStats.totalAttempted}
+              value={totalAnswered}
               label="Questions"
               sublabel="Total answered"
               color="blue"
@@ -388,14 +334,14 @@ export default function DashboardPage() {
               value={`${overallStats.mastery}%`}
               label="Accuracy"
               sublabel="All-time"
-              color={overallStats.mastery >= 70 ? "green" : "gray"}
+              color="green"
             />
             <StatCard
               icon="💀"
               value={bestSuddenDeath}
               label="Best Run"
               sublabel="Sudden Death"
-              color={bestSuddenDeath >= 10 ? "red" : "gray"}
+              color="red"
             />
           </div>
         </div>
@@ -448,10 +394,7 @@ export default function DashboardPage() {
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Category Progress</h2>
               <p className="text-sm text-gray-500 mt-0.5">
-                {overallStats.categoriesStarted > 0
-                  ? `${overallStats.categoriesStarted} categories started`
-                  : 'Start training to track progress'
-                }
+                {overallStats.categoriesStarted} categories started
               </p>
             </div>
             <Link
