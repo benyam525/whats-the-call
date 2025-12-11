@@ -89,13 +89,8 @@ function GlassCard({ children, className = '' }: { children: React.ReactNode; cl
   );
 }
 
-// Large readiness ring with animated gradient
+// Large readiness ring with animated gradient - responsive
 function ReadinessRing({ score, size = 180 }: { score: number; size?: number }) {
-  const strokeWidth = 12;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (score / 100) * circumference;
-
   const getColor = () => {
     if (score >= 85) return { start: '#10B981', end: '#059669' };
     if (score >= 70) return { start: '#3B82F6', end: '#2563EB' };
@@ -104,10 +99,16 @@ function ReadinessRing({ score, size = 180 }: { score: number; size?: number }) 
   };
 
   const colors = getColor();
+  // Using viewBox for responsive sizing
+  const viewBoxSize = 180;
+  const strokeWidth = 12;
+  const radius = (viewBoxSize - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (score / 100) * circumference;
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="transform -rotate-90">
+      <svg viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className="w-full h-full transform -rotate-90">
         <defs>
           <linearGradient id="readinessGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor={colors.start} />
@@ -115,16 +116,16 @@ function ReadinessRing({ score, size = 180 }: { score: number; size?: number }) 
           </linearGradient>
         </defs>
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={viewBoxSize / 2}
+          cy={viewBoxSize / 2}
           r={radius}
           fill="none"
           stroke="#F3F4F6"
           strokeWidth={strokeWidth}
         />
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={viewBoxSize / 2}
+          cy={viewBoxSize / 2}
           r={radius}
           fill="none"
           stroke="url(#readinessGradient)"
@@ -136,38 +137,34 @@ function ReadinessRing({ score, size = 180 }: { score: number; size?: number }) 
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-5xl font-bold text-gray-900">{score}</span>
-        <span className="text-sm text-gray-500 font-medium">Ref Readiness</span>
+        <span className="text-4xl sm:text-5xl font-bold text-gray-900">{score}</span>
+        <span className="text-xs sm:text-sm text-gray-500 font-medium">Ref Readiness</span>
       </div>
     </div>
   );
 }
 
-// Mini ring for pillars
+// Mini ring for pillars - responsive
 function MiniRing({ score, label, color }: { score: number; label: string; color: string }) {
-  const size = 80;
-  const strokeWidth = 6;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (score / 100) * circumference;
-
   return (
     <div className="flex flex-col items-center">
-      <div className="relative" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="transform -rotate-90">
-          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#F3F4F6" strokeWidth={strokeWidth} />
+      {/* Mobile size */}
+      <div className="relative w-16 h-16 sm:w-20 sm:h-20">
+        <svg viewBox="0 0 80 80" className="w-full h-full transform -rotate-90">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#F3F4F6" strokeWidth="6" />
           <circle
-            cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={color}
-            strokeWidth={strokeWidth} strokeLinecap="round"
-            strokeDasharray={circumference} strokeDashoffset={offset}
+            cx="40" cy="40" r="34" fill="none" stroke={color}
+            strokeWidth="6" strokeLinecap="round"
+            strokeDasharray={213.6}
+            strokeDashoffset={213.6 - (score / 100) * 213.6}
             className="transition-all duration-700"
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xl font-bold text-gray-900">{score}</span>
+          <span className="text-base sm:text-xl font-bold text-gray-900">{score}</span>
         </div>
       </div>
-      <span className="text-xs text-gray-500 mt-1 font-medium">{label}</span>
+      <span className="text-[10px] sm:text-xs text-gray-500 mt-1 font-medium">{label}</span>
     </div>
   );
 }
@@ -225,19 +222,19 @@ export default function DemoDashboardPage() {
 
       <main className="max-w-6xl mx-auto px-4 py-6">
         {/* Header Row */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Welcome back, {DEMO_USER.name}</h1>
-            <p className="text-gray-500">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, {DEMO_USER.name}</h1>
+            <p className="text-gray-500 text-sm sm:text-base">
               {DEMO_USER.readinessChange > 0 ? '+' : ''}{DEMO_USER.readinessChange} points vs yesterday
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-white rounded-lg border border-gray-200 p-1">
+          <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1 self-start sm:self-auto">
             {(['day', 'week', 'season'] as const).map((view) => (
               <button
                 key={view}
                 onClick={() => setTimeView(view)}
-                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                className={`px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-md transition-colors ${
                   timeView === view ? 'bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -248,11 +245,16 @@ export default function DemoDashboardPage() {
         </div>
 
         {/* Hero Section: Readiness Score + Pillars */}
-        <GlassCard className="p-6 mb-6">
-          <div className="flex flex-col lg:flex-row items-center gap-8">
+        <GlassCard className="p-4 sm:p-6 mb-6">
+          <div className="flex flex-col items-center gap-6 lg:flex-row lg:gap-8">
             {/* Main Readiness Ring */}
             <div className="flex flex-col items-center">
-              <ReadinessRing score={DEMO_USER.refReadiness} />
+              <div className="hidden sm:block">
+                <ReadinessRing score={DEMO_USER.refReadiness} size={180} />
+              </div>
+              <div className="sm:hidden">
+                <ReadinessRing score={DEMO_USER.refReadiness} size={140} />
+              </div>
               <div className="flex items-center gap-2 mt-3">
                 <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">
                   {DEMO_USER.tier}
@@ -262,79 +264,79 @@ export default function DemoDashboardPage() {
             </div>
 
             {/* Three Pillars */}
-            <div className="flex-1">
-              <div className="text-sm text-gray-500 uppercase tracking-wide font-medium mb-4">
+            <div className="flex-1 w-full lg:w-auto">
+              <div className="text-xs sm:text-sm text-gray-500 uppercase tracking-wide font-medium mb-3 sm:mb-4 text-center lg:text-left">
                 Performance Pillars
               </div>
-              <div className="flex justify-center lg:justify-start gap-8">
+              <div className="flex justify-center lg:justify-start gap-4 sm:gap-8">
                 <MiniRing score={DEMO_USER.gameIQ} label="Game IQ" color="#3B82F6" />
                 <MiniRing score={DEMO_USER.execution} label="Execution" color="#8B5CF6" />
                 <MiniRing score={DEMO_USER.commitment} label="Commitment" color="#10B981" />
               </div>
 
               {/* Quick Tags */}
-              <div className="flex flex-wrap gap-2 mt-6 justify-center lg:justify-start">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm">
+              <div className="flex flex-wrap gap-2 mt-4 sm:mt-6 justify-center lg:justify-start">
+                <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs sm:text-sm">
                   <span className="font-medium">Strength:</span> Blocking Fouls
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-sm">
+                <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 bg-amber-50 text-amber-700 rounded-full text-xs sm:text-sm">
                   <span className="font-medium">Weak Spot:</span> Coach&apos;s Challenge
                 </span>
               </div>
             </div>
 
             {/* Today's Quick Stats */}
-            <div className="grid grid-cols-2 gap-3 w-full lg:w-auto">
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <div className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
+            <div className="grid grid-cols-4 lg:grid-cols-2 gap-2 sm:gap-3 w-full lg:w-auto">
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
                   🔥 {DEMO_USER.streak}
                 </div>
-                <div className="text-xs text-gray-500 uppercase">Day Streak</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Streak</div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <div className="text-2xl font-bold text-gray-900">{DEMO_USER.totalQuestions}</div>
-                <div className="text-xs text-gray-500 uppercase">Questions</div>
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900">{DEMO_USER.totalQuestions.toLocaleString()}</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Questions</div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <div className="text-2xl font-bold text-gray-900">{DEMO_USER.daily5Score}/5</div>
-                <div className="text-xs text-gray-500 uppercase">Daily 5</div>
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900">{DEMO_USER.daily5Score}/5</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Daily 5</div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <div className="text-2xl font-bold text-gray-900">{DEMO_USER.bestSuddenDeath}</div>
-                <div className="text-xs text-gray-500 uppercase">Best Run</div>
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900">{DEMO_USER.bestSuddenDeath}</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Best Run</div>
               </div>
             </div>
           </div>
         </GlassCard>
 
         {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
           {/* Strengths & Weaknesses */}
-          <GlassCard className="p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-5">Strengths & Blind Spots</h2>
+          <GlassCard className="p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-5">Strengths & Blind Spots</h2>
 
             {/* Strengths */}
-            <div className="mb-5">
-              <div className="flex items-center gap-2 mb-3">
+            <div className="mb-4 sm:mb-5">
+              <div className="flex items-center gap-2 mb-2 sm:mb-3">
                 <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Top 3 Strengths</span>
+                <span className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide">Top 3 Strengths</span>
               </div>
               <div className="space-y-2">
                 {topStrengths.map((cat, i) => (
-                  <div key={cat.name} className="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl">
-                    <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">
+                  <div key={cat.name} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-emerald-50 rounded-xl">
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] sm:text-xs font-bold flex-shrink-0">
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-900 text-sm truncate">{cat.name}</span>
-                        <span className="font-bold text-emerald-700">{cat.accuracy}%</span>
+                        <span className="font-medium text-gray-900 text-xs sm:text-sm truncate">{cat.name}</span>
+                        <span className="font-bold text-emerald-700 text-xs sm:text-sm ml-2">{cat.accuracy}%</span>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <div className="flex-1 h-1.5 bg-emerald-200 rounded-full">
+                        <div className="flex-1 h-1 sm:h-1.5 bg-emerald-200 rounded-full">
                           <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${cat.accuracy}%` }} />
                         </div>
-                        <span className="text-xs text-gray-500">{cat.reps} reps</span>
+                        <span className="text-[10px] sm:text-xs text-gray-500 hidden sm:inline">{cat.reps} reps</span>
                       </div>
                     </div>
                     <TrendIndicator trend={cat.trend} change={cat.change} />
@@ -345,26 +347,26 @@ export default function DemoDashboardPage() {
 
             {/* Blind Spots */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2 sm:mb-3">
                 <div className="w-2 h-2 rounded-full bg-amber-500" />
-                <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Top 3 Blind Spots</span>
+                <span className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide">Top 3 Blind Spots</span>
               </div>
               <div className="space-y-2">
                 {blindSpots.map((cat, i) => (
-                  <div key={cat.name} className="flex items-center gap-3 p-3 bg-amber-50 rounded-xl">
-                    <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">
+                  <div key={cat.name} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-amber-50 rounded-xl">
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-[10px] sm:text-xs font-bold flex-shrink-0">
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-900 text-sm truncate">{cat.name}</span>
-                        <span className="font-bold text-amber-700">{cat.accuracy}%</span>
+                        <span className="font-medium text-gray-900 text-xs sm:text-sm truncate">{cat.name}</span>
+                        <span className="font-bold text-amber-700 text-xs sm:text-sm ml-2">{cat.accuracy}%</span>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <div className="flex-1 h-1.5 bg-amber-200 rounded-full">
+                        <div className="flex-1 h-1 sm:h-1.5 bg-amber-200 rounded-full">
                           <div className="h-full bg-amber-500 rounded-full" style={{ width: `${cat.accuracy}%` }} />
                         </div>
-                        <span className="text-xs text-gray-500">{cat.reps} reps</span>
+                        <span className="text-[10px] sm:text-xs text-gray-500 hidden sm:inline">{cat.reps} reps</span>
                       </div>
                     </div>
                     <TrendIndicator trend={cat.trend} change={cat.change} />
@@ -375,28 +377,28 @@ export default function DemoDashboardPage() {
           </GlassCard>
 
           {/* Pressure Performance */}
-          <GlassCard className="p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-5">Decision Under Pressure</h2>
+          <GlassCard className="p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-5">Decision Under Pressure</h2>
 
             {/* Calm vs Pressure */}
-            <div className="mb-6">
+            <div className="mb-5 sm:mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Calm (Film Room)</span>
-                <span className="font-bold text-gray-900">{DEMO_USER.calmAccuracy}%</span>
+                <span className="text-xs sm:text-sm text-gray-600">Calm (Film Room)</span>
+                <span className="font-bold text-gray-900 text-sm sm:text-base">{DEMO_USER.calmAccuracy}%</span>
               </div>
-              <div className="h-3 bg-gray-100 rounded-full mb-4">
+              <div className="h-2 sm:h-3 bg-gray-100 rounded-full mb-3 sm:mb-4">
                 <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${DEMO_USER.calmAccuracy}%` }} />
               </div>
 
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Under Pressure (Sudden Death)</span>
-                <span className="font-bold text-gray-900">{DEMO_USER.pressureAccuracy}%</span>
+                <span className="text-xs sm:text-sm text-gray-600">Under Pressure</span>
+                <span className="font-bold text-gray-900 text-sm sm:text-base">{DEMO_USER.pressureAccuracy}%</span>
               </div>
-              <div className="h-3 bg-gray-100 rounded-full">
+              <div className="h-2 sm:h-3 bg-gray-100 rounded-full">
                 <div className="h-full bg-purple-500 rounded-full" style={{ width: `${DEMO_USER.pressureAccuracy}%` }} />
               </div>
 
-              <div className="mt-3 flex items-center gap-2 text-amber-600 text-sm">
+              <div className="mt-2 sm:mt-3 flex items-center gap-2 text-amber-600 text-xs sm:text-sm">
                 <span>⚠️</span>
                 <span>{DEMO_USER.pressureGap} point drop under pressure</span>
               </div>
@@ -404,11 +406,11 @@ export default function DemoDashboardPage() {
 
             {/* Composure Curve */}
             <div>
-              <div className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
+              <div className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2 sm:mb-3">
                 Composure Curve
               </div>
-              <div className="text-xs text-gray-500 mb-3">Accuracy by streak length in Sudden Death</div>
-              <div className="flex items-end gap-2 h-32">
+              <div className="text-[10px] sm:text-xs text-gray-500 mb-2 sm:mb-3">Accuracy by streak length</div>
+              <div className="flex items-end gap-1 sm:gap-2 h-24 sm:h-32">
                 {COMPOSURE_CURVE.map((point) => {
                   const height = (point.accuracy / 100) * 100;
                   const color = point.accuracy >= 85 ? 'bg-emerald-500' :
@@ -416,37 +418,37 @@ export default function DemoDashboardPage() {
                                point.accuracy >= 65 ? 'bg-amber-400' : 'bg-orange-400';
                   return (
                     <div key={point.range} className="flex-1 flex flex-col items-center">
-                      <span className="text-xs font-medium text-gray-700 mb-1">{point.accuracy}%</span>
+                      <span className="text-[10px] sm:text-xs font-medium text-gray-700 mb-1">{point.accuracy}%</span>
                       <div className={`w-full ${color} rounded-t-lg transition-all`} style={{ height: `${height}%` }} />
-                      <span className="text-xs text-gray-500 mt-1">Q{point.range}</span>
+                      <span className="text-[10px] sm:text-xs text-gray-500 mt-1 truncate w-full text-center">Q{point.range}</span>
                     </div>
                   );
                 })}
               </div>
-              <div className="mt-3 text-sm text-gray-500">
-                📉 Slight drop after Q15, but stays above 75%
+              <div className="mt-2 sm:mt-3 text-xs sm:text-sm text-gray-500">
+                📉 Slight drop after Q15, stays above 75%
               </div>
             </div>
           </GlassCard>
         </div>
 
         {/* Category Mastery Grid */}
-        <GlassCard className="p-6 mb-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-bold text-gray-900">Category Mastery</h2>
-            <span className="text-sm text-gray-500">{CATEGORY_MASTERY.length} categories</span>
+        <GlassCard className="p-4 sm:p-6 mb-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-5">
+            <h2 className="text-base sm:text-lg font-bold text-gray-900">Category Mastery</h2>
+            <span className="text-xs sm:text-sm text-gray-500">{CATEGORY_MASTERY.length} categories</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
             {CATEGORY_MASTERY.map((cat) => (
-              <div key={cat.name} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center">
-                  <span className="text-lg font-bold text-gray-900">{cat.accuracy}</span>
+              <div key={cat.name} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm sm:text-lg font-bold text-gray-900">{cat.accuracy}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-gray-900 text-sm truncate">{cat.name}</div>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-xs text-gray-500">{cat.reps} reps</span>
+                  <div className="font-medium text-gray-900 text-xs sm:text-sm truncate">{cat.name}</div>
+                  <div className="flex items-center gap-1 sm:gap-2 mt-0.5">
+                    <span className="text-[10px] sm:text-xs text-gray-500">{cat.reps}</span>
                     <ConfidenceBadge level={cat.confidence} />
                   </div>
                 </div>
@@ -457,22 +459,22 @@ export default function DemoDashboardPage() {
         </GlassCard>
 
         {/* Focus Plan + Weekly Activity */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
           {/* 14-Day Focus Plan */}
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-blue-200 p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-blue-200 p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
               <div>
-                <h2 className="text-lg font-bold text-gray-900">14-Day Focus Plan</h2>
-                <p className="text-sm text-gray-600">{FOCUS_PLAN.daysRemaining} days remaining</p>
+                <h2 className="text-base sm:text-lg font-bold text-gray-900">14-Day Focus Plan</h2>
+                <p className="text-xs sm:text-sm text-gray-600">{FOCUS_PLAN.daysRemaining} days remaining</p>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-blue-600">{FOCUS_PLAN.progress}%</div>
-                <div className="text-xs text-gray-500">Progress</div>
+                <div className="text-xl sm:text-2xl font-bold text-blue-600">{FOCUS_PLAN.progress}%</div>
+                <div className="text-[10px] sm:text-xs text-gray-500">Progress</div>
               </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="h-2 bg-white/50 rounded-full mb-5">
+            <div className="h-1.5 sm:h-2 bg-white/50 rounded-full mb-4 sm:mb-5">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
                 style={{ width: `${FOCUS_PLAN.progress}%` }}
@@ -480,16 +482,16 @@ export default function DemoDashboardPage() {
             </div>
 
             {/* Goals */}
-            <div className="space-y-3 mb-5">
+            <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-5">
               {FOCUS_PLAN.goals.map((goal) => (
-                <div key={goal.label} className="bg-white rounded-xl p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-900">{goal.label}</span>
-                    <span className="text-xs text-gray-500">
+                <div key={goal.label} className="bg-white rounded-xl p-2 sm:p-3">
+                  <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+                    <span className="text-xs sm:text-sm font-medium text-gray-900">{goal.label}</span>
+                    <span className="text-[10px] sm:text-xs text-gray-500">
                       {goal.from}{goal.unit || '%'} → {goal.to}{goal.unit || '%'}
                     </span>
                   </div>
-                  <div className="h-1.5 bg-gray-100 rounded-full">
+                  <div className="h-1 sm:h-1.5 bg-gray-100 rounded-full">
                     <div
                       className="h-full bg-blue-500 rounded-full"
                       style={{ width: `${goal.progress}%` }}
@@ -500,12 +502,12 @@ export default function DemoDashboardPage() {
             </div>
 
             {/* Actions */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               {FOCUS_PLAN.actions.map((action) => (
-                <div key={action.action} className="flex items-center gap-3 p-2 bg-white/60 rounded-lg">
-                  <span className="text-lg">{action.icon}</span>
-                  <span className="flex-1 text-sm text-gray-700">{action.action}</span>
-                  <span className="text-xs font-medium text-gray-500 bg-white px-2 py-1 rounded">
+                <div key={action.action} className="flex items-center gap-2 sm:gap-3 p-2 bg-white/60 rounded-lg">
+                  <span className="text-base sm:text-lg">{action.icon}</span>
+                  <span className="flex-1 text-xs sm:text-sm text-gray-700 truncate">{action.action}</span>
+                  <span className="text-[10px] sm:text-xs font-medium text-gray-500 bg-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded flex-shrink-0">
                     {action.frequency}
                   </span>
                 </div>
@@ -514,11 +516,11 @@ export default function DemoDashboardPage() {
           </div>
 
           {/* Weekly Activity */}
-          <GlassCard className="p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-5">This Week</h2>
+          <GlassCard className="p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-5">This Week</h2>
 
             {/* Activity Chart */}
-            <div className="flex items-end gap-2 h-40 mb-4">
+            <div className="flex items-end gap-1 sm:gap-2 h-28 sm:h-40 mb-3 sm:mb-4">
               {WEEKLY_ACTIVITY.map((day) => {
                 const maxQuestions = Math.max(...WEEKLY_ACTIVITY.map(d => d.questions));
                 const height = day.questions > 0 ? (day.questions / maxQuestions) * 100 : 5;
@@ -529,68 +531,68 @@ export default function DemoDashboardPage() {
                 return (
                   <div key={day.day} className="flex-1 flex flex-col items-center">
                     {day.questions > 0 && (
-                      <span className="text-xs font-medium text-gray-600 mb-1">{day.accuracy}%</span>
+                      <span className="text-[10px] sm:text-xs font-medium text-gray-600 mb-1">{day.accuracy}%</span>
                     )}
                     <div className={`w-full ${color} rounded-t-lg transition-all relative group`} style={{ height: `${height}%`, minHeight: '8px' }}>
                       {day.questions > 0 && (
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap hidden sm:block">
                           {day.questions} questions
                         </div>
                       )}
                     </div>
-                    <span className="text-xs text-gray-500 mt-2">{day.day}</span>
+                    <span className="text-[10px] sm:text-xs text-gray-500 mt-1 sm:mt-2">{day.day}</span>
                   </div>
                 );
               })}
             </div>
 
             {/* Week Stats */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-gray-100">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-100">
               <div className="text-center">
-                <div className="text-xl font-bold text-gray-900">248</div>
-                <div className="text-xs text-gray-500">Questions</div>
+                <div className="text-lg sm:text-xl font-bold text-gray-900">248</div>
+                <div className="text-[10px] sm:text-xs text-gray-500">Questions</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-gray-900">89%</div>
-                <div className="text-xs text-gray-500">Avg Accuracy</div>
+                <div className="text-lg sm:text-xl font-bold text-gray-900">89%</div>
+                <div className="text-[10px] sm:text-xs text-gray-500">Accuracy</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-gray-900">6/7</div>
-                <div className="text-xs text-gray-500">Days Active</div>
+                <div className="text-lg sm:text-xl font-bold text-gray-900">6/7</div>
+                <div className="text-[10px] sm:text-xs text-gray-500">Days</div>
               </div>
             </div>
 
             {/* Insights */}
-            <div className="mt-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-emerald-700 bg-emerald-50 rounded-lg p-2">
-                <span>✓</span> 6/7 days active - excellent consistency!
+            <div className="mt-3 sm:mt-4 space-y-1.5 sm:space-y-2">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-emerald-700 bg-emerald-50 rounded-lg p-1.5 sm:p-2">
+                <span>✓</span> <span className="truncate">6/7 days active - excellent consistency!</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-blue-700 bg-blue-50 rounded-lg p-2">
-                <span>📈</span> Coach&apos;s Challenge up 8% this week
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-blue-700 bg-blue-50 rounded-lg p-1.5 sm:p-2">
+                <span>📈</span> <span className="truncate">Coach&apos;s Challenge up 8% this week</span>
               </div>
             </div>
           </GlassCard>
         </div>
 
         {/* Footer CTA */}
-        <div className="text-center py-8">
-          <p className="text-gray-500 mb-4">Ready to improve your Ref Readiness?</p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link href="/film-room" className="px-6 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors">
+        <div className="text-center py-6 sm:py-8">
+          <p className="text-sm sm:text-base text-gray-500 mb-3 sm:mb-4">Ready to improve your Ref Readiness?</p>
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            <Link href="/film-room" className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors">
               Film Room
             </Link>
-            <Link href="/sudden-death" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+            <Link href="/sudden-death" className="px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-medium hover:bg-gray-50 transition-colors">
               Sudden Death
             </Link>
-            <Link href="/daily-5" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+            <Link href="/daily-5" className="px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-medium hover:bg-gray-50 transition-colors">
               Daily 5
             </Link>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="text-center pb-8">
-          <p className="text-sm text-gray-400">
+        <div className="text-center pb-6 sm:pb-8">
+          <p className="text-xs sm:text-sm text-gray-400">
             RuleVision · See the Call Before It Happens
           </p>
         </div>
