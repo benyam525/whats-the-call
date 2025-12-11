@@ -189,6 +189,32 @@ const CATEGORY_COLORS = [
 
 const STORAGE_KEY = 'rulevision-category-mastery';
 
+// Demo mode flag - set to true for partner presentations
+const DEMO_MODE = true;
+
+// Demo data for impressive partner presentations
+const DEMO_MASTERY_DATA = {
+  parents: {
+    'out_of_bounds': { correct: 42, total: 48 },
+    'violations': { correct: 67, total: 78 },
+    'fouls': { correct: 89, total: 102 },
+    'timing': { correct: 34, total: 41 },
+    'scoring': { correct: 28, total: 31 },
+    'jump_ball': { correct: 19, total: 22 },
+    'throw_in': { correct: 45, total: 52 },
+    'substitutions': { correct: 23, total: 27 },
+    'timeouts': { correct: 31, total: 35 },
+    'basket_interference': { correct: 17, total: 20 },
+    'traveling': { correct: 56, total: 64 },
+    'dribbling': { correct: 38, total: 44 },
+  },
+  subs: {}
+};
+
+const DEMO_STREAK = 12;
+const DEMO_TOTAL_ANSWERED = 847;
+const DEMO_BEST_SUDDEN_DEATH = 23;
+
 export default function DashboardPage() {
   const [masteryData, setMasteryData] = useState<{
     parents: Record<string, { correct: number; total: number }>;
@@ -201,6 +227,15 @@ export default function DashboardPage() {
 
   // Load data on mount
   useEffect(() => {
+    // Use demo data for presentations
+    if (DEMO_MODE) {
+      setMasteryData(DEMO_MASTERY_DATA);
+      setStreakDays(DEMO_STREAK);
+      setTotalAnswered(DEMO_TOTAL_ANSWERED);
+      setBestSuddenDeath(DEMO_BEST_SUDDEN_DEATH);
+      return;
+    }
+
     // Load mastery data
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -303,8 +338,15 @@ export default function DashboardPage() {
       <main className="max-w-5xl mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-          <p className="text-gray-500 mt-1">Track your progress and continue training</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {DEMO_MODE ? 'Welcome back, Marcus' : 'Welcome back'}
+          </h1>
+          <p className="text-gray-500 mt-1">
+            {DEMO_MODE
+              ? "You're on a 12-day streak! Keep it up."
+              : 'Track your progress and continue training'
+            }
+          </p>
         </div>
 
         {/* Top Row: Progress + Stats */}
