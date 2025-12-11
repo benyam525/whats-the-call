@@ -1,76 +1,133 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
-import { casebookQuestions, getParentCategories } from '@/data/casebook';
-import { ParentCategory, PARENT_CATEGORY_NAMES } from '@/data/types';
 
-// Glass card component with enhanced styling
-function GlassCard({ children, className = '' }: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+// ============================================================================
+// DEMO DATA - Impressive stats for partner presentations
+// ============================================================================
+
+const DEMO_USER = {
+  name: 'Marcus',
+  streak: 23,
+  totalQuestions: 3835,
+  avgAccuracy: 89,
+  refReadiness: 89,
+  gameIQ: 89,
+  execution: 85,
+  commitment: 94,
+  readinessChange: +3,
+  pressureAccuracy: 84,
+  calmAccuracy: 94,
+  pressureGap: 10,
+  bestSuddenDeath: 18,
+  daily5Score: 5,
+  avgResponseTime: 4.2,
+  percentile: 78,
+  tier: 'Veteran',
+};
+
+const CATEGORY_MASTERY = [
+  { name: 'Blocking Fouls', accuracy: 96, reps: 245, trend: 'up', change: 3, confidence: 'elite' },
+  { name: 'Out of Bounds', accuracy: 95, reps: 267, trend: 'stable', change: 1, confidence: 'elite' },
+  { name: 'Traveling', accuracy: 94, reps: 312, trend: 'up', change: 2, confidence: 'elite' },
+  { name: 'Charging Fouls', accuracy: 93, reps: 198, trend: 'stable', change: 0, confidence: 'reliable' },
+  { name: 'Backcourt Violations', accuracy: 91, reps: 156, trend: 'up', change: 4, confidence: 'reliable' },
+  { name: 'Offensive Fouls', accuracy: 91, reps: 178, trend: 'stable', change: 1, confidence: 'reliable' },
+  { name: 'Shot Clock', accuracy: 88, reps: 134, trend: 'up', change: 5, confidence: 'reliable' },
+  { name: 'Goaltending', accuracy: 87, reps: 89, trend: 'up', change: 3, confidence: 'developing' },
+  { name: 'Technical Fouls', accuracy: 85, reps: 67, trend: 'stable', change: 0, confidence: 'developing' },
+  { name: 'Defensive 3-Seconds', accuracy: 84, reps: 76, trend: 'up', change: 6, confidence: 'developing' },
+  { name: 'Flagrant Fouls', accuracy: 82, reps: 45, trend: 'stable', change: 0, confidence: 'needs_work' },
+  { name: 'Clear-Path', accuracy: 78, reps: 112, trend: 'up', change: 4, confidence: 'needs_work' },
+  { name: "Coach's Challenge", accuracy: 72, reps: 98, trend: 'up', change: 6, confidence: 'blind_spot' },
+];
+
+const COMPOSURE_CURVE = [
+  { range: '1-5', accuracy: 96 },
+  { range: '6-10', accuracy: 92 },
+  { range: '11-15', accuracy: 86 },
+  { range: '16-20', accuracy: 80 },
+  { range: '21+', accuracy: 75 },
+];
+
+const FOCUS_PLAN = {
+  progress: 45,
+  daysRemaining: 9,
+  goals: [
+    { label: "Raise Coach's Challenge", from: 72, to: 82, progress: 45 },
+    { label: 'Close pressure gap', from: 10, to: 6, progress: 35, unit: 'pts' },
+    { label: 'Clear-Path mastery', from: 78, to: 85, progress: 55 },
+  ],
+  actions: [
+    { action: "20 questions/day in Coach's Challenge", frequency: 'Daily', icon: '🎯' },
+    { action: 'Sudden Death marathon (aim for 20+)', frequency: '4×/week', icon: '💀' },
+    { action: 'Category Drill: Clear-Path scenarios', frequency: '3×/week', icon: '🎬' },
+  ],
+};
+
+const WEEKLY_ACTIVITY = [
+  { day: 'Mon', questions: 45, accuracy: 87 },
+  { day: 'Tue', questions: 38, accuracy: 92 },
+  { day: 'Wed', questions: 42, accuracy: 88 },
+  { day: 'Thu', questions: 35, accuracy: 91 },
+  { day: 'Fri', questions: 48, accuracy: 85 },
+  { day: 'Sat', questions: 0, accuracy: 0 },
+  { day: 'Sun', questions: 52, accuracy: 90 },
+];
+
+// ============================================================================
+// COMPONENTS
+// ============================================================================
+
+function GlassCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`
-      relative overflow-hidden rounded-2xl
-      bg-white/80 backdrop-blur-lg
-      border border-gray-200/50
-      shadow-sm
-      ${className}
-    `}>
+    <div className={`bg-white rounded-2xl border border-gray-200 shadow-sm ${className}`}>
       {children}
     </div>
   );
 }
 
-// Circular progress ring with gradient
-function ProgressRing({
-  value,
-  size = 140,
-  strokeWidth = 10,
-}: {
-  value: number;
-  size?: number;
-  strokeWidth?: number;
-}) {
+// Large readiness ring with animated gradient
+function ReadinessRing({ score, size = 180 }: { score: number; size?: number }) {
+  const strokeWidth = 12;
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (value / 100) * circumference;
+  const offset = circumference - (score / 100) * circumference;
 
-  // Color based on value
   const getColor = () => {
-    if (value >= 80) return '#10B981';
-    if (value >= 60) return '#3B82F6';
-    if (value >= 40) return '#F59E0B';
-    return '#6B7280';
+    if (score >= 85) return { start: '#10B981', end: '#059669' };
+    if (score >= 70) return { start: '#3B82F6', end: '#2563EB' };
+    if (score >= 55) return { start: '#F59E0B', end: '#D97706' };
+    return { start: '#EF4444', end: '#DC2626' };
   };
 
+  const colors = getColor();
+
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
         <defs>
-          <linearGradient id="progressGradientDemo" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={getColor()} stopOpacity="0.8" />
-            <stop offset="100%" stopColor={getColor()} />
+          <linearGradient id="readinessGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={colors.start} />
+            <stop offset="100%" stopColor={colors.end} />
           </linearGradient>
         </defs>
-        {/* Background circle */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#E5E7EB"
+          stroke="#F3F4F6"
           strokeWidth={strokeWidth}
         />
-        {/* Progress circle */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="url(#progressGradientDemo)"
+          stroke="url(#readinessGradient)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
@@ -79,357 +136,460 @@ function ProgressRing({
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-bold text-gray-900">{value}</span>
-        <span className="text-sm text-gray-500 -mt-1">%</span>
+        <span className="text-5xl font-bold text-gray-900">{score}</span>
+        <span className="text-sm text-gray-500 font-medium">Ref Readiness</span>
       </div>
     </div>
   );
 }
 
-// Stat card with icon
-function StatCard({ icon, value, label, sublabel, color = 'gray' }: {
-  icon: string;
-  value: string | number;
-  label: string;
-  sublabel?: string;
-  color?: 'gray' | 'green' | 'blue' | 'amber' | 'red';
-}) {
-  const colorClasses = {
-    gray: 'bg-gray-50 border-gray-100',
-    green: 'bg-emerald-50 border-emerald-100',
-    blue: 'bg-blue-50 border-blue-100',
-    amber: 'bg-amber-50 border-amber-100',
-    red: 'bg-red-50 border-red-100',
+// Mini ring for pillars
+function MiniRing({ score, label, color }: { score: number; label: string; color: string }) {
+  const size = 80;
+  const strokeWidth = 6;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (score / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg width={size} height={size} className="transform -rotate-90">
+          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#F3F4F6" strokeWidth={strokeWidth} />
+          <circle
+            cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={color}
+            strokeWidth={strokeWidth} strokeLinecap="round"
+            strokeDasharray={circumference} strokeDashoffset={offset}
+            className="transition-all duration-700"
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-xl font-bold text-gray-900">{score}</span>
+        </div>
+      </div>
+      <span className="text-xs text-gray-500 mt-1 font-medium">{label}</span>
+    </div>
+  );
+}
+
+// Confidence badge
+function ConfidenceBadge({ level }: { level: string }) {
+  const styles: Record<string, string> = {
+    elite: 'bg-emerald-100 text-emerald-700',
+    reliable: 'bg-blue-100 text-blue-700',
+    developing: 'bg-amber-100 text-amber-700',
+    needs_work: 'bg-orange-100 text-orange-700',
+    blind_spot: 'bg-red-100 text-red-700',
+  };
+
+  const labels: Record<string, string> = {
+    elite: 'Elite',
+    reliable: 'Reliable',
+    developing: 'Developing',
+    needs_work: 'Needs Work',
+    blind_spot: 'Blind Spot',
   };
 
   return (
-    <div className={`rounded-xl p-4 border ${colorClasses[color]}`}>
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{icon}</span>
-        <div>
-          <div className="text-2xl font-bold text-gray-900">{value}</div>
-          <div className="text-xs text-gray-500 uppercase tracking-wide">{label}</div>
-          {sublabel && <div className="text-xs text-gray-400 mt-0.5">{sublabel}</div>}
-        </div>
-      </div>
-    </div>
+    <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${styles[level]}`}>
+      {labels[level]}
+    </span>
   );
 }
 
-// Training mode card
-function TrainingModeCard({ icon, title, description, href, color, stats }: {
-  icon: string;
-  title: string;
-  description: string;
-  href: string;
-  color: string;
-  stats?: string;
-}) {
+// Trend indicator
+function TrendIndicator({ trend, change }: { trend: string; change: number }) {
+  if (change === 0) return <span className="text-xs text-gray-400">—</span>;
+
+  const isUp = trend === 'up';
   return (
-    <Link href={href} className="block group">
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 p-5 transition-all duration-200 hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5">
-        {/* Color accent */}
-        <div className={`absolute top-0 left-0 right-0 h-1 ${color}`} />
-
-        <div className="flex items-start gap-4">
-          <div className={`w-12 h-12 rounded-xl ${color} bg-opacity-10 flex items-center justify-center text-2xl flex-shrink-0`}>
-            {icon}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 group-hover:text-gray-700">{title}</h3>
-            <p className="text-sm text-gray-500 mt-0.5">{description}</p>
-            {stats && (
-              <p className="text-xs text-gray-400 mt-2">{stats}</p>
-            )}
-          </div>
-          <svg className="w-5 h-5 text-gray-300 group-hover:text-gray-400 transition-colors flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      </div>
-    </Link>
+    <span className={`text-xs font-medium ${isUp ? 'text-emerald-600' : 'text-red-500'}`}>
+      {isUp ? '↑' : '↓'} {Math.abs(change)}%
+    </span>
   );
 }
 
-// Category pill
-function CategoryPill({ name, mastery, questions, color, href }: {
-  name: string;
-  mastery: number;
-  questions: number;
-  color: string;
-  href: string;
-}) {
-  return (
-    <Link href={href} className="block group">
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 border border-transparent hover:border-gray-200 transition-all">
-        <div className="w-2 h-8 rounded-full" style={{ backgroundColor: color }} />
-        <div className="flex-1 min-w-0">
-          <div className="font-medium text-gray-900 text-sm truncate">{name}</div>
-          <div className="text-xs text-gray-400">{questions} questions</div>
-        </div>
-        <div className="text-right">
-          <div className="text-sm font-semibold text-gray-900">{mastery}%</div>
-          <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden mt-1">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${mastery}%`, backgroundColor: color }}
-            />
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-const CATEGORY_COLORS = [
-  '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
-  '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1',
-  '#14B8A6', '#A855F7', '#F43F5E', '#22C55E'
-];
-
-// Demo data for impressive partner presentations
-const DEMO_MASTERY_DATA = {
-  parents: {
-    'out_of_bounds': { correct: 42, total: 48 },
-    'violations': { correct: 67, total: 78 },
-    'fouls': { correct: 89, total: 102 },
-    'timing': { correct: 34, total: 41 },
-    'scoring': { correct: 28, total: 31 },
-    'jump_ball': { correct: 19, total: 22 },
-    'throw_in': { correct: 45, total: 52 },
-    'substitutions': { correct: 23, total: 27 },
-    'timeouts': { correct: 31, total: 35 },
-    'basket_interference': { correct: 17, total: 20 },
-    'traveling': { correct: 56, total: 64 },
-    'dribbling': { correct: 38, total: 44 },
-  },
-  subs: {}
-};
-
-const DEMO_STREAK = 12;
-const DEMO_TOTAL_ANSWERED = 847;
-const DEMO_BEST_SUDDEN_DEATH = 23;
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
 
 export default function DemoDashboardPage() {
-  const [masteryData, setMasteryData] = useState<{
-    parents: Record<string, { correct: number; total: number }>;
-    subs: Record<string, { correct: number; total: number }>;
-  }>({ parents: {}, subs: {} });
+  const [timeView, setTimeView] = useState<'day' | 'week' | 'season'>('week');
 
-  const [streakDays, setStreakDays] = useState(0);
-  const [totalAnswered, setTotalAnswered] = useState(0);
-  const [bestSuddenDeath, setBestSuddenDeath] = useState(0);
-
-  // Load demo data on mount
-  useEffect(() => {
-    setMasteryData(DEMO_MASTERY_DATA);
-    setStreakDays(DEMO_STREAK);
-    setTotalAnswered(DEMO_TOTAL_ANSWERED);
-    setBestSuddenDeath(DEMO_BEST_SUDDEN_DEATH);
-  }, []);
-
-  // Build category data
-  const categoryData = useMemo(() => {
-    const parentCategories = getParentCategories();
-
-    return parentCategories.map((parent, idx) => {
-      const parentQuestions = casebookQuestions.filter(q => q.parent_category === parent);
-      const stats = masteryData.parents[parent] || { correct: 0, total: 0 };
-      const mastery = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
-
-      return {
-        parent,
-        name: PARENT_CATEGORY_NAMES[parent] || parent,
-        questions: parentQuestions.length,
-        mastery,
-        stats,
-        color: CATEGORY_COLORS[idx % CATEGORY_COLORS.length]
-      };
-    });
-  }, [masteryData]);
-
-  // Overall stats
-  const overallStats = useMemo(() => {
-    let totalCorrect = 0;
-    let totalAttempted = 0;
-
-    Object.values(masteryData.parents).forEach(stats => {
-      totalCorrect += stats.correct;
-      totalAttempted += stats.total;
-    });
-
-    const mastery = totalAttempted > 0 ? Math.round((totalCorrect / totalAttempted) * 100) : 0;
-    const categoriesStarted = categoryData.filter(c => c.stats.total > 0).length;
-
-    return {
-      mastery,
-      totalCorrect,
-      totalAttempted,
-      categoriesStarted,
-      totalCategories: categoryData.length
-    };
-  }, [masteryData, categoryData]);
-
-  // Sort categories for display
-  const sortedCategories = useMemo(() => {
-    return [...categoryData].sort((a, b) => {
-      // Started categories first, then by mastery
-      if (a.stats.total > 0 && b.stats.total === 0) return -1;
-      if (a.stats.total === 0 && b.stats.total > 0) return 1;
-      return b.mastery - a.mastery;
-    });
-  }, [categoryData]);
+  const topStrengths = CATEGORY_MASTERY.slice(0, 3);
+  const blindSpots = CATEGORY_MASTERY.slice(-3).reverse();
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Welcome back, Marcus
-          </h1>
-          <p className="text-gray-500 mt-1">
-            You&apos;re on a 12-day streak! Keep it up.
-          </p>
+      <main className="max-w-6xl mx-auto px-4 py-6">
+        {/* Header Row */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Welcome back, {DEMO_USER.name}</h1>
+            <p className="text-gray-500">
+              {DEMO_USER.readinessChange > 0 ? '+' : ''}{DEMO_USER.readinessChange} points vs yesterday
+            </p>
+          </div>
+          <div className="flex items-center gap-2 bg-white rounded-lg border border-gray-200 p-1">
+            {(['day', 'week', 'season'] as const).map((view) => (
+              <button
+                key={view}
+                onClick={() => setTimeView(view)}
+                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                  timeView === view ? 'bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {view.charAt(0).toUpperCase() + view.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Top Row: Progress + Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {/* Progress Ring Card */}
-          <GlassCard className="p-6 flex flex-col items-center justify-center">
-            <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-4">
-              Overall Accuracy
-            </div>
-            <ProgressRing value={overallStats.mastery} />
-            <div className="mt-4 text-center">
-              <div className="text-sm text-gray-600">
-                {overallStats.totalCorrect} / {overallStats.totalAttempted} correct
+        {/* Hero Section: Readiness Score + Pillars */}
+        <GlassCard className="p-6 mb-6">
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            {/* Main Readiness Ring */}
+            <div className="flex flex-col items-center">
+              <ReadinessRing score={DEMO_USER.refReadiness} />
+              <div className="flex items-center gap-2 mt-3">
+                <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">
+                  {DEMO_USER.tier}
+                </span>
+                <span className="text-sm text-gray-500">Top {100 - DEMO_USER.percentile}%</span>
               </div>
-              <div className="text-xs text-gray-400 mt-1">
-                {overallStats.categoriesStarted} of {overallStats.totalCategories} categories
+            </div>
+
+            {/* Three Pillars */}
+            <div className="flex-1">
+              <div className="text-sm text-gray-500 uppercase tracking-wide font-medium mb-4">
+                Performance Pillars
+              </div>
+              <div className="flex justify-center lg:justify-start gap-8">
+                <MiniRing score={DEMO_USER.gameIQ} label="Game IQ" color="#3B82F6" />
+                <MiniRing score={DEMO_USER.execution} label="Execution" color="#8B5CF6" />
+                <MiniRing score={DEMO_USER.commitment} label="Commitment" color="#10B981" />
+              </div>
+
+              {/* Quick Tags */}
+              <div className="flex flex-wrap gap-2 mt-6 justify-center lg:justify-start">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm">
+                  <span className="font-medium">Strength:</span> Blocking Fouls
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full text-sm">
+                  <span className="font-medium">Weak Spot:</span> Coach&apos;s Challenge
+                </span>
+              </div>
+            </div>
+
+            {/* Today's Quick Stats */}
+            <div className="grid grid-cols-2 gap-3 w-full lg:w-auto">
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
+                  🔥 {DEMO_USER.streak}
+                </div>
+                <div className="text-xs text-gray-500 uppercase">Day Streak</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold text-gray-900">{DEMO_USER.totalQuestions}</div>
+                <div className="text-xs text-gray-500 uppercase">Questions</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold text-gray-900">{DEMO_USER.daily5Score}/5</div>
+                <div className="text-xs text-gray-500 uppercase">Daily 5</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold text-gray-900">{DEMO_USER.bestSuddenDeath}</div>
+                <div className="text-xs text-gray-500 uppercase">Best Run</div>
+              </div>
+            </div>
+          </div>
+        </GlassCard>
+
+        {/* Two Column Layout */}
+        <div className="grid lg:grid-cols-2 gap-6 mb-6">
+          {/* Strengths & Weaknesses */}
+          <GlassCard className="p-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-5">Strengths & Blind Spots</h2>
+
+            {/* Strengths */}
+            <div className="mb-5">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Top 3 Strengths</span>
+              </div>
+              <div className="space-y-2">
+                {topStrengths.map((cat, i) => (
+                  <div key={cat.name} className="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl">
+                    <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">
+                      {i + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-gray-900 text-sm truncate">{cat.name}</span>
+                        <span className="font-bold text-emerald-700">{cat.accuracy}%</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex-1 h-1.5 bg-emerald-200 rounded-full">
+                          <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${cat.accuracy}%` }} />
+                        </div>
+                        <span className="text-xs text-gray-500">{cat.reps} reps</span>
+                      </div>
+                    </div>
+                    <TrendIndicator trend={cat.trend} change={cat.change} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Blind Spots */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-amber-500" />
+                <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Top 3 Blind Spots</span>
+              </div>
+              <div className="space-y-2">
+                {blindSpots.map((cat, i) => (
+                  <div key={cat.name} className="flex items-center gap-3 p-3 bg-amber-50 rounded-xl">
+                    <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">
+                      {i + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-gray-900 text-sm truncate">{cat.name}</span>
+                        <span className="font-bold text-amber-700">{cat.accuracy}%</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex-1 h-1.5 bg-amber-200 rounded-full">
+                          <div className="h-full bg-amber-500 rounded-full" style={{ width: `${cat.accuracy}%` }} />
+                        </div>
+                        <span className="text-xs text-gray-500">{cat.reps} reps</span>
+                      </div>
+                    </div>
+                    <TrendIndicator trend={cat.trend} change={cat.change} />
+                  </div>
+                ))}
               </div>
             </div>
           </GlassCard>
 
-          {/* Quick Stats Grid */}
-          <div className="md:col-span-2 grid grid-cols-2 gap-3">
-            <StatCard
-              icon="🔥"
-              value={streakDays}
-              label="Day Streak"
-              sublabel="Keep it going!"
-              color="amber"
-            />
-            <StatCard
-              icon="📝"
-              value={totalAnswered}
-              label="Questions"
-              sublabel="Total answered"
-              color="blue"
-            />
-            <StatCard
-              icon="🎯"
-              value={`${overallStats.mastery}%`}
-              label="Accuracy"
-              sublabel="All-time"
-              color="green"
-            />
-            <StatCard
-              icon="💀"
-              value={bestSuddenDeath}
-              label="Best Run"
-              sublabel="Sudden Death"
-              color="red"
-            />
+          {/* Pressure Performance */}
+          <GlassCard className="p-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-5">Decision Under Pressure</h2>
+
+            {/* Calm vs Pressure */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600">Calm (Film Room)</span>
+                <span className="font-bold text-gray-900">{DEMO_USER.calmAccuracy}%</span>
+              </div>
+              <div className="h-3 bg-gray-100 rounded-full mb-4">
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${DEMO_USER.calmAccuracy}%` }} />
+              </div>
+
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600">Under Pressure (Sudden Death)</span>
+                <span className="font-bold text-gray-900">{DEMO_USER.pressureAccuracy}%</span>
+              </div>
+              <div className="h-3 bg-gray-100 rounded-full">
+                <div className="h-full bg-purple-500 rounded-full" style={{ width: `${DEMO_USER.pressureAccuracy}%` }} />
+              </div>
+
+              <div className="mt-3 flex items-center gap-2 text-amber-600 text-sm">
+                <span>⚠️</span>
+                <span>{DEMO_USER.pressureGap} point drop under pressure</span>
+              </div>
+            </div>
+
+            {/* Composure Curve */}
+            <div>
+              <div className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
+                Composure Curve
+              </div>
+              <div className="text-xs text-gray-500 mb-3">Accuracy by streak length in Sudden Death</div>
+              <div className="flex items-end gap-2 h-32">
+                {COMPOSURE_CURVE.map((point) => {
+                  const height = (point.accuracy / 100) * 100;
+                  const color = point.accuracy >= 85 ? 'bg-emerald-500' :
+                               point.accuracy >= 75 ? 'bg-emerald-400' :
+                               point.accuracy >= 65 ? 'bg-amber-400' : 'bg-orange-400';
+                  return (
+                    <div key={point.range} className="flex-1 flex flex-col items-center">
+                      <span className="text-xs font-medium text-gray-700 mb-1">{point.accuracy}%</span>
+                      <div className={`w-full ${color} rounded-t-lg transition-all`} style={{ height: `${height}%` }} />
+                      <span className="text-xs text-gray-500 mt-1">Q{point.range}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-3 text-sm text-gray-500">
+                📉 Slight drop after Q15, but stays above 75%
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+
+        {/* Category Mastery Grid */}
+        <GlassCard className="p-6 mb-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-bold text-gray-900">Category Mastery</h2>
+            <span className="text-sm text-gray-500">{CATEGORY_MASTERY.length} categories</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {CATEGORY_MASTERY.map((cat) => (
+              <div key={cat.name} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center">
+                  <span className="text-lg font-bold text-gray-900">{cat.accuracy}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-gray-900 text-sm truncate">{cat.name}</div>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-xs text-gray-500">{cat.reps} reps</span>
+                    <ConfidenceBadge level={cat.confidence} />
+                  </div>
+                </div>
+                <TrendIndicator trend={cat.trend} change={cat.change} />
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+
+        {/* Focus Plan + Weekly Activity */}
+        <div className="grid lg:grid-cols-2 gap-6 mb-6">
+          {/* 14-Day Focus Plan */}
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-blue-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">14-Day Focus Plan</h2>
+                <p className="text-sm text-gray-600">{FOCUS_PLAN.daysRemaining} days remaining</p>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-blue-600">{FOCUS_PLAN.progress}%</div>
+                <div className="text-xs text-gray-500">Progress</div>
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="h-2 bg-white/50 rounded-full mb-5">
+              <div
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                style={{ width: `${FOCUS_PLAN.progress}%` }}
+              />
+            </div>
+
+            {/* Goals */}
+            <div className="space-y-3 mb-5">
+              {FOCUS_PLAN.goals.map((goal) => (
+                <div key={goal.label} className="bg-white rounded-xl p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-900">{goal.label}</span>
+                    <span className="text-xs text-gray-500">
+                      {goal.from}{goal.unit || '%'} → {goal.to}{goal.unit || '%'}
+                    </span>
+                  </div>
+                  <div className="h-1.5 bg-gray-100 rounded-full">
+                    <div
+                      className="h-full bg-blue-500 rounded-full"
+                      style={{ width: `${goal.progress}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Actions */}
+            <div className="space-y-2">
+              {FOCUS_PLAN.actions.map((action) => (
+                <div key={action.action} className="flex items-center gap-3 p-2 bg-white/60 rounded-lg">
+                  <span className="text-lg">{action.icon}</span>
+                  <span className="flex-1 text-sm text-gray-700">{action.action}</span>
+                  <span className="text-xs font-medium text-gray-500 bg-white px-2 py-1 rounded">
+                    {action.frequency}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Weekly Activity */}
+          <GlassCard className="p-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-5">This Week</h2>
+
+            {/* Activity Chart */}
+            <div className="flex items-end gap-2 h-40 mb-4">
+              {WEEKLY_ACTIVITY.map((day) => {
+                const maxQuestions = Math.max(...WEEKLY_ACTIVITY.map(d => d.questions));
+                const height = day.questions > 0 ? (day.questions / maxQuestions) * 100 : 5;
+                const color = day.questions === 0 ? 'bg-gray-200' :
+                             day.accuracy >= 90 ? 'bg-emerald-500' :
+                             day.accuracy >= 85 ? 'bg-blue-500' : 'bg-amber-500';
+
+                return (
+                  <div key={day.day} className="flex-1 flex flex-col items-center">
+                    {day.questions > 0 && (
+                      <span className="text-xs font-medium text-gray-600 mb-1">{day.accuracy}%</span>
+                    )}
+                    <div className={`w-full ${color} rounded-t-lg transition-all relative group`} style={{ height: `${height}%`, minHeight: '8px' }}>
+                      {day.questions > 0 && (
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                          {day.questions} questions
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-xs text-gray-500 mt-2">{day.day}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Week Stats */}
+            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-gray-100">
+              <div className="text-center">
+                <div className="text-xl font-bold text-gray-900">248</div>
+                <div className="text-xs text-gray-500">Questions</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xl font-bold text-gray-900">89%</div>
+                <div className="text-xs text-gray-500">Avg Accuracy</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xl font-bold text-gray-900">6/7</div>
+                <div className="text-xs text-gray-500">Days Active</div>
+              </div>
+            </div>
+
+            {/* Insights */}
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm text-emerald-700 bg-emerald-50 rounded-lg p-2">
+                <span>✓</span> 6/7 days active - excellent consistency!
+              </div>
+              <div className="flex items-center gap-2 text-sm text-blue-700 bg-blue-50 rounded-lg p-2">
+                <span>📈</span> Coach&apos;s Challenge up 8% this week
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+
+        {/* Footer CTA */}
+        <div className="text-center py-8">
+          <p className="text-gray-500 mb-4">Ready to improve your Ref Readiness?</p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link href="/film-room" className="px-6 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors">
+              Film Room
+            </Link>
+            <Link href="/sudden-death" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+              Sudden Death
+            </Link>
+            <Link href="/daily-5" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+              Daily 5
+            </Link>
           </div>
         </div>
 
-        {/* Training Modes */}
-        <GlassCard className="p-6 mb-8">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-semibold text-gray-900">Training Modes</h2>
-            <span className="text-xs text-gray-400">{casebookQuestions.length} questions</span>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            <TrainingModeCard
-              icon="🎬"
-              title="Film Room"
-              description="Practice at your own pace with instant feedback"
-              href="/film-room"
-              color="bg-blue-500"
-              stats="Unlimited practice"
-            />
-            <TrainingModeCard
-              icon="💀"
-              title="Sudden Death"
-              description="Test your instincts under pressure"
-              href="/sudden-death"
-              color="bg-red-500"
-              stats="10 sec per question"
-            />
-            <TrainingModeCard
-              icon="📅"
-              title="Daily 5"
-              description="5 new questions every day"
-              href="/daily-5"
-              color="bg-emerald-500"
-              stats="Build your streak"
-            />
-            <TrainingModeCard
-              icon="🎯"
-              title="Category Drill"
-              description="Focus on specific rule categories"
-              href="/play/category-drill"
-              color="bg-purple-500"
-              stats={`${overallStats.totalCategories} categories`}
-            />
-          </div>
-        </GlassCard>
-
-        {/* Category Progress */}
-        <GlassCard className="p-6">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">Category Progress</h2>
-              <p className="text-sm text-gray-500 mt-0.5">
-                {overallStats.categoriesStarted} categories started
-              </p>
-            </div>
-            <Link
-              href="/play/category-drill"
-              className="text-sm font-medium text-blue-600 hover:text-blue-700"
-            >
-              View all →
-            </Link>
-          </div>
-
-          <div className="grid gap-2">
-            {sortedCategories.slice(0, 8).map(cat => (
-              <CategoryPill
-                key={cat.parent}
-                name={cat.name}
-                mastery={cat.mastery}
-                questions={cat.questions}
-                color={cat.color}
-                href={`/play/category-drill?category=${cat.parent}`}
-              />
-            ))}
-          </div>
-
-          {categoryData.length > 8 && (
-            <Link
-              href="/play/category-drill"
-              className="mt-4 block text-center py-3 text-sm font-medium text-gray-500 hover:text-gray-700 border-t border-gray-100"
-            >
-              View all {categoryData.length} categories
-            </Link>
-          )}
-        </GlassCard>
-
         {/* Footer */}
-        <div className="mt-12 text-center">
+        <div className="text-center pb-8">
           <p className="text-sm text-gray-400">
             RuleVision · See the Call Before It Happens
           </p>
