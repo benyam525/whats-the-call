@@ -373,3 +373,73 @@ GRANT SELECT, INSERT, UPDATE ON daily_5_streaks TO authenticated;
 GRANT SELECT, INSERT, UPDATE ON category_mastery TO authenticated;
 GRANT EXECUTE ON FUNCTION update_daily_5_streak TO authenticated;
 GRANT EXECUTE ON FUNCTION update_category_mastery TO authenticated;
+
+-- ============================================
+-- USER PROFILES TABLE
+-- Stores authenticated user information
+-- ============================================
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
+  email TEXT NOT NULL,
+  first_name TEXT NOT NULL,
+  ref_level TEXT NOT NULL CHECK (ref_level IN ('youth', 'high_school', 'college', 'pro')),
+  experience_level TEXT NOT NULL CHECK (experience_level IN ('new', 'developing', 'experienced', 'veteran')),
+  years_experience INT,
+  avatar_url TEXT,
+  goals TEXT[],
+  training_frequency TEXT CHECK (training_frequency IN ('daily', 'few_times_week', 'weekly', 'casual')),
+  onboarding_completed BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_profiles_email ON profiles(email);
+
+-- Enable RLS on profiles
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+-- Profiles policies
+CREATE POLICY "Users can view own profile" ON profiles
+  FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert own profile" ON profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile" ON profiles
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Function to handle updated_at for profiles
+CREATE OR REPLACE FUNCTION handle_profiles_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger for profiles updated_at
+DROP TRIGGER IF EXISTS on_profiles_updated ON profiles;
+CREATE TRIGGER on_profiles_updated
+  BEFORE UPDATE ON profiles
+  FOR EACH ROW EXECUTE PROCEDURE handle_profiles_updated_at();
+
+-- Grant access
+GRANT SELECT, INSERT, UPDATE ON profiles TO authenticated;
+
+-- ============================================
+-- STORAGE BUCKET: avatars
+-- Run these commands in Supabase Dashboard > Storage
+-- ============================================
+-- 1. Create a new bucket called 'avatars'
+-- 2. Make it public (enable public access)
+-- 3. Add the following policy:
+--
+-- Policy name: "Allow authenticated uploads"
+-- Allowed operations: INSERT
+-- Policy definition:
+--   (bucket_id = 'avatars' AND auth.role() = 'authenticated')
+--
+-- Policy name: "Allow public reads"
+-- Allowed operations: SELECT
+-- Policy definition:
+--   (bucket_id = 'avatars')
