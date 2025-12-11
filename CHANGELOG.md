@@ -4,6 +4,16 @@ A daily log of development progress for RuleVision - the AI-powered referee trai
 
 ---
 
+## December 11, 2024
+
+### Question Quality Audit
+- **Fixed 13 Malformed Questions** - Audited all 479 casebook questions and found 13 that had embedded rule citations and rulings in the question text with no actual question being asked
+- **Proper Question Structure** - Each question now ends with an actual question (e.g., "What is the correct ruling?")
+- **Separated Rulings** - Ruling explanations moved to the proper `ruling` field for display after user answers
+- **Categories Fixed**: Continuation of Play, Delay-of-Game, Disconcertion, Dribbling, Fighting, Flagrant Fouls, Hostile Acts, Instant Replay, Player Position, Technical Fouls, Throw-In, Transition Take Fouls, Traveling
+
+---
+
 ## December 10, 2024
 
 ### Authentication & User Accounts
