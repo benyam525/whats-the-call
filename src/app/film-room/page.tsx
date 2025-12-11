@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { CasebookQuestion, AnswerKey, Difficulty, VoteStats } from '@/data/types';
 import { casebookQuestions, getCategories } from '@/data/casebook';
 import { useVisitorId } from '@/hooks/useVisitorId';
@@ -11,14 +12,13 @@ import { StreakBadge } from '@/components/StreakBadge';
 import { VoteSplit } from '@/components/VoteSplit';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { RuleCitation } from '@/components/RuleCitation';
-import { HomeButton } from '@/components/HomeButton';
 import { ResultFeedback, ResultHeader } from '@/components/ResultFeedback';
 import { RefGodPanel, GoDeeperButton } from '@/components/RefGodPanel';
 
 function LoadingSpinner() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-rv-navy">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rv-accent"></div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
     </div>
   );
 }
@@ -162,21 +162,21 @@ function FilmRoomContent() {
   };
 
   const getButtonClass = (option: AnswerKey) => {
-    const base = 'w-full text-left p-4 rounded-lg border transition-all duration-200 ';
+    const base = 'w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ';
 
     if (!showResult) {
-      return base + 'bg-rv-steel/50 border-white/10 hover:border-rv-accent/50 hover:bg-rv-steel cursor-pointer text-white';
+      return base + 'bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 cursor-pointer text-gray-900';
     }
 
     if (option === currentQuestion?.correct_answer) {
-      return base + 'border-rv-success bg-rv-success/20 text-rv-success';
+      return base + 'border-emerald-500 bg-emerald-50 text-emerald-900';
     }
 
     if (option === selectedAnswer && option !== currentQuestion?.correct_answer) {
-      return base + 'border-rv-danger bg-rv-danger/20 text-rv-danger';
+      return base + 'border-red-500 bg-red-50 text-red-900';
     }
 
-    return base + 'bg-rv-steel/30 border-white/5 opacity-50 text-rv-silver/60';
+    return base + 'bg-gray-50 border-gray-100 opacity-50 text-gray-400';
   };
 
   if (!currentQuestion) {
@@ -186,7 +186,7 @@ function FilmRoomContent() {
   const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
 
   return (
-    <main className="min-h-screen bg-rv-navy">
+    <main className="min-h-screen bg-gray-50">
       {/* Feedback overlay */}
       <ResultFeedback
         isCorrect={lastAnswerCorrect}
@@ -196,17 +196,24 @@ function FilmRoomContent() {
       />
 
       {/* Header */}
-      <header className="header-gradient py-5 px-4">
-        <div className="max-w-3xl mx-auto">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-3xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <span className="text-xl">🎬</span>
-                <h1 className="text-2xl font-bold tracking-tight text-white">Film Room</h1>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-xl">
+                🎬
               </div>
-              <p className="text-rv-silver/60 text-sm">Practice at your own pace</p>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">Film Room</h1>
+                <p className="text-gray-500 text-sm">Practice at your own pace</p>
+              </div>
             </div>
-            <HomeButton />
+            <Link
+              href="/dashboard"
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              ← Back
+            </Link>
           </div>
         </div>
       </header>
@@ -219,11 +226,11 @@ function FilmRoomContent() {
 
         {/* Score & Filters */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
-          <div className="bg-rv-slate/50 rounded-lg px-4 py-2 border border-white/5">
-            <span className="text-rv-silver/60 text-sm">Session: </span>
-            <span className="font-bold text-white">{score.correct}/{score.total}</span>
+          <div className="bg-white rounded-xl px-4 py-2.5 border border-gray-200 shadow-sm">
+            <span className="text-gray-500 text-sm">Session: </span>
+            <span className="font-bold text-gray-900">{score.correct}/{score.total}</span>
             {score.total > 0 && (
-              <span className="text-rv-silver/40 ml-2 text-sm">({percentage}%)</span>
+              <span className="text-gray-400 ml-2 text-sm">({percentage}%)</span>
             )}
           </div>
 
@@ -231,7 +238,7 @@ function FilmRoomContent() {
             <select
               value={selectedDifficulty}
               onChange={(e) => setSelectedDifficulty(e.target.value as Difficulty | 'all')}
-              className="bg-rv-slate border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rv-accent/50 focus:border-rv-accent/50"
+              className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-sm"
             >
               <option value="all">All Levels</option>
               <option value="rookie">🌱 Rookie</option>
@@ -242,7 +249,7 @@ function FilmRoomContent() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-rv-slate border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rv-accent/50 focus:border-rv-accent/50"
+              className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-sm"
             >
               <option value="all">All Categories</option>
               {categories.map(cat => (
@@ -253,23 +260,23 @@ function FilmRoomContent() {
         </div>
 
         {/* Question Card */}
-        <div className="bg-rv-slate rounded-xl border border-white/5 overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
           {/* Category & Difficulty Badge */}
-          <div className="bg-rv-navy/50 px-5 py-3 flex items-center justify-between border-b border-white/5">
-            <span className="text-rv-silver text-sm font-medium">{currentQuestion.category}</span>
+          <div className="bg-gray-50 px-5 py-3 flex items-center justify-between border-b border-gray-100">
+            <span className="text-gray-600 text-sm font-medium">{currentQuestion.category}</span>
             <DifficultyBadge difficulty={currentQuestion.difficulty} />
           </div>
 
           {/* Scenario */}
-          <div className="p-5 border-b border-white/5">
-            <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Scenario</h2>
-            <p className="text-white leading-relaxed">{currentQuestion.scenario}</p>
+          <div className="p-5 border-b border-gray-100">
+            <h2 className="text-xs uppercase tracking-wider text-gray-400 mb-2 font-medium">Scenario</h2>
+            <p className="text-gray-800 leading-relaxed">{currentQuestion.scenario}</p>
           </div>
 
           {/* Question */}
-          <div className="p-5 bg-rv-navy/30">
-            <h2 className="text-xs uppercase tracking-wider text-rv-silver/50 mb-2">Question</h2>
-            <p className="text-lg font-semibold text-white">{currentQuestion.question}</p>
+          <div className="p-5 bg-blue-50/50">
+            <h2 className="text-xs uppercase tracking-wider text-blue-600/70 mb-2 font-medium">Question</h2>
+            <p className="text-lg font-semibold text-gray-900">{currentQuestion.question}</p>
           </div>
 
           {/* Answer Options */}
@@ -283,7 +290,7 @@ function FilmRoomContent() {
                   disabled={showResult}
                   className={getButtonClass(key)}
                 >
-                  <span className="font-bold text-rv-accent mr-3 uppercase">{key}.</span>
+                  <span className="font-bold text-blue-600 mr-3 uppercase">{key}.</span>
                   <span>{value}</span>
                 </button>
               ))}
@@ -291,10 +298,10 @@ function FilmRoomContent() {
 
           {/* Result Section */}
           {showResult && selectedAnswer && (
-            <div className={`p-5 border-t ${
+            <div className={`p-5 border-t-2 ${
               selectedAnswer === currentQuestion.correct_answer
-                ? 'border-rv-success/30 bg-rv-success/10'
-                : 'border-rv-danger/30 bg-rv-danger/10'
+                ? 'border-emerald-500 bg-emerald-50'
+                : 'border-red-500 bg-red-50'
             }`}>
               {/* Result Header */}
               <ResultHeader
@@ -322,7 +329,7 @@ function FilmRoomContent() {
               />
 
               {/* Go Deeper Button */}
-              <div className="mt-4 pt-4 border-t border-white/10">
+              <div className="mt-4 pt-4 border-t border-gray-200">
                 <GoDeeperButton onClick={() => setShowRefGodPanel(true)} className="w-full" />
               </div>
             </div>
@@ -345,7 +352,7 @@ function FilmRoomContent() {
           <div className="mt-6 text-center">
             <button
               onClick={loadNewQuestion}
-              className="btn-primary"
+              className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
             >
               Next Scenario
             </button>
@@ -353,7 +360,7 @@ function FilmRoomContent() {
         )}
 
         {/* Footer */}
-        <footer className="mt-10 text-center text-rv-silver/40 text-xs">
+        <footer className="mt-10 text-center text-gray-400 text-xs">
           <p>Questions sourced from the NBA Official Case Book</p>
           <p className="mt-1">
             {casebookQuestions.length} scenarios available
