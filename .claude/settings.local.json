@@ -28,7 +28,8 @@
       "Bash(git ls-tree:*)",
       "Bash(gh run list:*)",
       "Bash(gh pr create:*)",
-      "Bash(git rebase:*)"
+      "Bash(git rebase:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
