@@ -1,76 +1,131 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
-import { casebookQuestions, getParentCategories } from '@/data/casebook';
-import { ParentCategory, PARENT_CATEGORY_NAMES } from '@/data/types';
+import { createClient } from '@/lib/supabase/client';
 
-// Glass card component with enhanced styling
-function GlassCard({ children, className = '' }: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+// ============================================================================
+// DATA LOADING - Pull from localStorage or use defaults
+// ============================================================================
+
+interface UserStats {
+  name: string;
+  streak: number;
+  totalQuestions: number;
+  avgAccuracy: number;
+  refReadiness: number;
+  gameIQ: number;
+  execution: number;
+  commitment: number;
+  readinessChange: number;
+  pressureAccuracy: number;
+  calmAccuracy: number;
+  pressureGap: number;
+  bestSuddenDeath: number;
+  daily5Score: number;
+  avgResponseTime: number;
+  percentile: number;
+  tier: string;
+}
+
+interface CategoryMasteryItem {
+  name: string;
+  accuracy: number;
+  reps: number;
+  trend: string;
+  change: number;
+  confidence: string;
+}
+
+const DEFAULT_USER: UserStats = {
+  name: 'Ref',
+  streak: 0,
+  totalQuestions: 0,
+  avgAccuracy: 0,
+  refReadiness: 0,
+  gameIQ: 0,
+  execution: 0,
+  commitment: 0,
+  readinessChange: 0,
+  pressureAccuracy: 0,
+  calmAccuracy: 0,
+  pressureGap: 0,
+  bestSuddenDeath: 0,
+  daily5Score: 0,
+  avgResponseTime: 0,
+  percentile: 50,
+  tier: 'Rookie',
+};
+
+const COMPOSURE_CURVE = [
+  { range: '1-5', accuracy: 0 },
+  { range: '6-10', accuracy: 0 },
+  { range: '11-15', accuracy: 0 },
+  { range: '16-20', accuracy: 0 },
+  { range: '21+', accuracy: 0 },
+];
+
+const WEEKLY_ACTIVITY = [
+  { day: 'Mon', questions: 0, accuracy: 0 },
+  { day: 'Tue', questions: 0, accuracy: 0 },
+  { day: 'Wed', questions: 0, accuracy: 0 },
+  { day: 'Thu', questions: 0, accuracy: 0 },
+  { day: 'Fri', questions: 0, accuracy: 0 },
+  { day: 'Sat', questions: 0, accuracy: 0 },
+  { day: 'Sun', questions: 0, accuracy: 0 },
+];
+
+// ============================================================================
+// COMPONENTS
+// ============================================================================
+
+function GlassCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`
-      relative overflow-hidden rounded-2xl
-      bg-white/80 backdrop-blur-lg
-      border border-gray-200/50
-      shadow-sm
-      ${className}
-    `}>
+    <div className={`bg-white rounded-2xl border border-gray-200 shadow-sm ${className}`}>
       {children}
     </div>
   );
 }
 
-// Circular progress ring with gradient
-function ProgressRing({
-  value,
-  size = 140,
-  strokeWidth = 10,
-}: {
-  value: number;
-  size?: number;
-  strokeWidth?: number;
-}) {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (value / 100) * circumference;
-
-  // Color based on value
+function ReadinessRing({ score, size = 180 }: { score: number; size?: number }) {
   const getColor = () => {
-    if (value >= 80) return '#10B981';
-    if (value >= 60) return '#3B82F6';
-    if (value >= 40) return '#F59E0B';
-    return '#6B7280';
+    if (score >= 85) return { start: '#10B981', end: '#059669' };
+    if (score >= 70) return { start: '#3B82F6', end: '#2563EB' };
+    if (score >= 55) return { start: '#F59E0B', end: '#D97706' };
+    return { start: '#6B7280', end: '#4B5563' };
   };
 
+  const colors = getColor();
+  const viewBoxSize = 180;
+  const strokeWidth = 12;
+  const radius = (viewBoxSize - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (score / 100) * circumference;
+
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="transform -rotate-90">
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} className="w-full h-full transform -rotate-90">
         <defs>
-          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={getColor()} stopOpacity="0.8" />
-            <stop offset="100%" stopColor={getColor()} />
+          <linearGradient id="readinessGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={colors.start} />
+            <stop offset="100%" stopColor={colors.end} />
           </linearGradient>
         </defs>
-        {/* Background circle */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={viewBoxSize / 2}
+          cy={viewBoxSize / 2}
           r={radius}
           fill="none"
-          stroke="#E5E7EB"
+          stroke="#F3F4F6"
           strokeWidth={strokeWidth}
         />
-        {/* Progress circle */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={viewBoxSize / 2}
+          cy={viewBoxSize / 2}
           r={radius}
           fill="none"
-          stroke="url(#progressGradient)"
+          stroke="url(#readinessGradient)"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
@@ -79,415 +134,415 @@ function ProgressRing({
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-bold text-gray-900">{value}</span>
-        <span className="text-sm text-gray-500 -mt-1">%</span>
+        <span className="text-4xl sm:text-5xl font-bold text-gray-900">{score}</span>
+        <span className="text-xs sm:text-sm text-gray-500 font-medium">Ref Readiness</span>
       </div>
     </div>
   );
 }
 
-// Stat card with icon
-function StatCard({ icon, value, label, sublabel, color = 'gray' }: {
-  icon: string;
-  value: string | number;
-  label: string;
-  sublabel?: string;
-  color?: 'gray' | 'green' | 'blue' | 'amber' | 'red';
-}) {
-  const colorClasses = {
-    gray: 'bg-gray-50 border-gray-100',
-    green: 'bg-emerald-50 border-emerald-100',
-    blue: 'bg-blue-50 border-blue-100',
-    amber: 'bg-amber-50 border-amber-100',
-    red: 'bg-red-50 border-red-100',
+function MiniRing({ score, label, color }: { score: number; label: string; color: string }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative w-16 h-16 sm:w-20 sm:h-20">
+        <svg viewBox="0 0 80 80" className="w-full h-full transform -rotate-90">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#F3F4F6" strokeWidth="6" />
+          <circle
+            cx="40" cy="40" r="34" fill="none" stroke={color}
+            strokeWidth="6" strokeLinecap="round"
+            strokeDasharray={213.6}
+            strokeDashoffset={213.6 - (score / 100) * 213.6}
+            className="transition-all duration-700"
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-base sm:text-xl font-bold text-gray-900">{score}</span>
+        </div>
+      </div>
+      <span className="text-[10px] sm:text-xs text-gray-500 mt-1 font-medium">{label}</span>
+    </div>
+  );
+}
+
+function ConfidenceBadge({ level }: { level: string }) {
+  const styles: Record<string, string> = {
+    elite: 'bg-emerald-100 text-emerald-700',
+    reliable: 'bg-blue-100 text-blue-700',
+    developing: 'bg-amber-100 text-amber-700',
+    needs_work: 'bg-orange-100 text-orange-700',
+    blind_spot: 'bg-red-100 text-red-700',
+  };
+
+  const labels: Record<string, string> = {
+    elite: 'Elite',
+    reliable: 'Reliable',
+    developing: 'Developing',
+    needs_work: 'Needs Work',
+    blind_spot: 'Blind Spot',
   };
 
   return (
-    <div className={`rounded-xl p-4 border ${colorClasses[color]}`}>
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{icon}</span>
-        <div>
-          <div className="text-2xl font-bold text-gray-900">{value}</div>
-          <div className="text-xs text-gray-500 uppercase tracking-wide">{label}</div>
-          {sublabel && <div className="text-xs text-gray-400 mt-0.5">{sublabel}</div>}
-        </div>
-      </div>
-    </div>
+    <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${styles[level] || styles.developing}`}>
+      {labels[level] || 'New'}
+    </span>
   );
 }
 
-// Training mode card
-function TrainingModeCard({ icon, title, description, href, color, stats }: {
-  icon: string;
-  title: string;
-  description: string;
-  href: string;
-  color: string;
-  stats?: string;
-}) {
+function TrendIndicator({ trend, change }: { trend: string; change: number }) {
+  if (change === 0) return <span className="text-xs text-gray-400">—</span>;
+
+  const isUp = trend === 'up';
   return (
-    <Link href={href} className="block group">
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 p-5 transition-all duration-200 hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5">
-        {/* Color accent */}
-        <div className={`absolute top-0 left-0 right-0 h-1 ${color}`} />
-
-        <div className="flex items-start gap-4">
-          <div className={`w-12 h-12 rounded-xl ${color} bg-opacity-10 flex items-center justify-center text-2xl flex-shrink-0`}>
-            {icon}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 group-hover:text-gray-700">{title}</h3>
-            <p className="text-sm text-gray-500 mt-0.5">{description}</p>
-            {stats && (
-              <p className="text-xs text-gray-400 mt-2">{stats}</p>
-            )}
-          </div>
-          <svg className="w-5 h-5 text-gray-300 group-hover:text-gray-400 transition-colors flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      </div>
-    </Link>
+    <span className={`text-xs font-medium ${isUp ? 'text-emerald-600' : 'text-red-500'}`}>
+      {isUp ? '↑' : '↓'} {Math.abs(change)}%
+    </span>
   );
 }
 
-// Category pill
-function CategoryPill({ name, mastery, questions, color, href }: {
-  name: string;
-  mastery: number;
-  questions: number;
-  color: string;
-  href: string;
-}) {
-  return (
-    <Link href={href} className="block group">
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 border border-transparent hover:border-gray-200 transition-all">
-        <div className="w-2 h-8 rounded-full" style={{ backgroundColor: color }} />
-        <div className="flex-1 min-w-0">
-          <div className="font-medium text-gray-900 text-sm truncate">{name}</div>
-          <div className="text-xs text-gray-400">{questions} questions</div>
-        </div>
-        <div className="text-right">
-          <div className="text-sm font-semibold text-gray-900">{mastery}%</div>
-          <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden mt-1">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${mastery}%`, backgroundColor: color }}
-            />
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-const CATEGORY_COLORS = [
-  '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
-  '#EC4899', '#06B6D4', '#84CC16', '#F97316', '#6366F1',
-  '#14B8A6', '#A855F7', '#F43F5E', '#22C55E'
-];
-
-const STORAGE_KEY = 'rulevision-category-mastery';
-
-// Demo mode flag - use /dashboard/demo for partner presentations
-const DEMO_MODE = false;
-
-// Demo data for impressive partner presentations
-const DEMO_MASTERY_DATA = {
-  parents: {
-    'out_of_bounds': { correct: 42, total: 48 },
-    'violations': { correct: 67, total: 78 },
-    'fouls': { correct: 89, total: 102 },
-    'timing': { correct: 34, total: 41 },
-    'scoring': { correct: 28, total: 31 },
-    'jump_ball': { correct: 19, total: 22 },
-    'throw_in': { correct: 45, total: 52 },
-    'substitutions': { correct: 23, total: 27 },
-    'timeouts': { correct: 31, total: 35 },
-    'basket_interference': { correct: 17, total: 20 },
-    'traveling': { correct: 56, total: 64 },
-    'dribbling': { correct: 38, total: 44 },
-  },
-  subs: {}
-};
-
-const DEMO_STREAK = 12;
-const DEMO_TOTAL_ANSWERED = 847;
-const DEMO_BEST_SUDDEN_DEATH = 23;
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
 
 export default function DashboardPage() {
-  const [masteryData, setMasteryData] = useState<{
-    parents: Record<string, { correct: number; total: number }>;
-    subs: Record<string, { correct: number; total: number }>;
-  }>({ parents: {}, subs: {} });
+  const [timeView, setTimeView] = useState<'day' | 'week' | 'season'>('week');
+  const [user, setUser] = useState<UserStats>(DEFAULT_USER);
+  const [categoryMastery, setCategoryMastery] = useState<CategoryMasteryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
 
-  const [streakDays, setStreakDays] = useState(0);
-  const [totalAnswered, setTotalAnswered] = useState(0);
-  const [bestSuddenDeath, setBestSuddenDeath] = useState(0);
-
-  // Load data on mount
   useEffect(() => {
-    // Use demo data for presentations
-    if (DEMO_MODE) {
-      setMasteryData(DEMO_MASTERY_DATA);
-      setStreakDays(DEMO_STREAK);
-      setTotalAnswered(DEMO_TOTAL_ANSWERED);
-      setBestSuddenDeath(DEMO_BEST_SUDDEN_DEATH);
-      return;
-    }
+    const loadData = async () => {
+      // Try to get user profile from Supabase
+      const { data: { user: authUser } } = await supabase.auth.getUser();
 
-    // Load mastery data
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setMasteryData(JSON.parse(stored));
+      if (authUser) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', authUser.id)
+          .single();
+
+        if (profile?.first_name) {
+          setUser(prev => ({ ...prev, name: profile.first_name }));
+        }
       }
-    } catch (e) {
-      console.error('Error loading mastery data:', e);
-    }
 
-    // Load streak data
-    try {
-      const dailyData = localStorage.getItem('rulevision-daily-5');
-      if (dailyData) {
-        const parsed = JSON.parse(dailyData);
-        setStreakDays(parsed.currentStreak || 0);
+      // Load stats from localStorage
+      try {
+        const stats = localStorage.getItem('rulevision-stats');
+        const daily5 = localStorage.getItem('rulevision-daily-5');
+        const suddenDeath = localStorage.getItem('rulevision-sudden-death-best');
+        const masteryData = localStorage.getItem('rulevision-category-mastery');
+
+        let totalQuestions = 0;
+        let totalCorrect = 0;
+
+        if (stats) {
+          const parsed = JSON.parse(stats);
+          totalQuestions = parsed.totalAnswered || 0;
+          totalCorrect = parsed.totalCorrect || 0;
+        }
+
+        const avgAccuracy = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+        const refReadiness = avgAccuracy;
+
+        setUser(prev => ({
+          ...prev,
+          totalQuestions,
+          avgAccuracy,
+          refReadiness,
+          gameIQ: avgAccuracy,
+          execution: Math.max(0, avgAccuracy - 5),
+          commitment: daily5 ? Math.min(100, avgAccuracy + 5) : avgAccuracy,
+          streak: daily5 ? JSON.parse(daily5).currentStreak || 0 : 0,
+          bestSuddenDeath: suddenDeath ? parseInt(suddenDeath) || 0 : 0,
+          tier: avgAccuracy >= 85 ? 'Elite' : avgAccuracy >= 70 ? 'Veteran' : avgAccuracy >= 50 ? 'Developing' : 'Rookie',
+        }));
+
+        // Load category mastery
+        if (masteryData) {
+          const parsed = JSON.parse(masteryData);
+          const categories: CategoryMasteryItem[] = [];
+
+          Object.entries(parsed.parents || {}).forEach(([key, value]: [string, unknown]) => {
+            const v = value as { correct: number; total: number };
+            if (v.total > 0) {
+              const accuracy = Math.round((v.correct / v.total) * 100);
+              categories.push({
+                name: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                accuracy,
+                reps: v.total,
+                trend: 'stable',
+                change: 0,
+                confidence: accuracy >= 85 ? 'elite' : accuracy >= 70 ? 'reliable' : accuracy >= 55 ? 'developing' : 'needs_work',
+              });
+            }
+          });
+
+          setCategoryMastery(categories.sort((a, b) => b.accuracy - a.accuracy));
+        }
+      } catch (e) {
+        console.error('Error loading dashboard data:', e);
       }
-    } catch (e) {
-      console.error('Error loading streak data:', e);
-    }
 
-    // Calculate total answered
-    try {
-      const stats = localStorage.getItem('rulevision-stats');
-      if (stats) {
-        const parsed = JSON.parse(stats);
-        setTotalAnswered(parsed.totalAnswered || 0);
-      }
-    } catch (e) {
-      console.error('Error loading stats:', e);
-    }
-
-    // Get best sudden death
-    try {
-      const sd = localStorage.getItem('rulevision-sudden-death-best');
-      if (sd) {
-        setBestSuddenDeath(parseInt(sd) || 0);
-      }
-    } catch (e) {
-      console.error('Error loading sudden death:', e);
-    }
-  }, []);
-
-  // Build category data
-  const categoryData = useMemo(() => {
-    const parentCategories = getParentCategories();
-
-    return parentCategories.map((parent, idx) => {
-      const parentQuestions = casebookQuestions.filter(q => q.parent_category === parent);
-      const stats = masteryData.parents[parent] || { correct: 0, total: 0 };
-      const mastery = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
-
-      return {
-        parent,
-        name: PARENT_CATEGORY_NAMES[parent] || parent,
-        questions: parentQuestions.length,
-        mastery,
-        stats,
-        color: CATEGORY_COLORS[idx % CATEGORY_COLORS.length]
-      };
-    });
-  }, [masteryData]);
-
-  // Overall stats
-  const overallStats = useMemo(() => {
-    let totalCorrect = 0;
-    let totalAttempted = 0;
-
-    Object.values(masteryData.parents).forEach(stats => {
-      totalCorrect += stats.correct;
-      totalAttempted += stats.total;
-    });
-
-    const mastery = totalAttempted > 0 ? Math.round((totalCorrect / totalAttempted) * 100) : 0;
-    const categoriesStarted = categoryData.filter(c => c.stats.total > 0).length;
-
-    return {
-      mastery,
-      totalCorrect,
-      totalAttempted,
-      categoriesStarted,
-      totalCategories: categoryData.length
+      setLoading(false);
     };
-  }, [masteryData, categoryData]);
 
-  // Sort categories for display
-  const sortedCategories = useMemo(() => {
-    return [...categoryData].sort((a, b) => {
-      // Started categories first, then by mastery
-      if (a.stats.total > 0 && b.stats.total === 0) return -1;
-      if (a.stats.total === 0 && b.stats.total > 0) return 1;
-      return b.mastery - a.mastery;
-    });
-  }, [categoryData]);
+    loadData();
+  }, [supabase]);
+
+  const topStrengths = categoryMastery.slice(0, 3);
+  const blindSpots = categoryMastery.slice(-3).reverse();
+  const hasData = user.totalQuestions > 0;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <div className="text-gray-500">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">
-            {DEMO_MODE ? 'Welcome back, Marcus' : 'Welcome back'}
-          </h1>
-          <p className="text-gray-500 mt-1">
-            {DEMO_MODE
-              ? "You're on a 12-day streak! Keep it up."
-              : 'Track your progress and continue training'
-            }
-          </p>
-        </div>
-
-        {/* Top Row: Progress + Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {/* Progress Ring Card */}
-          <GlassCard className="p-6 flex flex-col items-center justify-center">
-            <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-4">
-              Overall Accuracy
-            </div>
-            <ProgressRing value={overallStats.mastery} />
-            <div className="mt-4 text-center">
-              <div className="text-sm text-gray-600">
-                {overallStats.totalCorrect} / {overallStats.totalAttempted} correct
-              </div>
-              <div className="text-xs text-gray-400 mt-1">
-                {overallStats.categoriesStarted} of {overallStats.totalCategories} categories
-              </div>
-            </div>
-          </GlassCard>
-
-          {/* Quick Stats Grid */}
-          <div className="md:col-span-2 grid grid-cols-2 gap-3">
-            <StatCard
-              icon="🔥"
-              value={streakDays}
-              label="Day Streak"
-              sublabel={streakDays > 0 ? "Keep it going!" : "Start today"}
-              color={streakDays > 0 ? "amber" : "gray"}
-            />
-            <StatCard
-              icon="📝"
-              value={totalAnswered || overallStats.totalAttempted}
-              label="Questions"
-              sublabel="Total answered"
-              color="blue"
-            />
-            <StatCard
-              icon="🎯"
-              value={`${overallStats.mastery}%`}
-              label="Accuracy"
-              sublabel="All-time"
-              color={overallStats.mastery >= 70 ? "green" : "gray"}
-            />
-            <StatCard
-              icon="💀"
-              value={bestSuddenDeath}
-              label="Best Run"
-              sublabel="Sudden Death"
-              color={bestSuddenDeath >= 10 ? "red" : "gray"}
-            />
+      <main className="max-w-6xl mx-auto px-4 py-6">
+        {/* Header Row */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome back, {user.name}</h1>
+            <p className="text-gray-500 text-sm sm:text-base">
+              {hasData ? `${user.totalQuestions.toLocaleString()} questions answered` : 'Start training to track your progress'}
+            </p>
           </div>
-        </div>
-
-        {/* Training Modes */}
-        <GlassCard className="p-6 mb-8">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-semibold text-gray-900">Training Modes</h2>
-            <span className="text-xs text-gray-400">{casebookQuestions.length} questions</span>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            <TrainingModeCard
-              icon="🎬"
-              title="Film Room"
-              description="Practice at your own pace with instant feedback"
-              href="/film-room"
-              color="bg-blue-500"
-              stats="Unlimited practice"
-            />
-            <TrainingModeCard
-              icon="💀"
-              title="Sudden Death"
-              description="Test your instincts under pressure"
-              href="/sudden-death"
-              color="bg-red-500"
-              stats="10 sec per question"
-            />
-            <TrainingModeCard
-              icon="📅"
-              title="Daily 5"
-              description="5 new questions every day"
-              href="/daily-5"
-              color="bg-emerald-500"
-              stats="Build your streak"
-            />
-            <TrainingModeCard
-              icon="🎯"
-              title="Category Drill"
-              description="Focus on specific rule categories"
-              href="/play/category-drill"
-              color="bg-purple-500"
-              stats={`${overallStats.totalCategories} categories`}
-            />
-          </div>
-        </GlassCard>
-
-        {/* Category Progress */}
-        <GlassCard className="p-6">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">Category Progress</h2>
-              <p className="text-sm text-gray-500 mt-0.5">
-                {overallStats.categoriesStarted > 0
-                  ? `${overallStats.categoriesStarted} categories started`
-                  : 'Start training to track progress'
-                }
-              </p>
-            </div>
-            <Link
-              href="/play/category-drill"
-              className="text-sm font-medium text-blue-600 hover:text-blue-700"
-            >
-              View all →
-            </Link>
-          </div>
-
-          <div className="grid gap-2">
-            {sortedCategories.slice(0, 8).map(cat => (
-              <CategoryPill
-                key={cat.parent}
-                name={cat.name}
-                mastery={cat.mastery}
-                questions={cat.questions}
-                color={cat.color}
-                href={`/play/category-drill?category=${cat.parent}`}
-              />
+          <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1 self-start sm:self-auto">
+            {(['day', 'week', 'season'] as const).map((view) => (
+              <button
+                key={view}
+                onClick={() => setTimeView(view)}
+                className={`px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-md transition-colors ${
+                  timeView === view ? 'bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {view.charAt(0).toUpperCase() + view.slice(1)}
+              </button>
             ))}
           </div>
+        </div>
 
-          {categoryData.length > 8 && (
-            <Link
-              href="/play/category-drill"
-              className="mt-4 block text-center py-3 text-sm font-medium text-gray-500 hover:text-gray-700 border-t border-gray-100"
-            >
-              View all {categoryData.length} categories
-            </Link>
-          )}
+        {/* Hero Section: Readiness Score + Pillars */}
+        <GlassCard className="p-4 sm:p-6 mb-6">
+          <div className="flex flex-col items-center gap-6 lg:flex-row lg:gap-8">
+            {/* Main Readiness Ring */}
+            <div className="flex flex-col items-center">
+              <div className="hidden sm:block">
+                <ReadinessRing score={user.refReadiness} size={180} />
+              </div>
+              <div className="sm:hidden">
+                <ReadinessRing score={user.refReadiness} size={140} />
+              </div>
+              <div className="flex items-center gap-2 mt-3">
+                <span className={`px-2 py-1 text-xs font-semibold rounded ${
+                  user.tier === 'Elite' ? 'bg-emerald-100 text-emerald-700' :
+                  user.tier === 'Veteran' ? 'bg-blue-100 text-blue-700' :
+                  user.tier === 'Developing' ? 'bg-amber-100 text-amber-700' :
+                  'bg-gray-100 text-gray-700'
+                }`}>
+                  {user.tier}
+                </span>
+              </div>
+            </div>
+
+            {/* Three Pillars */}
+            <div className="flex-1 w-full lg:w-auto">
+              <div className="text-xs sm:text-sm text-gray-500 uppercase tracking-wide font-medium mb-3 sm:mb-4 text-center lg:text-left">
+                Performance Pillars
+              </div>
+              <div className="flex justify-center lg:justify-start gap-4 sm:gap-8">
+                <MiniRing score={user.gameIQ} label="Game IQ" color="#3B82F6" />
+                <MiniRing score={user.execution} label="Execution" color="#8B5CF6" />
+                <MiniRing score={user.commitment} label="Commitment" color="#10B981" />
+              </div>
+
+              {/* Quick Tags */}
+              {hasData && topStrengths.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4 sm:mt-6 justify-center lg:justify-start">
+                  <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs sm:text-sm">
+                    <span className="font-medium">Strength:</span> {topStrengths[0]?.name}
+                  </span>
+                  {blindSpots.length > 0 && (
+                    <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 bg-amber-50 text-amber-700 rounded-full text-xs sm:text-sm">
+                      <span className="font-medium">Focus:</span> {blindSpots[0]?.name}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Today's Quick Stats */}
+            <div className="grid grid-cols-4 lg:grid-cols-2 gap-2 sm:gap-3 w-full lg:w-auto">
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
+                  🔥 {user.streak}
+                </div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Streak</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900">{user.totalQuestions.toLocaleString()}</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Questions</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900">{user.avgAccuracy}%</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Accuracy</div>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-2 sm:p-3 text-center">
+                <div className="text-lg sm:text-2xl font-bold text-gray-900">{user.bestSuddenDeath}</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 uppercase">Best Run</div>
+              </div>
+            </div>
+          </div>
         </GlassCard>
 
+        {/* Two Column Layout */}
+        {hasData && categoryMastery.length >= 3 && (
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
+            {/* Strengths & Weaknesses */}
+            <GlassCard className="p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4 sm:mb-5">Strengths & Focus Areas</h2>
+
+              {/* Strengths */}
+              <div className="mb-4 sm:mb-5">
+                <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide">Top Strengths</span>
+                </div>
+                <div className="space-y-2">
+                  {topStrengths.map((cat, i) => (
+                    <div key={cat.name} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-emerald-50 rounded-xl">
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] sm:text-xs font-bold flex-shrink-0">
+                        {i + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-900 text-xs sm:text-sm truncate">{cat.name}</span>
+                          <span className="font-bold text-emerald-700 text-xs sm:text-sm ml-2">{cat.accuracy}%</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="flex-1 h-1 sm:h-1.5 bg-emerald-200 rounded-full">
+                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${cat.accuracy}%` }} />
+                          </div>
+                          <span className="text-[10px] sm:text-xs text-gray-500 hidden sm:inline">{cat.reps} reps</span>
+                        </div>
+                      </div>
+                      <TrendIndicator trend={cat.trend} change={cat.change} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Blind Spots */}
+              {blindSpots.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                    <div className="w-2 h-2 rounded-full bg-amber-500" />
+                    <span className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide">Focus Areas</span>
+                  </div>
+                  <div className="space-y-2">
+                    {blindSpots.map((cat, i) => (
+                      <div key={cat.name} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-amber-50 rounded-xl">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-[10px] sm:text-xs font-bold flex-shrink-0">
+                          {i + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium text-gray-900 text-xs sm:text-sm truncate">{cat.name}</span>
+                            <span className="font-bold text-amber-700 text-xs sm:text-sm ml-2">{cat.accuracy}%</span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <div className="flex-1 h-1 sm:h-1.5 bg-amber-200 rounded-full">
+                              <div className="h-full bg-amber-500 rounded-full" style={{ width: `${cat.accuracy}%` }} />
+                            </div>
+                            <span className="text-[10px] sm:text-xs text-gray-500 hidden sm:inline">{cat.reps} reps</span>
+                          </div>
+                        </div>
+                        <TrendIndicator trend={cat.trend} change={cat.change} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </GlassCard>
+
+            {/* Category Mastery */}
+            <GlassCard className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-5">
+                <h2 className="text-base sm:text-lg font-bold text-gray-900">Category Mastery</h2>
+                <span className="text-xs sm:text-sm text-gray-500">{categoryMastery.length} categories</span>
+              </div>
+
+              <div className="space-y-2 sm:space-y-3">
+                {categoryMastery.slice(0, 8).map((cat) => (
+                  <div key={cat.name} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm sm:text-lg font-bold text-gray-900">{cat.accuracy}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-900 text-xs sm:text-sm truncate">{cat.name}</div>
+                      <div className="flex items-center gap-1 sm:gap-2 mt-0.5">
+                        <span className="text-[10px] sm:text-xs text-gray-500">{cat.reps} reps</span>
+                        <ConfidenceBadge level={cat.confidence} />
+                      </div>
+                    </div>
+                    <TrendIndicator trend={cat.trend} change={cat.change} />
+                  </div>
+                ))}
+              </div>
+            </GlassCard>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!hasData && (
+          <GlassCard className="p-8 text-center mb-6">
+            <div className="text-4xl mb-4">🎯</div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Start Your Training Journey</h2>
+            <p className="text-gray-500 mb-6 max-w-md mx-auto">
+              Answer questions in any training mode to start building your Ref Readiness score and unlock detailed analytics.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link href="/film-room" className="px-6 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors">
+                Start with Film Room
+              </Link>
+              <Link href="/daily-5" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+                Try Daily 5
+              </Link>
+            </div>
+          </GlassCard>
+        )}
+
+        {/* Footer CTA */}
+        <div className="text-center py-6 sm:py-8">
+          <p className="text-sm sm:text-base text-gray-500 mb-3 sm:mb-4">Ready to improve your Ref Readiness?</p>
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            <Link href="/film-room" className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors">
+              Film Room
+            </Link>
+            <Link href="/sudden-death" className="px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-medium hover:bg-gray-50 transition-colors">
+              Sudden Death
+            </Link>
+            <Link href="/daily-5" className="px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-medium hover:bg-gray-50 transition-colors">
+              Daily 5
+            </Link>
+          </div>
+        </div>
+
         {/* Footer */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-gray-400">
+        <div className="text-center pb-6 sm:pb-8">
+          <p className="text-xs sm:text-sm text-gray-400">
             RuleVision · See the Call Before It Happens
           </p>
         </div>
