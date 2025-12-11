@@ -29,7 +29,8 @@
       "Bash(gh run list:*)",
       "Bash(gh pr create:*)",
       "Bash(git rebase:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(node audit-questions.js:*)"
     ],
     "deny": [],
     "ask": []

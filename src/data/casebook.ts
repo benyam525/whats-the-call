@@ -2462,7 +2462,7 @@ export const casebookQuestions: CasebookQuestion[] = [
     "rule_references": [
       "RULE 4, SECTION XI"
     ],
-    "question_text": "Defensive Player B1 is injured on the court as Player A2 advances the ball in the backcourt. Player B2 is told to foul his man and just prior to illegal contact, Player A2 gathers the ball. Following the foul Player A2 takes 2 steps and shoots the ball from the backcourt. Three free throws should be awarded if the shot is unsuccessful. False. On any shot which is not considered a drive to the basket, the offensive player must be in his upward motion to shoot when the contact occurs to be awarded a shooting foul. (EXCEPTION \u2013 if the clocks are about to expire, the shooting motion starts on the gather.) RULE 4, SECTION XI",
+    "question_text": "Defensive Player B1 is injured on the court as Player A2 advances the ball in the backcourt. Player B2 is told to foul his man and just prior to illegal contact, Player A2 gathers the ball. Following the foul Player A2 takes 2 steps and shoots the ball from the backcourt. Should three free throws be awarded if the shot is unsuccessful?",
     "options": {
       "A": "Shooting foul; free throws awarded to fouled player",
       "B": "Non-shooting foul; standard team foul penalty applies",
@@ -2482,9 +2482,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "CONTINUATION OF PLAY",
     "scenario": "",
-    "question": "Defensive Player B1 is injured on the court as Player A2 advances the ball in the backcourt. Player B2 is told to foul his man and just prior to illegal contact, Player A2 gathers the ball. Following the foul Player A2 takes 2 steps and shoots the ball from the backcourt. Three free throws should be awarded if the shot is unsuccessful. False. On any shot which is not considered a drive to the basket, the offensive player must be in his upward motion to shoot when the contact occurs to be awarded a shooting foul. (EXCEPTION \u2013 if the clocks are about to expire, the shooting motion starts on the gather.) RULE 4, SECTION XI",
+    "question": "Defensive Player B1 is injured on the court as Player A2 advances the ball in the backcourt. Player B2 is told to foul his man and just prior to illegal contact, Player A2 gathers the ball. Following the foul Player A2 takes 2 steps and shoots the ball from the backcourt. Should three free throws be awarded if the shot is unsuccessful?",
     "correctAnswer": "b",
-    "ruling": "",
+    "ruling": "False. On any shot which is not considered a drive to the basket, the offensive player must be in his upward motion to shoot when the contact occurs to be awarded a shooting foul. (EXCEPTION – if the clocks are about to expire, the shooting motion starts on the gather.)",
     "ruleReference": "RULE 4, SECTION XI",
     "casebookReference": "Case 70"
   },
@@ -3372,7 +3372,7 @@ export const casebookQuestions: CasebookQuestion[] = [
     "parent_category": "violations-general",
     "difficulty": "beginner",
     "rule_references": [],
-    "question_text": "Player A1 fumbles a pass near the sideline at the bench of Team B. The ball crosses the plane of the sideline and touches the coach of Team B who is standing on the sideline. Player A1 would have been able to recover the ball, if it had not been touched. A delay-of-game shall be issued to Team B. Team A is awarded the ball out-of-bounds on the sideline nearest the spot of the violation. A coach not seated on the bench has a responsibility not to interfere with a live ball. RULE 8 - SECTION II (e) RULE 12A - SECTION II (a)(7)",
+    "question_text": "Player A1 fumbles a pass near the sideline at the bench of Team B. The ball crosses the plane of the sideline and touches the coach of Team B who is standing on the sideline. Player A1 would have been able to recover the ball, if it had not been touched. What is the correct ruling?",
     "options": {
       "A": "Warning only; this is first delay-of-game offense",
       "B": "Delay-of-game technical foul; one free throw awarded",
@@ -3392,9 +3392,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "DELAY-OF-GAME",
     "scenario": "",
-    "question": "Player A1 fumbles a pass near the sideline at the bench of Team B. The ball crosses the plane of the sideline and touches the coach of Team B who is standing on the sideline. Player A1 would have been able to recover the ball, if it had not been touched. A delay-of-game shall be issued to Team B. Team A is awarded the ball out-of-bounds on the sideline nearest the spot of the violation. A coach not seated on the bench has a responsibility not to interfere with a live ball. RULE 8 - SECTION II (e) RULE 12A - SECTION II (a)(7)",
+    "question": "Player A1 fumbles a pass near the sideline at the bench of Team B. The ball crosses the plane of the sideline and touches the coach of Team B who is standing on the sideline. Player A1 would have been able to recover the ball, if it had not been touched. What is the correct ruling?",
     "correctAnswer": "b",
-    "ruling": "",
+    "ruling": "A delay-of-game shall be issued to Team B. Team A is awarded the ball out-of-bounds on the sideline nearest the spot of the violation. A coach not seated on the bench has a responsibility not to interfere with a live ball.",
     "ruleReference": "",
     "casebookReference": "Case 96"
   },
@@ -3511,7 +3511,7 @@ export const casebookQuestions: CasebookQuestion[] = [
     "rule_references": [
       "RULE 9, SECTION I"
     ],
-    "question_text": "Player A1 is attempting a free throw which is to be followed by another free throw. Player B1: (1) raises his arms above his head while positioned on the lane line, or (2) makes a sudden dash upcourt while within the visual field of Player A1, or (3) waves his arms, or (4) yells to a teammate, or (5) talks in a loud manner, or (6) enters the lane and continues to move. In Situations (1) through (6) above, Player B1 has disconcerted the free throw shooter. The violation is penalized by awarding a substitute free throw only if the attempt is unsuccessful. Further, during games, players must remain seated on the bench while the ball is live, except (a) to spontaneously react to a notable play, or (b) to approach the scorer\u2019s table to report into the game. Players not in the game may not remain standing at or away from their team\u2019s bench during game action. RULE 9, SECTION I (f)",
+    "question_text": "Player A1 is attempting a free throw which is to be followed by another free throw. Player B1: (1) raises his arms above his head while positioned on the lane line, or (2) makes a sudden dash upcourt while within the visual field of Player A1, or (3) waves his arms, or (4) yells to a teammate, or (5) talks in a loud manner, or (6) enters the lane and continues to move. Has Player B1 disconcerted the free throw shooter in these situations?",
     "options": {
       "A": "Two free throws awarded to the fouled player",
       "B": "One free throw; successful basket plus and-one",
@@ -3531,9 +3531,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "DISCONCERTION OF FREE THROW SHOOTER",
     "scenario": "",
-    "question": "Player A1 is attempting a free throw which is to be followed by another free throw. Player B1: (1) raises his arms above his head while positioned on the lane line, or (2) makes a sudden dash upcourt while within the visual field of Player A1, or (3) waves his arms, or (4) yells to a teammate, or (5) talks in a loud manner, or (6) enters the lane and continues to move. In Situations (1) through (6) above, Player B1 has disconcerted the free throw shooter. The violation is penalized by awarding a substitute free throw only if the attempt is unsuccessful. Further, during games, players must remain seated on the bench while the ball is live, except (a) to spontaneously react to a notable play, or (b) to approach the scorer\u2019s table to report into the game. Players not in the game may not remain standing at or away from their team\u2019s bench during game action. RULE 9, SECTION I (f)",
+    "question": "Player A1 is attempting a free throw which is to be followed by another free throw. Player B1: (1) raises his arms above his head while positioned on the lane line, or (2) makes a sudden dash upcourt while within the visual field of Player A1, or (3) waves his arms, or (4) yells to a teammate, or (5) talks in a loud manner, or (6) enters the lane and continues to move. Has Player B1 disconcerted the free throw shooter in these situations?",
     "correctAnswer": "a",
-    "ruling": "",
+    "ruling": "In Situations (1) through (6) above, Player B1 has disconcerted the free throw shooter. The violation is penalized by awarding a substitute free throw only if the attempt is unsuccessful. Further, during games, players must remain seated on the bench while the ball is live, except (a) to spontaneously react to a notable play, or (b) to approach the scorer's table to report into the game. Players not in the game may not remain standing at or away from their team's bench during game action.",
     "ruleReference": "RULE 9, SECTION I",
     "casebookReference": "Case 100"
   },
@@ -3827,7 +3827,7 @@ export const casebookQuestions: CasebookQuestion[] = [
     "rule_references": [
       "RULE 10, SECTION XVI"
     ],
-    "question_text": "Player A5 has his back to the basket below the free throw line extended and starts dribbling to back-down his defender. The official should call a violation when Player A5 is still dribbling below the foul line extended on the count of 5. Yes. This is a 5-second back to the basket violation. The count ends when (1) the player picks up the ball, (2) dribbles above the free throw line extended or (3) a defensive player deflects the ball away. Should Player A5 turn and face the basket while still dribbling, he is no longer violating the rule. RULE 10, SECTION XVI",
+    "question_text": "Player A5 has his back to the basket below the free throw line extended and starts dribbling to back-down his defender. Should the official call a violation when Player A5 is still dribbling below the foul line extended on the count of 5?",
     "options": {
       "A": "Traveling violation; pivot foot was lifted illegally",
       "B": "Legal play; footwork complied with gather step rules",
@@ -3847,9 +3847,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "DRIBBLING",
     "scenario": "",
-    "question": "Player A5 has his back to the basket below the free throw line extended and starts dribbling to back-down his defender. The official should call a violation when Player A5 is still dribbling below the foul line extended on the count of 5. Yes. This is a 5-second back to the basket violation. The count ends when (1) the player picks up the ball, (2) dribbles above the free throw line extended or (3) a defensive player deflects the ball away. Should Player A5 turn and face the basket while still dribbling, he is no longer violating the rule. RULE 10, SECTION XVI",
+    "question": "Player A5 has his back to the basket below the free throw line extended and starts dribbling to back-down his defender. Should the official call a violation when Player A5 is still dribbling below the foul line extended on the count of 5?",
     "correctAnswer": "b",
-    "ruling": "",
+    "ruling": "Yes. This is a 5-second back to the basket violation. The count ends when (1) the player picks up the ball, (2) dribbles above the free throw line extended or (3) a defensive player deflects the ball away. Should Player A5 turn and face the basket while still dribbling, he is no longer violating the rule.",
     "ruleReference": "RULE 10, SECTION XVI",
     "casebookReference": "Case 109"
   },
@@ -4480,7 +4480,7 @@ export const casebookQuestions: CasebookQuestion[] = [
       "RULE 12A, SECTION VI",
       "RULE 9, SECTION II"
     ],
-    "question_text": "Player A1, who has a clear-path-to-the-basket in Team A\u2019s frontcourt, is fouled by Player B1 while not in the act of shooting. The following action then occurs: (1) Player A1 punches Player B1, or (2) Players A1 and B1 engage in a fight. In both (1) and (2), the officials will utilize instant replay to review the altercation and determine the appropriate penalties for all those involved. Situation (1): A clear path foul is assessed to Player B1. Player A1 is charged with a punching foul and ejected. Team A is awarded two free throw attempts. The coach of Team B will select the substitute from Team A\u2019s bench who will attempt the two free throws. No players will be lined-up on the free throw lane lines. Player B1 will then attempt two free throws for the punching foul and Team B is awarded the ball at the free throw line extended for the throw-in. Situation (2): A clear path foul is assessed to Player B1. Player A1 and Player B1 are both assessed a technical foul for fighting and ejected. Team A is awarded two free throw attempts for the personal foul committed by Player B1. The coach of Team B will select the substitute from Team A\u2019s bench who will attempt the free throws. Team A will retain possession on the sideline where the play was interrupted, but no nearer the baseline than the free throw line extended. No free throws will be attempted as a penalty for the fighting fouls. RULE 9, SECTION II (a) (EXCEPTION 1) RULE 12A, SECTION VI (a) RULE 12B, SECTION IX (a and b) RULE 13, SECTION I (a)(4) RULE 13, SECTION II (d) XXIII. FLAGRANT FOULS",
+    "question_text": "Player A1, who has a clear-path-to-the-basket in Team A's frontcourt, is fouled by Player B1 while not in the act of shooting. The following action then occurs: (1) Player A1 punches Player B1, or (2) Players A1 and B1 engage in a fight. How should these situations be administered?",
     "options": {
       "A": "Technical foul assessed: one free throw plus possession",
       "B": "No violation: conduct was acceptable within rules",
@@ -4500,9 +4500,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "FIGHTING",
     "scenario": "",
-    "question": "Player A1, who has a clear-path-to-the-basket in Team A\u2019s frontcourt, is fouled by Player B1 while not in the act of shooting. The following action then occurs: (1) Player A1 punches Player B1, or (2) Players A1 and B1 engage in a fight. In both (1) and (2), the officials will utilize instant replay to review the altercation and determine the appropriate penalties for all those involved. Situation (1): A clear path foul is assessed to Player B1. Player A1 is charged with a punching foul and ejected. Team A is awarded two free throw attempts. The coach of Team B will select the substitute from Team A\u2019s bench who will attempt the two free throws. No players will be lined-up on the free throw lane lines. Player B1 will then attempt two free throws for the punching foul and Team B is awarded the ball at the free throw line extended for the throw-in. Situation (2): A clear path foul is assessed to Player B1. Player A1 and Player B1 are both assessed a technical foul for fighting and ejected. Team A is awarded two free throw attempts for the personal foul committed by Player B1. The coach of Team B will select the substitute from Team A\u2019s bench who will attempt the free throws. Team A will retain possession on the sideline where the play was interrupted, but no nearer the baseline than the free throw line extended. No free throws will be attempted as a penalty for the fighting fouls. RULE 9, SECTION II (a) (EXCEPTION 1) RULE 12A, SECTION VI (a) RULE 12B, SECTION IX (a and b) RULE 13, SECTION I (a)(4) RULE 13, SECTION II (d) XXIII. FLAGRANT FOULS",
+    "question": "Player A1, who has a clear-path-to-the-basket in Team A's frontcourt, is fouled by Player B1 while not in the act of shooting. The following action then occurs: (1) Player A1 punches Player B1, or (2) Players A1 and B1 engage in a fight. How should these situations be administered?",
     "correctAnswer": "a",
-    "ruling": "",
+    "ruling": "In both (1) and (2), the officials will utilize instant replay to review the altercation and determine the appropriate penalties for all those involved. Situation (1): A clear path foul is assessed to Player B1. Player A1 is charged with a punching foul and ejected. Team A is awarded two free throw attempts. The coach of Team B will select the substitute from Team A's bench who will attempt the two free throws. No players will be lined-up on the free throw lane lines. Player B1 will then attempt two free throws for the punching foul and Team B is awarded the ball at the free throw line extended for the throw-in. Situation (2): A clear path foul is assessed to Player B1. Player A1 and Player B1 are both assessed a technical foul for fighting and ejected. Team A is awarded two free throw attempts for the personal foul committed by Player B1. The coach of Team B will select the substitute from Team A's bench who will attempt the free throws. Team A will retain possession on the sideline where the play was interrupted, but no nearer the baseline than the free throw line extended. No free throws will be attempted as a penalty for the fighting fouls.",
     "ruleReference": "RULE 12B, SECTION IX, RULE 13, SECTION I, RULE 13, SECTION II, RULE 12A, SECTION VI, RULE 9, SECTION II",
     "casebookReference": "Case 127"
   },
@@ -4819,7 +4819,7 @@ export const casebookQuestions: CasebookQuestion[] = [
       "RULE 12B, SECTION IV",
       "RULE 13, SECTION I"
     ],
-    "question_text": "Following a successful field goal by Player A1, a flagrant foul is ruled a FF1 following instant replay and is called on Player B2 for physical contact with Player A2. This action occurs: (1) prior to possession of the ball out-of-bounds by Team B, or (2) after possession of the ball out-of-bounds by Team B. In both situations (1) and (2), Player A2 will be awarded two free throw attempts. Play will be resumed by awarding Team A the ball out-ofbounds at the free throw line extended. Possession or non-possession of the ball out-of- bounds does not change this procedure. RULE 12B, SECTION IV RULE 13, SECTION I (a)(3)",
+    "question_text": "Following a successful field goal by Player A1, a flagrant foul is ruled a FF1 following instant replay and is called on Player B2 for physical contact with Player A2. This action occurs: (1) prior to possession of the ball out-of-bounds by Team B, or (2) after possession of the ball out-of-bounds by Team B. How is play resumed in both situations?",
     "options": {
       "A": "Common foul: hard contact but within normal basketball play",
       "B": "Flagrant 1: unnecessary contact; two free throws plus possession",
@@ -4839,9 +4839,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "FLAGRANT FOULS",
     "scenario": "",
-    "question": "Following a successful field goal by Player A1, a flagrant foul is ruled a FF1 following instant replay and is called on Player B2 for physical contact with Player A2. This action occurs: (1) prior to possession of the ball out-of-bounds by Team B, or (2) after possession of the ball out-of-bounds by Team B. In both situations (1) and (2), Player A2 will be awarded two free throw attempts. Play will be resumed by awarding Team A the ball out-ofbounds at the free throw line extended. Possession or non-possession of the ball out-of- bounds does not change this procedure. RULE 12B, SECTION IV RULE 13, SECTION I (a)(3)",
+    "question": "Following a successful field goal by Player A1, a flagrant foul is ruled a FF1 following instant replay and is called on Player B2 for physical contact with Player A2. This action occurs: (1) prior to possession of the ball out-of-bounds by Team B, or (2) after possession of the ball out-of-bounds by Team B. How is play resumed in both situations?",
     "correctAnswer": "b",
-    "ruling": "",
+    "ruling": "In both situations (1) and (2), Player A2 will be awarded two free throw attempts. Play will be resumed by awarding Team A the ball out-of-bounds at the free throw line extended. Possession or non-possession of the ball out-of-bounds does not change this procedure.",
     "ruleReference": "RULE 12B, SECTION IV, RULE 13, SECTION I",
     "casebookReference": "Case 136"
   },
@@ -7306,7 +7306,7 @@ export const casebookQuestions: CasebookQuestion[] = [
       "RULE 12A, SECTION V",
       "RULE 13, SECTION I"
     ],
-    "question_text": "During a game at Team A\u2019s home arena, Player B3 ends up in the spectator stands after trying unsuccessfully to save the ball from going out-of-bounds. As Player B3 is in the spectator stands, Fan #1 holds out his cell phone close to Player B3 in an attempt to record the player on his cell phone camera. Player B3 responds by forcefully swiping the cell phone out of Fan #1\u2019s hand, which leads to unrest and negative reactions from Team B\u2019s fans. Instant replay shall be utilized if a player commits a hostile act (e.g., initiates physical contact of any type) against a spectator. In this case, the review is used to determine the level and nature of the player\u2019s involvement and the appropriate penalty to be assessed against the player. An unsportsmanlike technical foul may be assessed on Player B3 and, if the circumstances warrant, Player B3 could be ejected. Arena security should be notified to bring order to the fans in this section and determine whether any adverse action should be taken against any of Team B\u2019s fans. The entire incident must be reported to the League Office and recorded by the Crew Chief on the game report. RULE 12A, SECTION V (a, b, and h) RULE 13, SECTION I (a)(4) RULE 13, SECTION II (d) XXIX. INADVERTENT WHISTLE",
+    "question_text": "During a game at Team A's home arena, Player B3 ends up in the spectator stands after trying unsuccessfully to save the ball from going out-of-bounds. As Player B3 is in the spectator stands, Fan #1 holds out his cell phone close to Player B3 in an attempt to record the player on his cell phone camera. Player B3 responds by forcefully swiping the cell phone out of Fan #1's hand, which leads to unrest and negative reactions from Team B's fans. What is the correct ruling?",
     "options": {
       "A": "Technical foul assessed: one free throw plus possession",
       "B": "No violation: conduct was acceptable within rules",
@@ -7326,9 +7326,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "HOSTILE ACTS",
     "scenario": "",
-    "question": "During a game at Team A\u2019s home arena, Player B3 ends up in the spectator stands after trying unsuccessfully to save the ball from going out-of-bounds. As Player B3 is in the spectator stands, Fan #1 holds out his cell phone close to Player B3 in an attempt to record the player on his cell phone camera. Player B3 responds by forcefully swiping the cell phone out of Fan #1\u2019s hand, which leads to unrest and negative reactions from Team B\u2019s fans. Instant replay shall be utilized if a player commits a hostile act (e.g., initiates physical contact of any type) against a spectator. In this case, the review is used to determine the level and nature of the player\u2019s involvement and the appropriate penalty to be assessed against the player. An unsportsmanlike technical foul may be assessed on Player B3 and, if the circumstances warrant, Player B3 could be ejected. Arena security should be notified to bring order to the fans in this section and determine whether any adverse action should be taken against any of Team B\u2019s fans. The entire incident must be reported to the League Office and recorded by the Crew Chief on the game report. RULE 12A, SECTION V (a, b, and h) RULE 13, SECTION I (a)(4) RULE 13, SECTION II (d) XXIX. INADVERTENT WHISTLE",
+    "question": "During a game at Team A's home arena, Player B3 ends up in the spectator stands after trying unsuccessfully to save the ball from going out-of-bounds. As Player B3 is in the spectator stands, Fan #1 holds out his cell phone close to Player B3 in an attempt to record the player on his cell phone camera. Player B3 responds by forcefully swiping the cell phone out of Fan #1's hand, which leads to unrest and negative reactions from Team B's fans. What is the correct ruling?",
     "correctAnswer": "a",
-    "ruling": "",
+    "ruling": "Instant replay shall be utilized if a player commits a hostile act (e.g., initiates physical contact of any type) against a spectator. In this case, the review is used to determine the level and nature of the player's involvement and the appropriate penalty to be assessed against the player. An unsportsmanlike technical foul may be assessed on Player B3 and, if the circumstances warrant, Player B3 could be ejected. Arena security should be notified to bring order to the fans in this section and determine whether any adverse action should be taken against any of Team B's fans. The entire incident must be reported to the League Office and recorded by the Crew Chief on the game report.",
     "ruleReference": "RULE 13, SECTION II, RULE 12A, SECTION V, RULE 13, SECTION I",
     "casebookReference": "Case 206"
   },
@@ -7665,7 +7665,7 @@ export const casebookQuestions: CasebookQuestion[] = [
       "RULE 12, SECTION V",
       "RULE 3, SECTION V"
     ],
-    "question_text": "Following an instant replay review, a flagrant foul Penalty 2 is assessed against Player B1 for contact against Player A1. During the review the officials also observed that as Player A1 got up from the floor that he threw a punch at Player B2 which missed. A technical foul will be assessed against Player A1 and he will be ejected. Any of the four remaining players on Team B will attempt the one free throw for the technical foul. The coach of Team B will select the shooter from Team A\u2019s bench to attempt the 2 free throws for the flagrant foul. RULE 3, SECTION V (d) RULE 9, SECTION II (A)(EXCEPTIONS) RULE 12, SECTION V (j) ",
+    "question_text": "Following an instant replay review, a flagrant foul Penalty 2 is assessed against Player B1 for contact against Player A1. During the review the officials also observed that as Player A1 got up from the floor that he threw a punch at Player B2 which missed. How should this situation be administered?",
     "options": {
       "A": "Replay confirms the original call on the floor",
       "B": "Replay overturns call; adjustments made accordingly",
@@ -7685,9 +7685,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "INSTANT REPLAY",
     "scenario": "",
-    "question": "Following an instant replay review, a flagrant foul Penalty 2 is assessed against Player B1 for contact against Player A1. During the review the officials also observed that as Player A1 got up from the floor that he threw a punch at Player B2 which missed. A technical foul will be assessed against Player A1 and he will be ejected. Any of the four remaining players on Team B will attempt the one free throw for the technical foul. The coach of Team B will select the shooter from Team A\u2019s bench to attempt the 2 free throws for the flagrant foul. RULE 3, SECTION V (d) RULE 9, SECTION II (A)(EXCEPTIONS) RULE 12, SECTION V (j) ",
+    "question": "Following an instant replay review, a flagrant foul Penalty 2 is assessed against Player B1 for contact against Player A1. During the review the officials also observed that as Player A1 got up from the floor that he threw a punch at Player B2 which missed. How should this situation be administered?",
     "correctAnswer": "a",
-    "ruling": "",
+    "ruling": "A technical foul will be assessed against Player A1 and he will be ejected. Any of the four remaining players on Team B will attempt the one free throw for the technical foul. The coach of Team B will select the shooter from Team A's bench to attempt the 2 free throws for the flagrant foul.",
     "ruleReference": "RULE 9, SECTION II, RULE 12, SECTION V, RULE 3, SECTION V",
     "casebookReference": "Case 216"
   },
@@ -11115,7 +11115,7 @@ export const casebookQuestions: CasebookQuestion[] = [
     "rule_references": [
       "RULE 10, SECTION XV"
     ],
-    "question_text": "Player A2 saves the ball from going out-of-bounds and falls into the stands. If he does not immediately return to the playing area a violation shall be assessed against his team. False \u2014 if a player\u2019s momentum carries him from the playing area, he will be given a reasonable amount of time to return to the playing area depending on the circumstance. RULE 10, SECTION XV XL. PUNCHING",
+    "question_text": "Player A2 saves the ball from going out-of-bounds and falls into the stands. If he does not immediately return to the playing area, should a violation be assessed against his team?",
     "options": {
       "A": "Personal foul on the defender; free throws if team is in the bonus",
       "B": "No foul: the contact was incidental and didn't affect the play",
@@ -11135,9 +11135,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "PLAYER POSITION",
     "scenario": "",
-    "question": "Player A2 saves the ball from going out-of-bounds and falls into the stands. If he does not immediately return to the playing area a violation shall be assessed against his team. False \u2014 if a player\u2019s momentum carries him from the playing area, he will be given a reasonable amount of time to return to the playing area depending on the circumstance. RULE 10, SECTION XV XL. PUNCHING",
+    "question": "Player A2 saves the ball from going out-of-bounds and falls into the stands. If he does not immediately return to the playing area, should a violation be assessed against his team?",
     "correctAnswer": "a",
-    "ruling": "",
+    "ruling": "False — if a player's momentum carries him from the playing area, he will be given a reasonable amount of time to return to the playing area depending on the circumstance.",
     "ruleReference": "RULE 10, SECTION XV",
     "casebookReference": "Case 313"
   },
@@ -13380,7 +13380,7 @@ export const casebookQuestions: CasebookQuestion[] = [
       "RULE 2, SECTION III",
       "RULE 12A, SECTION V"
     ],
-    "question_text": "Player A1 is in the act of shooting when Player B1, who has lost a shoe, throws the shoe in the direction of the ball. What is the ruling if: (a) the ball has been released, (b) the ball has not been released. In both (a) and (b), Player A1 shall be awarded points for the type of field goal attempted and a technical foul shall be called on Player B1. After the free throw attempt, the ball shall be awarded to Team B as after any score. This ruling shall apply for any object thrown by any player, coach or trainer on the court or on the bench whether or not it contacts the ball or shooter. RULE 2, SECTION III RULE 12A, SECTION V (a) ",
+    "question_text": "Player A1 is in the act of shooting when Player B1, who has lost a shoe, throws the shoe in the direction of the ball. What is the ruling if: (a) the ball has been released, (b) the ball has not been released?",
     "options": {
       "A": "Warning issued: conduct doesn't warrant immediate penalty",
       "B": "Technical foul: one free throw plus possession awarded",
@@ -13400,9 +13400,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "TECHNICAL FOULS",
     "scenario": "",
-    "question": "Player A1 is in the act of shooting when Player B1, who has lost a shoe, throws the shoe in the direction of the ball. What is the ruling if: (a) the ball has been released, (b) the ball has not been released. In both (a) and (b), Player A1 shall be awarded points for the type of field goal attempted and a technical foul shall be called on Player B1. After the free throw attempt, the ball shall be awarded to Team B as after any score. This ruling shall apply for any object thrown by any player, coach or trainer on the court or on the bench whether or not it contacts the ball or shooter. RULE 2, SECTION III RULE 12A, SECTION V (a) ",
+    "question": "Player A1 is in the act of shooting when Player B1, who has lost a shoe, throws the shoe in the direction of the ball. What is the ruling if: (a) the ball has been released, (b) the ball has not been released?",
     "correctAnswer": "b",
-    "ruling": "",
+    "ruling": "In both (a) and (b), Player A1 shall be awarded points for the type of field goal attempted and a technical foul shall be called on Player B1. After the free throw attempt, the ball shall be awarded to Team B as after any score. This ruling shall apply for any object thrown by any player, coach or trainer on the court or on the bench whether or not it contacts the ball or shooter.",
     "ruleReference": "RULE 2, SECTION III, RULE 12A, SECTION V",
     "casebookReference": "Case 377"
   },
@@ -15407,7 +15407,7 @@ export const casebookQuestions: CasebookQuestion[] = [
     "rule_references": [
       "RULE 8, SECTION III"
     ],
-    "question_text": "On a baseline throw-in at Team A\u2019s basket, four players set a multiple screen. Are defensive players allowed to take position between the offensive players if the screen is: (1) perpendicular to the baseline, or (2) parallel to the baseline. Yes. Defensive players are always allowed to take a position between the offensive players and the basket during a throw-in. RULE 8, SECTION III (a) COMMENTS ON THE RULES, SECTION II (A)(2)",
+    "question_text": "On a baseline throw-in at Team A's basket, four players set a multiple screen. Are defensive players allowed to take position between the offensive players if the screen is: (1) perpendicular to the baseline, or (2) parallel to the baseline?",
     "options": {
       "A": "Throw-in from baseline nearest the basket",
       "B": "Throw-in from sideline nearest the interruption point",
@@ -15427,9 +15427,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "THROW-IN",
     "scenario": "",
-    "question": "On a baseline throw-in at Team A\u2019s basket, four players set a multiple screen. Are defensive players allowed to take position between the offensive players if the screen is: (1) perpendicular to the baseline, or (2) parallel to the baseline. Yes. Defensive players are always allowed to take a position between the offensive players and the basket during a throw-in. RULE 8, SECTION III (a) COMMENTS ON THE RULES, SECTION II (A)(2)",
+    "question": "On a baseline throw-in at Team A's basket, four players set a multiple screen. Are defensive players allowed to take position between the offensive players if the screen is: (1) perpendicular to the baseline, or (2) parallel to the baseline?",
     "correctAnswer": "b",
-    "ruling": "",
+    "ruling": "Yes. Defensive players are always allowed to take a position between the offensive players and the basket during a throw-in.",
     "ruleReference": "RULE 8, SECTION III",
     "casebookReference": "Case 434"
   },
@@ -16680,7 +16680,7 @@ export const casebookQuestions: CasebookQuestion[] = [
     "rule_references": [
       "RULE 4, SECTION IV"
     ],
-    "question_text": "State whether each of the following situations should be called a transition take foul. (1) With 1:56 remaining in the first period, Player A5 wraps up and grabs Player B5 in a non-basketball manner immediately after Player B5 secures a defensive rebound and before Player B5 has the opportunity to advance the ball to a teammate. (2) Same scenario as subsection (1) above, except that the play occurs with 1:56 remaining in the fourth quarter. (3) With 3:13 remaining in the first period, Player A1, in an attempt to stop a fast break dunk, wraps and grabs Player B2 in a non-basketball manner after Player B2 started his shooting motion on a dunk attempt.  (4) With 5:15 remaining in the second period, as Player A1 attempts to continuously advance the ball via the live dribble immediately after securing a long defensive rebound, Player B5 (who was out of position, trailing the play, and recognized that his team was at a disadvantage on the play due to the position of his teammates) wraps up and grabs Player A5 (who was also trailing the play) in a non-basketball manner. (1) Yes, this play must be called a transition take foul. A take foul committed immediately after a change of possession but before the offensive team has the opportunity to advance the ball satisfies the definition of a transition take foul. RULE 4, SECTION IV (i)(2) (2) No, this play may not be called a transition take foul. By rule, a transition take foul may not occur within the last two minutes of the fourth period or the last two minutes of any overtime period. Thus, Player A5 should be called for a common foul. RULE 4, SECTION IV (i)(4) (3) No, this play may not be called a transition take foul. By rule, a transition take foul may not occur if the offensive player is fouled in the act of shooting. Thus, Player A1 must be called for a shooting foul and Player B2 is awarded two free throw attempts. RULE 4, SECTION IV (i)(6) (4) Yes, this play must be called a transition take foul. A foul committed against any offensive player, including a player who does not have the ball, constitutes a transition take foul if all the other elements of the rule are satisfied, which they were in this case (because Team A continuously advanced the ball immediately following the change of possession while it had an advantage based on position of the defenders). RULE 4, SECTION IV (i)(1)",
+    "question_text": "State whether each of the following situations should be called a transition take foul: (1) With 1:56 remaining in the first period, Player A5 wraps up and grabs Player B5 in a non-basketball manner immediately after Player B5 secures a defensive rebound and before Player B5 has the opportunity to advance the ball to a teammate. (2) Same scenario as subsection (1) above, except that the play occurs with 1:56 remaining in the fourth quarter. (3) With 3:13 remaining in the first period, Player A1, in an attempt to stop a fast break dunk, wraps and grabs Player B2 in a non-basketball manner after Player B2 started his shooting motion on a dunk attempt. (4) With 5:15 remaining in the second period, as Player A1 attempts to continuously advance the ball via the live dribble immediately after securing a long defensive rebound, Player B5 (who was out of position, trailing the play, and recognized that his team was at a disadvantage on the play due to the position of his teammates) wraps up and grabs Player A5 (who was also trailing the play) in a non-basketball manner. Which situations constitute a transition take foul?",
     "options": {
       "A": "Common foul; free throws awarded only if team is in the bonus",
       "B": "Clear-path foul: two free throws plus possession at the sideline",
@@ -16700,9 +16700,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "TRANSITION TAKE FOULS",
     "scenario": "",
-    "question": "State whether each of the following situations should be called a transition take foul. (1) With 1:56 remaining in the first period, Player A5 wraps up and grabs Player B5 in a non-basketball manner immediately after Player B5 secures a defensive rebound and before Player B5 has the opportunity to advance the ball to a teammate. (2) Same scenario as subsection (1) above, except that the play occurs with 1:56 remaining in the fourth quarter. (3) With 3:13 remaining in the first period, Player A1, in an attempt to stop a fast break dunk, wraps and grabs Player B2 in a non-basketball manner after Player B2 started his shooting motion on a dunk attempt.  (4) With 5:15 remaining in the second period, as Player A1 attempts to continuously advance the ball via the live dribble immediately after securing a long defensive rebound, Player B5 (who was out of position, trailing the play, and recognized that his team was at a disadvantage on the play due to the position of his teammates) wraps up and grabs Player A5 (who was also trailing the play) in a non-basketball manner. (1) Yes, this play must be called a transition take foul. A take foul committed immediately after a change of possession but before the offensive team has the opportunity to advance the ball satisfies the definition of a transition take foul. RULE 4, SECTION IV (i)(2) (2) No, this play may not be called a transition take foul. By rule, a transition take foul may not occur within the last two minutes of the fourth period or the last two minutes of any overtime period. Thus, Player A5 should be called for a common foul. RULE 4, SECTION IV (i)(4) (3) No, this play may not be called a transition take foul. By rule, a transition take foul may not occur if the offensive player is fouled in the act of shooting. Thus, Player A1 must be called for a shooting foul and Player B2 is awarded two free throw attempts. RULE 4, SECTION IV (i)(6) (4) Yes, this play must be called a transition take foul. A foul committed against any offensive player, including a player who does not have the ball, constitutes a transition take foul if all the other elements of the rule are satisfied, which they were in this case (because Team A continuously advanced the ball immediately following the change of possession while it had an advantage based on position of the defenders). RULE 4, SECTION IV (i)(1)",
+    "question": "State whether each of the following situations should be called a transition take foul: (1) With 1:56 remaining in the first period, Player A5 wraps up and grabs Player B5 in a non-basketball manner immediately after Player B5 secures a defensive rebound and before Player B5 has the opportunity to advance the ball to a teammate. (2) Same scenario as subsection (1) above, except that the play occurs with 1:56 remaining in the fourth quarter. (3) With 3:13 remaining in the first period, Player A1, in an attempt to stop a fast break dunk, wraps and grabs Player B2 in a non-basketball manner after Player B2 started his shooting motion on a dunk attempt. (4) With 5:15 remaining in the second period, as Player A1 attempts to continuously advance the ball via the live dribble immediately after securing a long defensive rebound, Player B5 (who was out of position, trailing the play, and recognized that his team was at a disadvantage on the play due to the position of his teammates) wraps up and grabs Player A5 (who was also trailing the play) in a non-basketball manner. Which situations constitute a transition take foul?",
     "correctAnswer": "c",
-    "ruling": "",
+    "ruling": "(1) Yes, this play must be called a transition take foul. A take foul committed immediately after a change of possession but before the offensive team has the opportunity to advance the ball satisfies the definition of a transition take foul. (2) No, this play may not be called a transition take foul. By rule, a transition take foul may not occur within the last two minutes of the fourth period or the last two minutes of any overtime period. Thus, Player A5 should be called for a common foul. (3) No, this play may not be called a transition take foul. By rule, a transition take foul may not occur if the offensive player is fouled in the act of shooting. Thus, Player A1 must be called for a shooting foul and Player B2 is awarded two free throw attempts. (4) Yes, this play must be called a transition take foul. A foul committed against any offensive player, including a player who does not have the ball, constitutes a transition take foul if all the other elements of the rule are satisfied.",
     "ruleReference": "RULE 4, SECTION IV",
     "casebookReference": "Case 470"
   },
@@ -16753,7 +16753,7 @@ export const casebookQuestions: CasebookQuestion[] = [
       "RULE 4, SECTION III",
       "RULE 10, SECTION XIII"
     ],
-    "question_text": "State whether each of the following situations should be called as a traveling violation. (1) As Player A1 was in control of the ball while dribbling, he put his right hand under the ball and brought it to a pause while his right foot was on the ground, took one step backwards landing on his left foot, jumped backward off his left foot, and landed simultaneously with both feet before he attempted a three-point field goal. (2) While he sprinted up the court in a transition situation, Player A2 caught the ball with his left foot on the ground, took one step landing on his right foot, took another step landing on his left foot, jumped off his left foot, and dunked the ball. (1) No. This is a legal play because Player A1 took two legal steps after gathering his dribble. By rule, a player who gathers the ball while dribbling may take two steps to shoot the ball. In this case, Player A1\u2019s first step occurred when he landed on his left foot (after gathering the ball and then taking a step backwards) and his second step occurred when he landed simultaneously with both feet on the ground before attempting a legal shot. (2) No. This is a legal play because Player A2 took two legal steps after gathering a pass. By rule, a player who gathers the ball while progressing may take two steps to shoot the ball. In this case, Player A2\u2019s first step occurred when he landed on his right foot (after gathering the ball with his left foot on the ground) and his second step occurred when he landed on his left foot before legally dunking the ball. RULE 4, SECTION III (b) (1, 2, and 3) RULE 10, SECTION XIII (b)",
+    "question_text": "State whether each of the following situations should be called as a traveling violation: (1) As Player A1 was in control of the ball while dribbling, he put his right hand under the ball and brought it to a pause while his right foot was on the ground, took one step backwards landing on his left foot, jumped backward off his left foot, and landed simultaneously with both feet before he attempted a three-point field goal. (2) While he sprinted up the court in a transition situation, Player A2 caught the ball with his left foot on the ground, took one step landing on his right foot, took another step landing on his left foot, jumped off his left foot, and dunked the ball. Are either of these traveling violations?",
     "options": {
       "A": "Traveling violation; pivot foot was lifted illegally",
       "B": "Legal play; footwork complied with gather step rules",
@@ -16773,9 +16773,9 @@ export const casebookQuestions: CasebookQuestion[] = [
     },
     "category": "TRAVELING",
     "scenario": "",
-    "question": "State whether each of the following situations should be called as a traveling violation. (1) As Player A1 was in control of the ball while dribbling, he put his right hand under the ball and brought it to a pause while his right foot was on the ground, took one step backwards landing on his left foot, jumped backward off his left foot, and landed simultaneously with both feet before he attempted a three-point field goal. (2) While he sprinted up the court in a transition situation, Player A2 caught the ball with his left foot on the ground, took one step landing on his right foot, took another step landing on his left foot, jumped off his left foot, and dunked the ball. (1) No. This is a legal play because Player A1 took two legal steps after gathering his dribble. By rule, a player who gathers the ball while dribbling may take two steps to shoot the ball. In this case, Player A1\u2019s first step occurred when he landed on his left foot (after gathering the ball and then taking a step backwards) and his second step occurred when he landed simultaneously with both feet on the ground before attempting a legal shot. (2) No. This is a legal play because Player A2 took two legal steps after gathering a pass. By rule, a player who gathers the ball while progressing may take two steps to shoot the ball. In this case, Player A2\u2019s first step occurred when he landed on his right foot (after gathering the ball with his left foot on the ground) and his second step occurred when he landed on his left foot before legally dunking the ball. RULE 4, SECTION III (b) (1, 2, and 3) RULE 10, SECTION XIII (b)",
+    "question": "State whether each of the following situations should be called as a traveling violation: (1) As Player A1 was in control of the ball while dribbling, he put his right hand under the ball and brought it to a pause while his right foot was on the ground, took one step backwards landing on his left foot, jumped backward off his left foot, and landed simultaneously with both feet before he attempted a three-point field goal. (2) While he sprinted up the court in a transition situation, Player A2 caught the ball with his left foot on the ground, took one step landing on his right foot, took another step landing on his left foot, jumped off his left foot, and dunked the ball. Are either of these traveling violations?",
     "correctAnswer": "b",
-    "ruling": "",
+    "ruling": "(1) No. This is a legal play because Player A1 took two legal steps after gathering his dribble. By rule, a player who gathers the ball while dribbling may take two steps to shoot the ball. In this case, Player A1's first step occurred when he landed on his left foot (after gathering the ball and then taking a step backwards) and his second step occurred when he landed simultaneously with both feet on the ground before attempting a legal shot. (2) No. This is a legal play because Player A2 took two legal steps after gathering a pass. By rule, a player who gathers the ball while progressing may take two steps to shoot the ball. In this case, Player A2's first step occurred when he landed on his right foot (after gathering the ball with his left foot on the ground) and his second step occurred when he landed on his left foot before legally dunking the ball.",
     "ruleReference": "RULE 4, SECTION III, RULE 10, SECTION XIII",
     "casebookReference": "Case 472"
   },
