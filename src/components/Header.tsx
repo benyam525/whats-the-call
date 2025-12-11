@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -13,6 +15,30 @@ const navLinks = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setIsMenuOpen(false);
+    window.location.href = '/';
+  };
 
   return (
     <nav className="border-b border-brand-border bg-white relative z-50">
@@ -38,6 +64,25 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+
+          {/* Auth Button */}
+          {!loading && (
+            user ? (
+              <button
+                onClick={handleSignOut}
+                className="text-brand-gray hover:text-brand-black transition-colors"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="bg-brand-black text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+              >
+                Sign In
+              </Link>
+            )
+          )}
         </div>
 
         {/* Mobile Hamburger Button */}
@@ -81,6 +126,26 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
+
+              {/* Mobile Auth Button */}
+              {!loading && (
+                user ? (
+                  <button
+                    onClick={handleSignOut}
+                    className="py-3 px-4 text-left text-brand-gray font-medium rounded-lg hover:bg-brand-card transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="py-3 px-4 text-brand-black font-medium rounded-lg bg-brand-card hover:bg-gray-200 transition-colors text-center"
+                  >
+                    Sign In
+                  </Link>
+                )
+              )}
             </div>
           </div>
         </>
